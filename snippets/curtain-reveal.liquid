@@ -10,7 +10,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: {{ settings.colors_solid_button_labels | default: '#000' }}; /* Use brand color */
+    background-color: #64bae2; /* Azourane Blue */
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -23,31 +23,38 @@
     transform: translateY(-100%);
   }
 
-  .curtain-logo {
+  .curtain-text {
     opacity: 0;
     transform: scale(0.9);
-    animation: logoFadeIn 0.8s ease-out forwards;
-    max-width: 200px;
-  }
-  
-  .curtain-logo img {
-    width: 100%;
-    height: auto;
+    animation: textFadeIn 0.8s ease-out forwards;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900; /* Black */
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
-  @keyframes logoFadeIn {
+  @media screen and (min-width: 768px) {
+    .curtain-text {
+      font-size: 5rem;
+    }
+  }
+
+  @keyframes textFadeIn {
     0% { opacity: 0; transform: scale(0.9); }
     100% { opacity: 1; transform: scale(1); }
   }
 </style>
 
+<!-- Import Montserrat Black -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+
 <div id="curtain-reveal" class="curtain-reveal" style="display: none;">
-  <div class="curtain-logo">
-    {% if settings.logo != blank %}
-      {{ settings.logo | image_url: width: 400 | image_tag: loading: 'eager' }}
-    {% else %}
-      <h1 style="color: white; font-size: 2rem; font-weight: bold;">{{ shop.name }}</h1>
-    {% endif %}
+  <div class="curtain-text">
+    AZOURANE
   </div>
 </div>
 

@@ -1,0 +1,116 @@
+{% render 'product-why-buy', block: block %}
+
+{% schema %}
+{
+  "name": "t:names.why_buy",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:content.benefit_1"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1_text",
+      "label": "t:settings.text",
+      "default": "t:defaults.why_buy.benefit_1"
+    },
+    {
+      "type": "select",
+      "id": "benefit_1_icon",
+      "label": "t:settings.icon",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "checkmark", "label": "t:options.checkmark" },
+        { "value": "shipping", "label": "t:options.shipping" },
+        { "value": "return", "label": "t:options.return" },
+        { "value": "leaf", "label": "t:options.leaf" },
+        { "value": "star", "label": "t:options.star" }
+      ],
+      "default": "checkmark"
+    },
+    {
+      "type": "header",
+      "content": "t:content.benefit_2"
+    },
+    {
+      "type": "text",
+      "id": "benefit_2_text",
+      "label": "t:settings.text",
+      "default": "t:defaults.why_buy.benefit_2"
+    },
+    {
+      "type": "select",
+      "id": "benefit_2_icon",
+      "label": "t:settings.icon",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "checkmark", "label": "t:options.checkmark" },
+        { "value": "shipping", "label": "t:options.shipping" },
+        { "value": "return", "label": "t:options.return" },
+        { "value": "leaf", "label": "t:options.leaf" },
+        { "value": "star", "label": "t:options.star" }
+      ],
+      "default": "checkmark"
+    },
+    {
+      "type": "header",
+      "content": "t:content.benefit_3"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3_text",
+      "label": "t:settings.text",
+      "default": "t:defaults.why_buy.benefit_3"
+    },
+    {
+      "type": "select",
+      "id": "benefit_3_icon",
+      "label": "t:settings.icon",
+      "options": [
+        { "value": "none", "label": "t:options.none" },
+        { "value": "checkmark", "label": "t:options.checkmark" },
+        { "value": "shipping", "label": "t:options.shipping" },
+        { "value": "return", "label": "t:options.return" },
+        { "value": "leaf", "label": "t:options.leaf" },
+        { "value": "star", "label": "t:options.star" }
+      ],
+      "default": "checkmark"
+    },
+    {
+      "type": "header",
+      "content": "t:content.layout"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.why_buy",
+      "settings": {
+        "benefit_1_text": "t:defaults.why_buy.benefit_1",
+        "benefit_2_text": "t:defaults.why_buy.benefit_2",
+        "benefit_3_text": "t:defaults.why_buy.benefit_3"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -84,6 +84,15 @@
     width: calc((100% - ((var(--columns) - 1) * var(--gap))) / var(--columns));
     transition: transform 0.3s var(--transition), box-shadow 0.3s var(--transition);
     border-radius: 8px; /* Soften edges */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-conveyor-{{ section.id }} .az-grid-item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Micro-interaction: Hover Lift */

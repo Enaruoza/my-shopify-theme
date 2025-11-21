@@ -43,6 +43,7 @@
         class="cart-items-component"
         data-section-id="{{ section.id }}"
       >
+        {% render 'free-shipping-bar' %}
         {%- if cart.empty? -%}
           <div class="cart-drawer__header">
             <button

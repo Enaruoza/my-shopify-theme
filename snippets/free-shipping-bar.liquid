@@ -1,0 +1,57 @@
+{% comment %}
+  Free Shipping Bar
+  Renders a progress bar indicating how close the customer is to free shipping.
+{% endcomment %}
+
+{% assign threshold = 7900 %} {% comment %} 79.00 BAM {% endcomment %}
+{% assign current_value = cart.total_price %}
+{% assign remaining = threshold | minus: current_value %}
+{% assign percentage = current_value | times: 100.0 | divided_by: threshold %}
+
+{% if percentage > 100 %}
+  {% assign percentage = 100 %}
+{% endif %}
+
+<div class="free-shipping-bar" data-threshold="{{ threshold }}">
+  <div class="free-shipping-bar__message">
+    {% if current_value >= threshold %}
+      <p>🎉 <strong>Čestitamo!</strong> Imate besplatnu dostavu.</p>
+    {% else %}
+      <p>Još samo <strong>{{ remaining | money }}</strong> do besplatne dostave!</p>
+    {% endif %}
+  </div>
+  
+  <div class="free-shipping-bar__progress-bg">
+    <div class="free-shipping-bar__progress-fill" style="width: {{ percentage }}%;"></div>
+  </div>
+</div>
+
+<style>
+  .free-shipping-bar {
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+  }
+
+  .free-shipping-bar__message p {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-foreground);
+  }
+
+  .free-shipping-bar__progress-bg {
+    width: 100%;
+    height: 8px;
+    background-color: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .free-shipping-bar__progress-fill {
+    height: 100%;
+    background-color: var(--color-primary, #000); /* Fallback to black if var not found */
+    transition: width 0.5s ease-out;
+    border-radius: 4px;
+  }
+</style>

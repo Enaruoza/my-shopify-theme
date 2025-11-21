@@ -1,0 +1,304 @@
+{% schema %}
+{
+  "name": "Countdown Timer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "UNBEATABLE DEALS"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Unmissable savings—countdown is on, don't miss out.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Shop Sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Timer Settings"
+    },
+    {
+      "type": "text",
+      "id": "target_date",
+      "label": "Target Date",
+      "info": "Format: YYYY-MM-DDTHH:mm:ss (e.g., 2025-12-31T23:59:59)",
+      "default": "2025-12-31T23:59:59"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text Color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "color_number",
+      "label": "Number Color",
+      "default": "#ECA72C"
+    },
+    {
+      "type": "color",
+      "id": "color_label_bg",
+      "label": "Label Background",
+      "default": "#F48F91"
+    },
+    {
+      "type": "color",
+      "id": "color_label_text",
+      "label": "Label Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown Timer"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .countdown-timer-section {
+    background-color: {{ section.settings.color_bg }};
+    color: {{ section.settings.color_text }};
+    text-align: center;
+  }
+
+  .countdown-header {
+    margin-bottom: 2rem;
+  }
+
+  .countdown-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #1a3b3b; /* Dark green from image */
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Simple underline effect to mimic the scribble */
+  .countdown-heading::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: {{ section.settings.color_label_bg }};
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+    border-radius: 2px;
+    transform: rotate(-2deg);
+    opacity: 0.6;
+  }
+
+  .countdown-subheading {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .countdown-button {
+    display: inline-block;
+    background-color: #1a3b3b;
+    color: #fff;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 3rem;
+    transition: opacity 0.3s;
+  }
+
+  .countdown-button:hover {
+    opacity: 0.9;
+  }
+
+  .countdown-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+  }
+
+  .countdown-number {
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: {{ section.settings.color_number }};
+    font-family: 'Stencil', 'Impact', sans-serif; /* Try to match the bold stencil look */
+    margin-bottom: 0.5rem;
+  }
+
+  .countdown-label {
+    background-color: {{ section.settings.color_label_bg }};
+    color: {{ section.settings.color_label_text }};
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  @media screen and (max-width: 749px) {
+    .countdown-number {
+      font-size: 4rem;
+    }
+    .countdown-grid {
+      gap: 1rem;
+    }
+    .countdown-item {
+      min-width: 70px;
+    }
+  }
+</style>
+
+<div class="countdown-timer-section section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="countdown-header">
+      {% if section.settings.heading != blank %}
+        <h2 class="countdown-heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="countdown-subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link }}" class="countdown-button">
+          {{ section.settings.button_label }} >
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="countdown-grid" id="Countdown-{{ section.id }}" data-target="{{ section.settings.target_date }}">
+      <div class="countdown-item">
+        <span class="countdown-number" data-hours>00</span>
+        <span class="countdown-label">Hours</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-number">:</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-number" data-minutes>00</span>
+        <span class="countdown-label">Minutes</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-number">:</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-number" data-seconds>00</span>
+        <span class="countdown-label">Seconds</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('Countdown-{{ section.id }}');
+    if (!container) return;
+
+    const targetDateStr = container.dataset.target;
+    const targetDate = new Date(targetDateStr).getTime();
+    
+    const els = {
+      hours: container.querySelector('[data-hours]'),
+      minutes: container.querySelector('[data-minutes]'),
+      seconds: container.querySelector('[data-seconds]')
+    };
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        els.hours.textContent = "00";
+        els.minutes.textContent = "00";
+        els.seconds.textContent = "00";
+        return;
+      }
+
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      els.hours.textContent = hours < 10 ? "0" + hours : hours;
+      els.minutes.textContent = minutes < 10 ? "0" + minutes : minutes;
+      els.seconds.textContent = seconds < 10 ? "0" + seconds : seconds;
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  });
+</script>

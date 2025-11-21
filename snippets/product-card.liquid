@@ -156,6 +156,19 @@
   product-card-link,
   :not(product-card-link) product-card {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card__content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card__content .buy-buttons-block {
+    margin-top: auto;
   }
 
   .product-card__placeholder-image svg {

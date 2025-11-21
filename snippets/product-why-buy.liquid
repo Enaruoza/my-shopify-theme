@@ -1,0 +1,61 @@
+{% comment %}
+  Renders a list of "Why Buy" bullet points with icons.
+  Accepts:
+  - block: {Object} The block object containing settings.
+{% endcomment %}
+
+<div class="product-why-buy" {{ block.shopify_attributes }}>
+  <ul class="why-buy-list list-unstyled">
+    {%- for i in (1..3) -%}
+      {%- capture text_key -%}benefit_{{ i }}_text{%- endcapture -%}
+      {%- capture icon_key -%}benefit_{{ i }}_icon{%- endcapture -%}
+      {%- assign text = block.settings[text_key] -%}
+      {%- assign icon = block.settings[icon_key] -%}
+
+      {%- if text != blank -%}
+        <li class="why-buy-item">
+          <span class="why-buy-icon">
+            {%- if icon != 'none' -%}
+              {% render 'icon', icon: icon %}
+            {%- else -%}
+               {% render 'icon', icon: 'checkmark' %}
+            {%- endif -%}
+          </span>
+          <span class="why-buy-text">{{ text }}</span>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</div>
+
+<style>
+  .product-why-buy {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .why-buy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .why-buy-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.4rem;
+    line-height: 1.4;
+    color: rgb(var(--color-foreground));
+  }
+  .why-buy-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    color: rgb(var(--color-primary)); /* Use primary color for icons */
+  }
+  .why-buy-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+</style>
