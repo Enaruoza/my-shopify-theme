@@ -75,6 +75,12 @@
       "default": "#ffffff"
     },
     {
+      "type": "image_picker",
+      "id": "number_texture",
+      "label": "Number Texture Image",
+      "info": "Upload an image to overlay on the numbers (e.g., gold foil, grunge pattern)."
+    },
+    {
       "type": "header",
       "content": "Padding"
     },
@@ -181,7 +187,7 @@
   .countdown-grid {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
   }
 
@@ -189,7 +195,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 100px;
+    min-width: 80px;
   }
 
   .countdown-number {
@@ -199,6 +205,33 @@
     color: {{ section.settings.color_number }};
     font-family: 'Stencil', 'Impact', sans-serif; /* Try to match the bold stencil look */
     margin-bottom: 0.5rem;
+    
+    /* Texture Effect */
+    {% if section.settings.number_texture != blank %}
+      background-image: url('{{ section.settings.number_texture | image_url: width: 800 }}');
+      background-size: cover;
+      background-position: center;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    {% else %}
+      /* Fallback Gradient if no image is selected but user wants depth */
+      background-image: linear-gradient(135deg, {{ section.settings.color_number }} 0%, {{ section.settings.color_number | color_darken: 20 }} 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    {% endif %}
+  }
+
+  .countdown-colon {
+    font-size: 4rem;
+    font-weight: 700;
+    color: {{ section.settings.color_number }};
+    align-self: flex-start;
+    margin-top: 1rem;
+    opacity: 0.5;
   }
 
   .countdown-label {
@@ -214,13 +247,17 @@
   
   @media screen and (max-width: 749px) {
     .countdown-number {
-      font-size: 4rem;
+      font-size: 3rem;
     }
     .countdown-grid {
-      gap: 1rem;
+      gap: 0.5rem;
     }
     .countdown-item {
-      min-width: 70px;
+      min-width: 50px;
+    }
+    .countdown-colon {
+        font-size: 2rem;
+        margin-top: 0.5rem;
     }
   }
 </style>
@@ -243,19 +280,20 @@
 
     <div class="countdown-grid" id="Countdown-{{ section.id }}" data-target="{{ section.settings.target_date }}">
       <div class="countdown-item">
+        <span class="countdown-number" data-days>00</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <div class="countdown-colon">:</div>
+      <div class="countdown-item">
         <span class="countdown-number" data-hours>00</span>
         <span class="countdown-label">Hours</span>
       </div>
-      <div class="countdown-item">
-        <span class="countdown-number">:</span>
-      </div>
+      <div class="countdown-colon">:</div>
       <div class="countdown-item">
         <span class="countdown-number" data-minutes>00</span>
         <span class="countdown-label">Minutes</span>
       </div>
-      <div class="countdown-item">
-        <span class="countdown-number">:</span>
-      </div>
+      <div class="countdown-colon">:</div>
       <div class="countdown-item">
         <span class="countdown-number" data-seconds>00</span>
         <span class="countdown-label">Seconds</span>
@@ -273,6 +311,7 @@
     const targetDate = new Date(targetDateStr).getTime();
     
     const els = {
+      days: container.querySelector('[data-days]'),
       hours: container.querySelector('[data-hours]'),
       minutes: container.querySelector('[data-minutes]'),
       seconds: container.querySelector('[data-seconds]')
@@ -283,16 +322,19 @@
       const distance = targetDate - now;
 
       if (distance < 0) {
+        els.days.textContent = "00";
         els.hours.textContent = "00";
         els.minutes.textContent = "00";
         els.seconds.textContent = "00";
         return;
       }
 
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+      els.days.textContent = days < 10 ? "0" + days : days;
       els.hours.textContent = hours < 10 ? "0" + hours : hours;
       els.minutes.textContent = minutes < 10 ? "0" + minutes : minutes;
       els.seconds.textContent = seconds < 10 ? "0" + seconds : seconds;
