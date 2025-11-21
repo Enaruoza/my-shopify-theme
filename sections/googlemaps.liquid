@@ -1,0 +1,282 @@
+{%- comment -%}
+  A modern, responsive split-layout section to display
+  a map embed on one side and content blocks on the other.
+{%- endcomment -%}
+
+{%- liquid
+  case section.settings.width
+    when 'page'
+      assign container_class = 'page-width'
+    when 'full'
+      assign container_class = 'full-width'
+  endcase
+-%}
+
+{%- style -%}
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  .map-contact__grid--{{ section.id }} {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-text));
+  }
+
+  .map-contact__col--content-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+
+  .map-contact__map-wrapper--{{ section.id }} {
+    height: {{ section.settings.map_height_mobile }}px;
+    width: 100%;
+  }
+
+  .map-contact__map-wrapper--{{ section.id }} iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  
+  .map-contact__col--content-{{ section.id }} > * + * {
+    margin-top: 1.5rem;
+  }
+
+  /* Desktop and up */
+  @media (min-width: 750px) {
+    .section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+
+    .map-contact__grid--{{ section.id }} {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .map-contact__map-wrapper--{{ section.id }} {
+      height: {{ section.settings.map_height_desktop }}px;
+    }
+    
+    .map-contact__col--content-{{ section.id }} {
+      padding: 4rem;
+    }
+
+    {%- if section.settings.layout == 'map_right' -%}
+      .map-contact__col--map-{{ section.id }} {
+        order: 2;
+      }
+      .map-contact__col--content-{{ section.id }} {
+        order: 1;
+      }
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="{{ container_class }}">
+    <div class="map-contact__grid--{{ section.id }}">
+      
+      <div class="map-contact__col map-contact__col--map-{{ section.id }}">
+        <div class="map-contact__map-wrapper--{{ section.id }}">
+          {%- if section.settings.map_embed != blank -%}
+            {{ section.settings.map_embed }}
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg', 'A map will appear here' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="map-contact__col map-contact__col--content-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <div class="map-contact__block-{{ block.type }}" {{ block.shopify_attributes }}>
+            {%- case block.type -%}
+              
+              {%- when 'heading' -%}
+                <h2 class="h2">
+                  {{ block.settings.heading | escape }}
+                </h2>
+              
+              {%- when 'text' -%}
+                <div class="rte">
+                  {{ block.settings.text }}
+                </div>
+              
+              {%- when 'button' -%}
+                {%- if block.settings.button_label != blank -%}
+                  <a href="{{ block.settings.button_link }}" class="button">
+                    {{ block.settings.button_label | escape }}
+                  </a>
+                {%- endif -%}
+                
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Maps & Contact",
+  "class": "section-map-contact",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "textarea",
+      "id": "map_embed",
+      "label": "Map Embed Code",
+      "info": "Go to Google Maps, find your location, click 'Share', then 'Embed a map'. Copy the <iframe> code here."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "map_left",
+          "label": "Map left, Text right"
+        },
+        {
+          "value": "map_right",
+          "label": "Map right, Text left"
+        }
+      ],
+      "default": "map_left"
+    },
+    {
+      "type": "range",
+      "id": "map_height_desktop",
+      "label": "Map height (Desktop)",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "map_height_mobile",
+      "label": "Map height (Mobile)",
+      "min": 300,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 350
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Find Us"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use this text to share your address, hours, or other contact info.</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Get Directions"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Maps & Contact",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

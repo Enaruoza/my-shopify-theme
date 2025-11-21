@@ -1,0 +1,615 @@
+{% doc %}
+  @prompt
+    Design a responsive website section with the following specifications:
+    
+    Headline: Large, bold text reading “*FROM THE FIRST RAW INGREDIENT TO THE VERY LAST MOLECULE, OUR FORMULAS ARE ALL GOOD.” Use a modern sans-serif font (e.g., Inter or Neue Haas), all uppercase, centered or left-aligned, with noticeable line spacing. Asterisk at the beginning.
+    
+    Image Layout:
+    
+    Three images, layered and slightly rotated for a collage effect.
+    
+    One large central image (back view of a woman’s shoulder with exfoliation) tilted left.
+    
+    Two smaller images (dropper applying oil, hand applying cream), flanking left and bottom right, overlapping the main image slightly.
+    
+    Text Placeholder: Two small blocks of placeholder paragraph text below or near the images, aligned cleanly with grid or flexbox.
+    
+    Button: Centered red-orange “ABOUT US” button at the bottom with hover state (slightly darker tone). Rounded edges.
+    
+    Background: Off-white or beige background with subtle gradient or flat tone.
+    
+    Use CSS for the overlapping image rotation (transform: rotate), z-index layering, and responsive adjustments for mobile stacking., i should be able to edit the height of different things; it feels like the title is too far from the text and its too far from the button
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-brand-story-{{ ai_gen_id }} {
+    background: {{ block.settings.background_color }};
+    padding: {{ block.settings.section_padding }}px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ai-brand-story-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .ai-brand-story-headline-{{ ai_gen_id }} {
+    font-family: {{ block.settings.headline_font.family }}, {{ block.settings.headline_font.fallback_families }};
+    font-weight: {{ block.settings.headline_font.weight }};
+    font-size: {{ block.settings.headline_size }}px;
+    line-height: {{ block.settings.line_height }};
+    text-transform: uppercase;
+    color: {{ block.settings.headline_color }};
+    text-align: {{ block.settings.headline_alignment }};
+    margin-bottom: {{ block.settings.headline_bottom_spacing }}px;
+    letter-spacing: 1px;
+  }
+
+  .ai-brand-story-content-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-bottom: {{ block.settings.content_bottom_spacing }}px;
+  }
+
+  .ai-brand-story-images-{{ ai_gen_id }} {
+    position: relative;
+    height: {{ block.settings.images_container_height }}px;
+    width: 100%;
+  }
+
+  .ai-brand-story-image-{{ ai_gen_id }} {
+    position: absolute;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-brand-story-image-main-{{ ai_gen_id }} {
+    width: 300px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate({{ block.settings.main_image_rotation }}deg);
+    z-index: 2;
+  }
+
+  .ai-brand-story-image-left-{{ ai_gen_id }} {
+    width: 180px;
+    height: 240px;
+    top: 20%;
+    left: 5%;
+    transform: rotate({{ block.settings.left_image_rotation }}deg);
+    z-index: 1;
+  }
+
+  .ai-brand-story-image-right-{{ ai_gen_id }} {
+    width: 160px;
+    height: 200px;
+    bottom: 10%;
+    right: 10%;
+    transform: rotate({{ block.settings.right_image_rotation }}deg);
+    z-index: 3;
+  }
+
+  .ai-brand-story-image-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-brand-story-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-brand-story-image-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-brand-story-text-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.text_blocks_spacing }}px;
+  }
+
+  .ai-brand-story-text-block-{{ ai_gen_id }} {
+    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-weight: {{ block.settings.body_font.weight }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.6;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-brand-story-button-container-{{ ai_gen_id }} {
+    text-align: center;
+  }
+
+  .ai-brand-story-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 16px 40px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    font-family: {{ block.settings.button_font.family }}, {{ block.settings.button_font.fallback_families }};
+    font-weight: {{ block.settings.button_font.weight }};
+    font-size: {{ block.settings.button_text_size }}px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ai-brand-story-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    transform: translateY(-2px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-brand-story-headline-{{ ai_gen_id }} {
+      font-size: {{ block.settings.headline_size | times: 0.6 }}px;
+      margin-bottom: {{ block.settings.headline_bottom_spacing | times: 0.7 }}px;
+    }
+
+    .ai-brand-story-content-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 50px;
+      margin-bottom: {{ block.settings.content_bottom_spacing | times: 0.7 }}px;
+    }
+
+    .ai-brand-story-images-{{ ai_gen_id }} {
+      height: {{ block.settings.images_container_height | times: 0.7 }}px;
+      order: 2;
+    }
+
+    .ai-brand-story-image-main-{{ ai_gen_id }} {
+      width: 220px;
+      height: 280px;
+    }
+
+    .ai-brand-story-image-left-{{ ai_gen_id }} {
+      width: 120px;
+      height: 160px;
+      top: 10%;
+      left: 0%;}
+
+    .ai-brand-story-image-right-{{ ai_gen_id }} {
+      width: 100px;
+      height: 130px;
+      bottom: 5%;
+      right: 5%;
+    }
+
+    .ai-brand-story-text-{{ ai_gen_id }} {
+      order: 1;
+      gap: {{ block.settings.text_blocks_spacing | times: 0.7 }}px;
+    }
+
+    .ai-brand-story-text-block-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+
+    .ai-brand-story-button-{{ ai_gen_id }} {
+      padding: 14px 30px;
+      font-size: {{ block.settings.button_text_size | times: 0.9 }}px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-brand-story-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.7 }}px 15px;
+    }
+
+    .ai-brand-story-headline-{{ ai_gen_id }} {
+      font-size: {{ block.settings.headline_size | times: 0.5 }}px;
+      margin-bottom: {{ block.settings.headline_bottom_spacing | times: 0.5 }}px;
+    }
+
+    .ai-brand-story-content-{{ ai_gen_id }} {
+      margin-bottom: {{ block.settings.content_bottom_spacing | times: 0.5 }}px;
+    }
+
+    .ai-brand-story-images-{{ ai_gen_id }} {
+      height: {{ block.settings.images_container_height | times: 0.5 }}px;
+    }
+
+    .ai-brand-story-image-main-{{ ai_gen_id }} {
+      width: 180px;
+      height: 220px;
+    }
+
+    .ai-brand-story-image-left-{{ ai_gen_id }} {
+      width: 100px;
+      height: 130px;
+    }
+
+    .ai-brand-story-image-right-{{ ai_gen_id }} {
+      width: 80px;
+      height: 100px;
+    }
+
+    .ai-brand-story-text-{{ ai_gen_id }} {
+      gap: {{ block.settings.text_blocks_spacing | times: 0.5 }}px;
+    }
+  }
+{% endstyle %}
+
+<section class="ai-brand-story-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-brand-story-container-{{ ai_gen_id }}">
+    <h1 class="ai-brand-story-headline-{{ ai_gen_id }}">
+      {{ block.settings.headline }}
+    </h1>
+
+    <div class="ai-brand-story-content-{{ ai_gen_id }}">
+      <div class="ai-brand-story-images-{{ ai_gen_id }}">
+        <div class="ai-brand-story-image-{{ ai_gen_id }} ai-brand-story-image-main-{{ ai_gen_id }}">
+          {% if block.settings.main_image %}
+            <img
+              src="{{ block.settings.main_image | image_url: width: 600 }}"
+              alt="{{ block.settings.main_image.alt | escape }}"
+              loading="lazy"
+              width="300"
+              height="400"
+            >
+          {% else %}
+            <div class="ai-brand-story-image-placeholder-{{ ai_gen_id }}">
+              {{ 'hero-apparel-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div><div class="ai-brand-story-image-{{ ai_gen_id }} ai-brand-story-image-left-{{ ai_gen_id }}">
+          {% if block.settings.left_image %}
+            <img
+              src="{{ block.settings.left_image | image_url: width: 400 }}"
+              alt="{{ block.settings.left_image.alt | escape }}"
+              loading="lazy"
+              width="180"
+              height="240"
+            >
+          {% else %}
+            <div class="ai-brand-story-image-placeholder-{{ ai_gen_id }}">
+              {{ 'detailed-apparel-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="ai-brand-story-image-{{ ai_gen_id }} ai-brand-story-image-right-{{ ai_gen_id }}">
+          {% if block.settings.right_image %}
+            <img
+              src="{{ block.settings.right_image | image_url: width: 400 }}"
+              alt="{{ block.settings.right_image.alt | escape }}"
+              loading="lazy"
+              width="160"
+              height="200"
+            >
+          {% else %}
+            <div class="ai-brand-story-image-placeholder-{{ ai_gen_id }}">
+              {{ 'product-apparel-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="ai-brand-story-text-{{ ai_gen_id }}">
+        {% if block.settings.text_block_1 != blank %}
+          <div class="ai-brand-story-text-block-{{ ai_gen_id }}">
+            {{ block.settings.text_block_1 }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.text_block_2 != blank %}
+          <div class="ai-brand-story-text-block-{{ ai_gen_id }}">
+            {{ block.settings.text_block_2 }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-brand-story-button-container-{{ ai_gen_id }}">
+      <a href="{{ block.settings.button_link }}" class="ai-brand-story-button-{{ ai_gen_id }}">
+        {{ block.settings.button_text }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Story Section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline text",
+      "default": "*FROM THE FIRST RAW INGREDIENT TO THE VERY LAST MOLECULE, OUR FORMULAS ARE ALL GOOD."
+    },
+    {
+      "type": "font_picker",
+      "id": "headline_font",
+      "label": "Headline font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "headline_size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Headline size",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "headline_alignment",
+      "label": "Headline alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "label": "Line height",
+      "default": 1.2
+    },
+    {
+      "type": "color",
+      "id": "headline_color",
+      "label": "Headline color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "headline_bottom_spacing",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Space below headline",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main image (center)"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Left image"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right image"
+    },
+    {
+      "type": "range",
+      "id": "images_container_height",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "label": "Images container height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "main_image_rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "label": "Main image rotation",
+      "default": -5
+    },
+    {
+      "type": "range",
+      "id": "left_image_rotation",
+      "min": -30,
+      "max": 30,
+      "step": 1,
+      "unit": "deg",
+      "label": "Left image rotation",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "right_image_rotation",
+      "min": -30,
+      "max": 30,
+      "step": 1,
+      "unit": "deg",
+      "label": "Right image rotation",
+      "default": -12
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "richtext",
+      "id": "text_block_1",
+      "label": "First text block",
+      "default": "<p>Our commitment to quality begins with sourcing the finest raw ingredients from trusted suppliers around the world. Each component is carefully selected and tested to ensure it meets our rigorous standards for purity and effectiveness.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "text_block_2",
+      "label": "Second text block",
+      "default": "<p>Through innovative formulation techniques and extensive research, we create products that deliver exceptional results while maintaining the highest safety standards. Every formula is crafted with precision and care.</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Text font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "text_blocks_spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Space between text blocks",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "content_bottom_spacing",
+      "min": 30,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "label": "Space below content",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "ABOUT US"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "font_picker",
+      "id": "button_font",
+      "label": "Button font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Button text size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#FF6B35"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#E55A2B"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FAF8F5"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 40,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story Section"
+    }
+  ]
+}
+{% endschema %}

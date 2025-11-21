@@ -1,0 +1,1157 @@
+{%- liquid
+  assign section_id = 'kinetic-' | append: section.id
+  assign chapters = section.blocks | where: 'type', 'chapter'
+  assign enable_parallax = section.settings.enable_parallax
+  assign section_spacing = section.settings.section_spacing
+-%}
+
+{%- if chapters.size > 0 -%}
+<kinetic-storyteller
+  id="{{ section_id }}"
+  class="kinetic-storyteller color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+  data-parallax="{{ enable_parallax }}"
+  style="
+    --chapter-count: {{ chapters.size }};
+    --section-spacing: {{ section_spacing }}px;
+    --transition-duration: {{ section.settings.animation_speed }}ms;
+  "
+>
+  <div class="kinetic-chapters" role="region" aria-label="{{ section.settings.section_label | default: 'Product Story' | escape }}">
+    {%- for block in chapters -%}
+      {%- liquid
+        assign chapter_index = forloop.index
+        assign has_media = false
+        if block.settings.featured_image != blank or block.settings.featured_video != blank
+          assign has_media = true
+        endif
+        
+        # Layout calculations
+        assign content_width = block.settings.content_width
+        assign media_width = 100 | minus: content_width
+
+        # PRE-BUILD THE 'SIZES' ATTRIBUTE HERE
+        assign dynamic_size = media_width | times: 0.9
+        assign image_sizes = '(min-width: 990px) ' | append: dynamic_size | append: 'vw, 90vw'
+      -%}
+
+      <div
+        class="kinetic-chapter kinetic-chapter--{{ block.settings.layout }} {% if has_media %}kinetic-chapter--has-media{% endif %}"
+        data-chapter="{{ chapter_index }}"
+        data-theme="{{ block.settings.chapter_theme }}"
+        style="
+          --content-width: {{ content_width }}%;
+          --media-width: {{ media_width }}%;
+          --bg-color: {{ block.settings.background_color }};
+          --text-color: {{ block.settings.text_color }};
+          --heading-size-mobile: {{ block.settings.heading_size_mobile }}px;
+          --heading-size-desktop: {{ block.settings.heading_size_desktop }}px;
+          --content-size-mobile: {{ block.settings.content_size_mobile }}px;
+          --content-size-desktop: {{ block.settings.content_size_desktop }}px;
+        "
+        {{ block.shopify_attributes }}
+      >
+        {%- comment %} Background Layer {%- endcomment -%}
+        {%- if block.settings.background_image != blank -%}
+          <div class="kinetic-chapter__bg" aria-hidden="true">
+            {%- assign bg_image = block.settings.background_image -%}
+            {{- bg_image | image_url: width: 2400 | image_tag:
+              loading: 'lazy',
+              widths: '600, 900, 1200, 1600, 2000, 2400',
+              sizes: '100vw',
+              class: 'kinetic-chapter__bg-img',
+              alt: ''
+            -}}
+            <div class="kinetic-chapter__bg-overlay" style="opacity: {{ block.settings.background_overlay | divided_by: 100.0 }};"></div>
+          </div>
+        {%- endif -%}
+
+        {%- comment %} Content Container {%- endcomment -%}
+        <div class="kinetic-chapter__container page-width">
+          <div class="kinetic-chapter__grid">
+            
+            {%- comment %} Text Content {%- endcomment -%}
+            <div class="kinetic-chapter__content" data-animate="content">
+              {%- if block.settings.eyebrow != blank -%}
+                <p class="kinetic-chapter__eyebrow" data-animate="eyebrow">
+                  {{ block.settings.eyebrow | escape }}
+                </p>
+              {%- endif -%}
+
+              {%- if block.settings.heading != blank -%}
+                <h2 class="kinetic-chapter__heading h1" data-animate="heading">
+                  {{ block.settings.heading }}
+                </h2>
+              {%- endif -%}
+
+              {%- if block.settings.content != blank -%}
+                <div class="kinetic-chapter__text rte" data-animate="text">
+                  {{ block.settings.content }}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.button_label != blank -%}
+                <div class="kinetic-chapter__actions" data-animate="actions">
+                  <a
+                    href="{{ block.settings.button_link | default: '#' }}"
+                    class="button {% if block.settings.button_style == 'secondary' %}button--secondary{% endif %}"
+                  >
+                    {{ block.settings.button_label | escape }}
+                    {%- render 'icon-arrow' -%}
+                  </a>
+                  
+                  {%- if block.settings.button_label_2 != blank -%}
+                    <a
+                      href="{{ block.settings.button_link_2 | default: '#' }}"
+                      class="button button--secondary"
+                    >
+                      {{ block.settings.button_label_2 | escape }}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+
+            {%- comment %} Media Content {%- endcomment -%}
+            {%- if has_media -%}
+              <div class="kinetic-chapter__media" data-animate="media">
+                <div class="kinetic-chapter__media-wrapper">
+                  
+                  {%- if block.settings.featured_video != blank -%}
+                    {%- liquid
+                      assign video_url = block.settings.featured_video
+                      assign video_type = 'unknown'
+                      if video_url contains 'youtube.com' or video_url contains 'youtu.be'
+                        assign video_type = 'youtube'
+                      elsif video_url contains 'vimeo.com'
+                        assign video_type = 'vimeo'
+                      endif
+                    -%}
+                    
+                    <div class="kinetic-chapter__video" data-video-type="{{ video_type }}">
+                      {%- if block.settings.featured_image != blank -%}
+                        <button
+                          type="button"
+                          class="kinetic-chapter__video-poster"
+                          aria-label="Play video"
+                          data-video-play
+                          data-video-url="{{ block.settings.featured_video | escape }}"
+                        >
+                          {{- block.settings.featured_image | image_url: width: 1400 | image_tag:
+                            loading: 'lazy',
+                            widths: '400, 600, 800, 1000, 1400',
+                            sizes: image_sizes
+                          -}}
+                          <span class="kinetic-chapter__play-icon">
+                            {%- render 'icon-play' -%}
+                          </span>
+                        </button>
+                      {%- endif -%}
+                      <div class="kinetic-chapter__video-embed" data-video-embed></div>
+                    </div>
+
+                  {%- elsif block.settings.featured_image != blank -%}
+                    {%- assign featured_image = block.settings.featured_image -%}
+                    <div class="kinetic-chapter__image-wrapper">
+                      {{- featured_image | image_url: width: 1400 | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 800, 1000, 1400',
+                        sizes: image_sizes,
+                        class: 'kinetic-chapter__image',
+                        alt: featured_image.alt | escape
+                      -}}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.media_caption != blank -%}
+                    <p class="kinetic-chapter__caption">{{ block.settings.media_caption | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+          </div>
+        </div>
+
+        {%- comment %} Chapter Progress Indicator {%- endcomment -%}
+        {%- if section.settings.show_progress -%}
+          <div class="kinetic-chapter__progress" aria-hidden="true">
+            <div class="kinetic-chapter__progress-bar"></div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment %} Navigation {%- endcomment -%}
+  {%- if section.settings.show_navigation and chapters.size > 1 -%}
+    <nav class="kinetic-nav" aria-label="Chapter navigation">
+      <ol class="kinetic-nav__list">
+        {%- for block in chapters -%}
+          <li class="kinetic-nav__item">
+            <button
+              type="button"
+              class="kinetic-nav__button"
+              data-chapter-nav="{{ forloop.index }}"
+              aria-label="Go to chapter {{ forloop.index }}: {{ block.settings.heading | escape }}"
+            >
+              <span class="kinetic-nav__label">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            </button>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </nav>
+  {%- endif -%}
+</kinetic-storyteller>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Kinetic Storyteller",
+  "tag": "section",
+  "class": "section-kinetic-storyteller",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "Product Story",
+      "info": "For screen readers"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "section_spacing",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Section Spacing",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable Parallax Effects",
+      "default": true,
+      "info": "Automatically disabled for users who prefer reduced motion"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 200,
+      "max": 1200,
+      "step": 100,
+      "unit": "ms",
+      "label": "Animation Speed",
+      "default": 600
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress",
+      "label": "Show Chapter Progress",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show Chapter Navigation",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "media-right",
+              "label": "Media Right"
+            },
+            {
+              "value": "media-left",
+              "label": "Media Left"
+            },
+            {
+              "value": "media-center",
+              "label": "Media Center (Full Width)"
+            },
+            {
+              "value": "content-only",
+              "label": "Content Only"
+            }
+          ],
+          "default": "media-right"
+        },
+        {
+          "type": "range",
+          "id": "content_width",
+          "min": 30,
+          "max": 70,
+          "step": 5,
+          "unit": "%",
+          "label": "Content Width",
+          "default": 50,
+          "info": "Only applies to split layouts"
+        },
+        {
+          "type": "select",
+          "id": "chapter_theme",
+          "label": "Chapter Theme",
+          "options": [
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ],
+          "default": "dark"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow Text",
+          "default": "Chapter 01"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Crafted with Precision"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Description",
+          "default": "<p>Every detail tells a story. Discover the craftsmanship behind our products.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Explore Collection"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "Second Button Label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Second Button Link"
+        },
+        {
+          "type": "header",
+          "content": "Media"
+        },
+        {
+          "type": "image_picker",
+          "id": "featured_image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "featured_video",
+          "label": "Video URL",
+          "info": "YouTube or Vimeo link. Image above will be used as poster."
+        },
+        {
+          "type": "text",
+          "id": "media_caption",
+          "label": "Media Caption"
+        },
+        {
+          "type": "header",
+          "content": "Background"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background Image"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "background_overlay",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "Background Overlay Opacity",
+          "default": 40
+        },
+        {
+          "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "range",
+          "id": "heading_size_mobile",
+          "min": 24,
+          "max": 64,
+          "step": 2,
+          "unit": "px",
+          "label": "Mobile Heading Size",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "heading_size_desktop",
+          "min": 32,
+          "max": 120,
+          "step": 4,
+          "unit": "px",
+          "label": "Desktop Heading Size",
+          "default": 64
+        },
+        {
+          "type": "range",
+          "id": "content_size_mobile",
+          "min": 14,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Mobile Content Size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "content_size_desktop",
+          "min": 14,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Desktop Content Size",
+          "default": 18
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kinetic Storyteller",
+      "blocks": [
+        {
+          "type": "chapter",
+          "settings": {
+            "eyebrow": "Chapter 01",
+            "heading": "Crafted with Precision",
+            "layout": "media-right"
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "eyebrow": "Chapter 02",
+            "heading": "Designed for Life",
+            "layout": "media-left"
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "eyebrow": "Chapter 03",
+            "heading": "Built to Last",
+            "layout": "media-right"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  /* ============================================================================
+      Kinetic Storyteller - Core Styles
+      ============================================================================ */
+  
+  .kinetic-storyteller {
+    position: relative;
+    isolation: isolate;
+    padding: var(--section-spacing) 0;
+  }
+
+  .kinetic-chapters {
+    position: relative;
+  }
+
+  /* ============================================================================
+      Chapter Container
+      ============================================================================ */
+  
+  .kinetic-chapter {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: clamp(3rem, 10vh, 8rem) 0;
+  }
+
+  .kinetic-chapter + .kinetic-chapter {
+    margin-top: 0;
+  }
+
+  /* ============================================================================
+      Background Layer
+      ============================================================================ */
+  
+  .kinetic-chapter__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .kinetic-chapter__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .kinetic-chapter__bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+
+  /* Parallax Effect */
+  @media (prefers-reduced-motion: no-preference) {
+    .kinetic-storyteller[data-parallax="true"] .kinetic-chapter__bg-img {
+      transform: translateY(calc(var(--scroll-progress, 0) * -15%));
+      transition: transform 0.1s linear;
+    }
+  }
+
+  /* ============================================================================
+      Content Grid
+      ============================================================================ */
+  
+  .kinetic-chapter__container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .kinetic-chapter__grid {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  /* Desktop Layouts */
+  @media (min-width: 990px) {
+    .kinetic-chapter--media-right .kinetic-chapter__grid,
+    .kinetic-chapter--media-left .kinetic-chapter__grid {
+      grid-template-columns: var(--content-width) var(--media-width);
+      gap: clamp(3rem, 6vw, 8rem);
+    }
+
+    .kinetic-chapter--media-left .kinetic-chapter__content {
+      order: 2;
+    }
+
+    .kinetic-chapter--media-left .kinetic-chapter__media {
+      order: 1;
+    }
+
+    .kinetic-chapter--media-center .kinetic-chapter__grid {
+      grid-template-columns: 1fr;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .kinetic-chapter--content-only .kinetic-chapter__grid {
+      grid-template-columns: 1fr;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .kinetic-chapter--content-only .kinetic-chapter__content {
+      text-align: center;
+      align-items: center;
+    }
+  }
+
+  /* ============================================================================
+      Content Styles
+      ============================================================================ */
+  
+  .kinetic-chapter__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .kinetic-chapter__eyebrow {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .kinetic-chapter__heading {
+    font-size: clamp(var(--heading-size-mobile), 5vw, var(--heading-size-desktop));
+    line-height: 1.1;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .kinetic-chapter__text {
+    font-size: clamp(var(--content-size-mobile), 1.2vw, var(--content-size-desktop));
+    line-height: 1.7;
+    max-width: 65ch;
+  }
+
+  .kinetic-chapter__text p {
+    margin: 0 0 1em;
+  }
+
+  .kinetic-chapter__text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .kinetic-chapter__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  /* ============================================================================
+      Media Styles
+      ============================================================================ */
+  
+  .kinetic-chapter__media-wrapper {
+    position: relative;
+  }
+
+  .kinetic-chapter__image-wrapper {
+    position: relative;
+    border-radius: var(--media-radius, 0px);
+    overflow: hidden;
+  }
+
+  .kinetic-chapter__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .kinetic-chapter__caption {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  /* Video Styles */
+  .kinetic-chapter__video {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--media-radius, 0px);
+    overflow: hidden;
+    background: #000;
+  }
+
+  .kinetic-chapter__video-poster {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+  }
+
+  .kinetic-chapter__video-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kinetic-chapter__play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  .kinetic-chapter__video-poster:hover .kinetic-chapter__play-icon {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(255, 255, 255, 1);
+  }
+
+  .kinetic-chapter__video-embed {
+    position: absolute;
+    inset: 0;
+    display: none;
+  }
+
+  .kinetic-chapter__video-embed.is-active {
+    display: block;
+  }
+
+  .kinetic-chapter__video-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* ============================================================================
+      Progress Indicator
+      ============================================================================ */
+  
+  .kinetic-chapter__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .kinetic-chapter__progress-bar {
+    height: 100%;
+    background: currentColor;
+    transform-origin: left center;
+    transform: scaleX(var(--chapter-progress, 0));
+    transition: transform 0.1s linear;
+  }
+
+  /* ============================================================================
+      Navigation
+      ============================================================================ */
+  
+  .kinetic-nav {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+  }
+
+  .kinetic-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .kinetic-nav__button {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .kinetic-nav__button::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+  }
+
+  .kinetic-nav__button.is-active {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 1);
+    transform: scale(1.3);
+  }
+
+  .kinetic-nav__button:hover:not(.is-active) {
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.15);
+  }
+
+  .kinetic-nav__label {
+    position: absolute;
+    right: calc(100% + 1rem);
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    color: #fff;
+  }
+
+  .kinetic-nav__button:hover .kinetic-nav__label,
+  .kinetic-nav__button:focus .kinetic-nav__label {
+    opacity: 1;
+  }
+
+  @media (max-width: 989px) {
+    .kinetic-nav {
+      right: 1rem;
+    }
+  }
+
+  /* ============================================================================
+      Scroll-Driven Animations (CSS Only!)
+      ============================================================================ */
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .kinetic-chapter__content > * {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: kinetic-fade-in-up linear forwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+
+    .kinetic-chapter__eyebrow {
+      animation-delay: 0s;
+    }
+
+    .kinetic-chapter__heading {
+      animation-delay: 0.05s;
+    }
+
+    .kinetic-chapter__text {
+      animation-delay: 0.1s;
+    }
+
+    .kinetic-chapter__actions {
+      animation-delay: 0.15s;
+    }
+
+    .kinetic-chapter__media {
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      animation: kinetic-media-in linear forwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 50%;
+    }
+
+    @keyframes kinetic-fade-in-up {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes kinetic-media-in {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  }
+
+  /* Fallback for browsers without animation-timeline support */
+  @supports not (animation-timeline: view()) {
+    .kinetic-chapter__content > *,
+    .kinetic-chapter__media {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+
+  /* ============================================================================
+      Reduced Motion
+      ============================================================================ */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .kinetic-chapter__content > *,
+    .kinetic-chapter__media {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+
+    .kinetic-chapter__bg-img {
+      transform: none !important;
+    }
+
+    .kinetic-nav__button,
+    .kinetic-chapter__play-icon {
+      transition: none !important;
+    }
+  }
+
+  /* ============================================================================
+      Theme Variations
+      ============================================================================ */
+  
+  .kinetic-chapter[data-theme="light"] {
+    --text-color: #000000;
+  }
+
+  .kinetic-chapter[data-theme="dark"] {
+    --text-color: #ffffff;
+  }
+{% endstyle %}
+
+<script>
+  if (!customElements.get('kinetic-storyteller')) {
+    class KineticStoryteller extends HTMLElement {
+      constructor() {
+        super();
+        this.chapters = Array.from(this.querySelectorAll('.kinetic-chapter'));
+        this.navButtons = Array.from(this.querySelectorAll('[data-chapter-nav]'));
+        this.enableParallax = this.dataset.parallax === 'true';
+        this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        this.observers = [];
+      }
+
+      connectedCallback() {
+        this.init();
+      }
+
+      disconnectedCallback() {
+        this.destroy();
+      }
+
+      init() {
+        if (this.prefersReducedMotion) return;
+
+        // Initialize Intersection Observer for chapters
+        this.initChapterObserver();
+
+        // Initialize parallax if enabled
+        if (this.enableParallax) {
+          this.initParallax();
+        }
+
+        // Initialize video players
+        this.initVideos();
+
+        // Initialize navigation
+        this.initNavigation();
+      }
+
+      initChapterObserver() {
+        const options = {
+          root: null,
+          rootMargin: '-20% 0px -20% 0px',
+          threshold: [0, 0.25, 0.5, 0.75, 1]
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            const chapterIndex = entry.target.dataset.chapter;
+            const progressBar = entry.target.querySelector('.kinetic-chapter__progress-bar');
+            
+            if (entry.isIntersecting) {
+              // Update active navigation
+              this.updateActiveNav(chapterIndex);
+              
+              // Update progress bar
+              if (progressBar) {
+                progressBar.style.setProperty('--chapter-progress', entry.intersectionRatio);
+              }
+            }
+          });
+        }, options);
+
+        this.chapters.forEach(chapter => observer.observe(chapter));
+        this.observers.push(observer);
+      }
+
+      initParallax() {
+        const backgrounds = this.querySelectorAll('.kinetic-chapter__bg-img');
+        
+        const handleScroll = () => {
+          backgrounds.forEach(bg => {
+            const chapter = bg.closest('.kinetic-chapter');
+            const rect = chapter.getBoundingClientRect();
+            const scrollProgress = 1 - (rect.top + rect.height / 2) / window.innerHeight;
+            
+            bg.style.setProperty('--scroll-progress', Math.max(0, Math.min(1, scrollProgress)));
+          });
+        };
+
+        // Throttle scroll events
+        let ticking = false;
+        const throttledScroll = () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              handleScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        };
+
+        window.addEventListener('scroll', throttledScroll, { passive: true });
+        handleScroll(); // Initial call
+      }
+
+      initVideos() {
+        const videoPosters = this.querySelectorAll('[data-video-play]');
+        
+        videoPosters.forEach(poster => {
+          poster.addEventListener('click', (e) => {
+            e.preventDefault();
+            const videoContainer = poster.closest('.kinetic-chapter__video');
+            const videoType = videoContainer.dataset.videoType;
+            const videoEmbed = videoContainer.querySelector('[data-video-embed]');
+            const videoUrl = poster.dataset.videoUrl; // <-- **FIXED LINE**
+
+            if (!videoUrl || !videoEmbed) return;
+
+            let embedUrl = '';
+            if (videoType === 'youtube') {
+              const videoId = this.extractYouTubeId(videoUrl);
+              embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            } else if (videoType === 'vimeo') {
+              const videoId = this.extractVimeoId(videoUrl);
+              embedUrl = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+            }
+
+            if (embedUrl) {
+              const iframe = document.createElement('iframe');
+              iframe.src = embedUrl;
+              iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+              iframe.loading = 'lazy';
+              
+              videoEmbed.appendChild(iframe);
+              videoEmbed.classList.add('is-active');
+              poster.style.display = 'none';
+            }
+          });
+        });
+      }
+
+      initNavigation() {
+        this.navButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const chapterIndex = button.dataset.chapterNav;
+            const targetChapter = this.chapters[chapterIndex - 1];
+            
+            if (targetChapter) {
+              targetChapter.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+              });
+            }
+          });
+        });
+      }
+
+      updateActiveNav(activeIndex) {
+        this.navButtons.forEach(button => {
+          const isActive = button.dataset.chapterNav === activeIndex;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+      }
+
+      extractYouTubeId(url) {
+        const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[7].length === 11) ? match[7] : null;
+      }
+
+      extractVimeoId(url) {
+        const regExp = /vimeo.*\/(\d+)/i;
+        const match = url.match(regExp);
+        return match ? match[1] : null;
+      }
+
+      destroy() {
+        this.observers.forEach(observer => observer.disconnect());
+        this.observers = [];
+      }
+    }
+
+    customElements.define('kinetic-storyteller', KineticStoryteller);
+  }
+</script>

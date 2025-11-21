@@ -1,0 +1,417 @@
+{% doc %}
+  @prompt
+    Create a responsive website section that features a logo with the text “CLASHD” overlaid on an animated, arch-shaped background filled with flowing, wavy sand-like textures. The animation should resemble soft, natural sand movement (like wind brushing dunes) and must be continuous and smooth. The sand animation should appear inside the arch shape and flow through the text—so the letters themselves act as transparent windows, allowing the animation to show within them (achieve this using masking or blend modes). The arch should have a soft, rounded top and a flat base. The colors of the waves should range from terracotta to warm amber, with subtle light and shadow variation to feel organic. All code must be clean, reusable, and adaptable for different screen sizes and shapes.
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+.clashd-logo-container-{{ ai_gen_id }} {
+  width: 100%;
+  max-width: {{ block.settings.container_width }}px;
+  margin: 0 auto;
+  padding: {{ block.settings.container_padding }}px;
+  position: relative;
+  overflow: hidden;
+}
+
+.clashd-arch-{{ ai_gen_id }} {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: {{ block.settings.arch_height_ratio }}%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-top-left-radius: {{ block.settings.arch_roundness }}%;
+  border-top-right-radius: {{ block.settings.arch_roundness }}%;
+}
+
+.clashd-sand-animation-{{ ai_gen_id }} {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    {{ block.settings.sand_color_1 }},
+    {{ block.settings.sand_color_2 }},
+    {{ block.settings.sand_color_3 }}
+  );
+  overflow: hidden;
+}
+
+.clashd-sand-wave-{{ ai_gen_id }} {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23{{ block.settings.wave_color | remove: '#' }}' fill-opacity='0.2' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+.clashd-logo-text-{{ ai_gen_id }} {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: {{ block.settings.font_family }}, sans-serif;
+  font-size: calc({{ block.settings.font_size }}px + ({{ block.settings.font_size_desktop }} - {{ block.settings.font_size }}) * ((100vw - 320px) / (1200 - 320)));
+  font-weight: {{ block.settings.font_weight }};
+  text-align: center;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  letter-spacing: {{ block.settings.letter_spacing }}px;
+  mix-blend-mode: {{ block.settings.blend_mode }};
+  z-index: 10;
+  width: 100%;
+}
+
+.clashd-logo-text-{{ ai_gen_id }}::before {
+  content: "{{ block.settings.logo_text }}";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: {{ block.settings.text_color }};
+  z-index: -1;
+}
+
+@media screen and (max-width: 768px) {
+  .clashd-arch-{{ ai_gen_id }} {
+    padding-bottom: calc({{ block.settings.arch_height_ratio }}% * 1.2);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .clashd-container-{{ ai_gen_id }} {
+    padding: calc({{ block.settings.container_padding }}px / 2);
+  }
+  
+  .clashd-arch-{{ ai_gen_id }} {
+    padding-bottom: calc({{ block.settings.arch_height_ratio }}% * 1.5);
+  }
+}
+{% endstyle %}
+
+<div class="clashd-logo-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="clashd-arch-{{ ai_gen_id }}">
+    <div class="clashd-sand-animation-{{ ai_gen_id }}">
+      <div class="clashd-sand-wave-{{ ai_gen_id }} wave1-{{ ai_gen_id }}"></div>
+      <div class="clashd-sand-wave-{{ ai_gen_id }} wave2-{{ ai_gen_id }}"></div>
+      <div class="clashd-sand-wave-{{ ai_gen_id }} wave3-{{ ai_gen_id }}"></div>
+    </div>
+    <div class="clashd-logo-text-{{ ai_gen_id }}">{{ block.settings.logo_text }}</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  class ClashdLogoAnimation extends HTMLElement {
+    constructor() {
+      super();
+      this.waves = this.querySelectorAll('.clashd-sand-wave-{{ ai_gen_id }}');
+      this.animationSpeed = {{ block.settings.animation_speed }};
+    }
+
+    connectedCallback() {
+      this.initializeWaves();
+      this.animateWaves();
+    }
+
+    initializeWaves() {
+      const wave1 = this.querySelector('.wave1-{{ ai_gen_id }}');
+      const wave2 = this.querySelector('.wave2-{{ ai_gen_id }}');
+      const wave3 = this.querySelector('.wave3-{{ ai_gen_id }}');
+      
+      if (wave1 && wave2 && wave3) {
+        wave1.style.backgroundSize = '60% 60%';
+        wave1.style.opacity = '0.3';
+        wave1.style.transform = 'rotate(10deg)';
+        
+        wave2.style.backgroundSize = '40% 40%';
+        wave2.style.opacity = '0.5';
+        wave2.style.transform = 'rotate(-8deg)';
+        
+        wave3.style.backgroundSize = '80% 80%';
+        wave3.style.opacity = '0.2';
+        wave3.style.transform = 'rotate(3deg)';
+      }
+    }
+
+    animateWaves() {
+      let xPos1 = 0;
+      let yPos1 = 0;
+      let xPos2 = 10;
+      let yPos2 = 10;
+      let xPos3 = -10;
+      let yPos3 = 5;
+      
+      const wave1 = this.querySelector('.wave1-{{ ai_gen_id }}');
+      const wave2 = this.querySelector('.wave2-{{ ai_gen_id }}');
+      const wave3 = this.querySelector('.wave3-{{ ai_gen_id }}');
+      
+      const animateFrame = () => {
+        xPos1 -= 0.15 * this.animationSpeed;
+        yPos1 -= 0.1 * this.animationSpeed;
+        xPos2 += 0.13 * this.animationSpeed;
+        yPos2 -= 0.08 * this.animationSpeed;
+        xPos3 -= 0.07 * this.animationSpeed;
+        yPos3 += 0.11 * this.animationSpeed;
+        
+        if (wave1) wave1.style.backgroundPosition = `${xPos1}px ${yPos1}px`;
+        if (wave2) wave2.style.backgroundPosition = `${xPos2}px ${yPos2}px`;
+        if (wave3) wave3.style.backgroundPosition = `${xPos3}px ${yPos3}px`;
+        
+        requestAnimationFrame(animateFrame);
+      };
+      
+      animateFrame();
+    }
+  }
+  
+  customElements.define('clashd-logo-animation-{{ ai_gen_id }}', ClashdLogoAnimation);
+  
+  // Initialize the component
+  const logoContainer = document.querySelector('.clashd-logo-container-{{ ai_gen_id }}');
+  if (logoContainer) {
+    const logoAnimation = new ClashdLogoAnimation();
+    logoContainer.parentNode.replaceChild(logoAnimation, logoContainer);
+    logoAnimation.appendChild(logoContainer);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "CLASHD Logo",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo Text"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "CLASHD"
+    },
+    {
+      "type": "select",
+      "id": "font_family",
+      "label": "Font family",
+      "options": [
+        {
+          "value": "Arial",
+          "label": "Arial"
+        },
+        {
+          "value": "Helvetica",
+          "label": "Helvetica"
+        },
+        {
+          "value": "Verdana",
+          "label": "Verdana"
+        },
+        {
+          "value": "Georgia",
+          "label": "Georgia"
+        },
+        {
+          "value": "Times New Roman",
+          "label": "Times New Roman"
+        },
+        {
+          "value": "Courier New",
+          "label": "Courier New"
+        }
+      ],
+      "default": "Arial"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size (mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "font_size_desktop",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Font size (desktop)",
+      "default": 120
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "900",
+          "label": "Black"
+        }
+      ],
+      "default": "900"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Letter spacing",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "blend_mode",
+      "label": "Blend mode",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "multiply",
+          "label": "Multiply"
+        },
+        {
+          "value": "screen",
+          "label": "Screen"
+        },
+        {
+          "value": "overlay",
+          "label": "Overlay"
+        },
+        {
+          "value": "darken",
+          "label": "Darken"
+        },
+        {
+          "value": "lighten",
+          "label": "Lighten"
+        },
+        {
+          "value": "difference",
+          "label": "Difference"
+        }
+      ],
+      "default": "overlay"
+    },
+    {
+      "type": "header",
+      "content": "Arch Shape"
+    },
+    {
+      "type": "range",
+      "id": "arch_height_ratio",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Arch height ratio",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "arch_roundness",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "label": "Arch roundness",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Sand Animation"
+    },
+    {
+      "type": "color",
+      "id": "sand_color_1",
+      "label": "Sand color 1",
+      "default": "#D2691E"
+    },
+    {
+      "type": "color",
+      "id": "sand_color_2",
+      "label": "Sand color 2",
+      "default": "#CD853F"
+    },
+    {
+      "type": "color",
+      "id": "sand_color_3",
+      "label": "Sand color 3",
+      "default": "#F4A460"
+    },
+    {
+      "type": "color",
+      "id": "wave_color",
+      "label": "Wave pattern color",
+      "default": "#FFD700"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.1,
+      "label": "Animation speed",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Container Settings"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 300,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Container max width",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "container_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Container padding",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "CLASHD Logo"
+    }
+  ]
+}
+{% endschema %}

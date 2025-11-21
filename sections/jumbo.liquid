@@ -1,0 +1,342 @@
+{%- comment -%}
+  =====================================================================================
+  Jumbo Text v6 - Font Size Fix & Responsive Text Controls
+  - FIXED: Font size slider for the Text block now correctly overrides the editor.
+  - ADDED: Separate Desktop and Mobile font size sliders for the Text block.
+  =====================================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign bg_color_1 = section.settings.background_color
+  assign bg_color_2 = section.settings.background_gradient
+  assign bg_image = section.settings.background_image
+
+  assign section_style = ''
+  if bg_color_2 != 'rgba(0,0,0,0)' and bg_color_2 != ''
+    assign section_style = section_style | append: 'background: linear-gradient(135deg, ' | append: bg_color_1 | append: ', ' | append: bg_color_2 | append: ');'
+  else
+    assign section_style = section_style | append: 'background-color: ' | append: bg_color_1 | append: ';'
+  endif
+
+  if bg_image != blank
+    assign section_style = section_style | append: ' background-image: url("' | append: bg_image | image_url | append: '");'
+  endif
+-%}
+
+<div
+  class="jumbo-fx-section"
+  style="
+    {{ section_style }}
+    --section-vertical-padding: {{ section.settings.section_height }}rem;
+    --mobile-font-scale: {{ section.settings.mobile_font_size_percentage | divided_by: 100.0 }};
+  "
+>
+  <div class="{% if section.settings.section_width == 'boxed' %}page-width-fx{% else %}full-width-fx{% endif %}">
+    <div class="jumbo-fx-blocks-wrapper">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'letter' -%}
+            {%- liquid
+              assign effect_style = block.settings.style
+              assign color1 = block.settings.color1
+              assign color2 = block.settings.color2
+              assign link = block.settings.link
+              assign letter = block.settings.letter | default: 'T'
+            -%}
+            {%- if link != blank -%}
+              <a href="{{ link }}" class="jumbo-letter-fx__link" {{ block.shopify_attributes }}>
+            {%- endif -%}
+            <span
+              class="jumbo-letter-fx effect-{{ effect_style }}"
+              style="
+                --color-1: {{ color1 }};
+                --color-2: {{ color2 }};
+                --color-1-shadow: {{ color1 | color_modify: 'alpha', 0.5 }};
+                --bg-color-darken-5: {{ section.settings.background_color | color_darken: 5 }};
+                --bg-color-darken-10: {{ section.settings.background_color | color_darken: 10 }};
+              "
+              {% if link == blank %}
+                {{ block.shopify_attributes }}
+              {% endif %}
+            >
+              {{ letter }}
+            </span>
+            {%- if link != blank -%}
+              </a>
+            {%- endif -%}
+
+          {%- when 'text' -%}
+            <div
+              class="jumbo-subtext-fx text-style--{{ block.settings.font_weight }}"
+              style="
+                --subtext-color: {{ block.settings.text_color }};
+                --desktop-text-size: {{ block.settings.desktop_text_size }}rem;
+                --mobile-text-size: {{ block.settings.mobile_text_size }}rem;
+                --subtext-align: {{ block.settings.text_align }};
+              "
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.subheading }}
+            </div>
+
+          {%- when 'button' -%}
+            <div class="jumbo-cta-container-fx" {{ block.shopify_attributes }}>
+              <a
+                href="{{ block.settings.link | default: '#' }}"
+                class="jumbo-cta-button-fx {% if block.settings.use_outline %}jumbo-cta-button-fx--outline{% endif %}"
+                style="--button-bg: {{ block.settings.button_bg_color }}; --button-text-color: {{ block.settings.button_text_color }};"
+              >
+                {{ block.settings.label | escape }}
+              </a>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .jumbo-fx-section {
+    padding: var(--section-vertical-padding) 2rem;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+  }
+  .page-width-fx {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .jumbo-fx-blocks-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.25rem, 2vw, 1.5rem);
+    width: 100%;
+  }
+  .jumbo-letter-fx__link {
+    text-decoration: none;
+    line-height: 1;
+  }
+  .jumbo-letter-fx {
+    font-family: var(--font-heading-family, 'Montserrat', sans-serif);
+    font-size: clamp(3.5rem, 20vw, 15rem);
+    font-weight: 800;
+    line-height: 1;
+    display: block;
+    transition: transform 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .jumbo-letter-fx__link:hover .jumbo-letter-fx {
+    transform: scale(1.03) rotate(-1deg);
+  }
+  .effect-standard { color: var(--color-1); }
+  .effect-gradient {
+    background: linear-gradient(45deg, var(--color-1), var(--color-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-fill-color: transparent;
+  }
+  .effect-vintage3d {
+    color: var(--color-1);
+    text-shadow: 3px 3px 0 var(--color-2), 6px 6px 0 var(--bg-color-darken-5), 9px 9px 0 var(--bg-color-darken-10);
+  }
+  .effect-shine {
+    position: relative;
+    background: linear-gradient(45deg, var(--color-1) 30%, var(--color-2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-fill-color: transparent;
+  }
+  .effect-shine::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 50%);
+    pointer-events: none;
+  }
+  .effect-outline { color: transparent; -webkit-text-stroke: 2px var(--color-1); }
+  .effect-neon {
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--color-1), 0 0 30px var(--color-1), 0 0 40px var(--color-1-shadow), 0 0 55px var(--color-1-shadow);
+  }
+
+  .jumbo-subtext-fx {
+    flex-basis: 100%;
+    color: var(--subtext-color);
+    text-align: var(--subtext-align);
+    margin: 2rem 0;
+    line-height: 1.6;
+    font-family: var(--font-body-family, sans-serif);
+  }
+  .jumbo-subtext-fx > * {
+    font-size: var(--desktop-text-size) !important; /* Use !important to override editor styles */
+    margin: 0;
+  }
+  .text-style--normal { font-weight: normal; }
+  .text-style--bold { font-weight: bold; }
+  .text-style--title {
+    font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em;
+    font-family: var(--font-heading-family, sans-serif);
+  }
+
+  .jumbo-cta-container-fx {
+    display: flex; flex-basis: 100%; justify-content: center;
+    gap: 1rem; margin-top: 2rem;
+  }
+  .jumbo-cta-button-fx {
+    display: inline-block; padding: 1rem 2.5rem; font-size: 1rem; text-decoration: none;
+    border-radius: 50px; font-weight: bold; background-color: var(--button-bg); color: var(--button-text-color);
+    border: 2px solid var(--button-bg); transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  }
+  .jumbo-cta-button-fx:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+  .jumbo-cta-button-fx--outline { background-color: transparent; color: var(--button-bg); }
+  .jumbo-cta-button-fx--outline:hover { background-color: var(--button-bg); color: var(--button-text-color); }
+
+  @media (max-width: 768px) {
+    .jumbo-letter-fx {
+      font-size: calc(clamp(3.5rem, 25vw, 15rem) * var(--mobile-font-scale));
+    }
+    .effect-outline { -webkit-text-stroke-width: 1.5px; }
+    .effect-vintage3d { text-shadow: 2px 2px 0 var(--color-2), 4px 4px 0 var(--bg-color-darken-5); }
+    .jumbo-subtext-fx > * {
+      font-size: var(--mobile-text-size) !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Jumbo Text (FX)",
+  "tag": "section",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Styling"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Content Width",
+      "options": [
+        { "value": "full", "label": "Full Width" },
+        { "value": "boxed", "label": "Boxed (1200px)" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Vertical Spacing",
+      "min": 2, "max": 20, "step": 1, "unit": "rem", "default": 8
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color 1",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "background_gradient",
+      "label": "Background Color 2 (for Gradient)",
+      "info": "Leave transparent for a solid color."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Styling"
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size_percentage",
+      "label": "Jumbo Letter Mobile Size",
+      "min": 10, "max": 100, "step": 5, "unit": "%", "default": 45,
+      "info": "Adjust the main letter size on mobile. 100% is default."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "letter",
+      "name": "Letter",
+      "settings": [
+        { "type": "text", "id": "letter", "label": "Letter", "default": "T" },
+        { "type": "url", "id": "link", "label": "Link" },
+        {
+          "type": "select", "id": "style", "label": "Artistic Style",
+          "options": [
+            { "value": "standard", "label": "Standard" },
+            { "value": "gradient", "label": "Editorial Gradient" },
+            { "value": "shine", "label": "Magazine Shine" },
+            { "value": "vintage3d", "label": "Vintage 3D" },
+            { "value": "outline", "label": "Outline" },
+            { "value": "neon", "label": "Neon Glow" }
+          ],
+          "default": "standard"
+        },
+        { "type": "color", "id": "color1", "label": "Primary Color", "default": "#222222" },
+        { "type": "color", "id": "color2", "label": "Secondary Color", "default": "#E87A7A" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext", "id": "subheading", "label": "Text Content",
+          "default": "<p>Add a title, subtitle, or a descriptive paragraph here.</p>"
+        },
+        {
+          "type": "select", "id": "font_weight", "label": "Text Style",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "bold", "label": "Bold" },
+            { "value": "title", "label": "Title (Bold & Uppercase)" }
+          ],
+          "default": "normal"
+        },
+        { "type": "color", "id": "text_color", "label": "Text Color", "default": "#333333" },
+        {
+          "type": "range", "id": "desktop_text_size", "label": "Desktop Font Size",
+          "min": 1, "max": 6, "step": 0.1, "unit": "rem", "default": 1.2
+        },
+        {
+          "type": "range", "id": "mobile_text_size", "label": "Mobile Font Size",
+          "min": 1, "max": 4, "step": 0.1, "unit": "rem", "default": 1.1
+        },
+        {
+          "type": "select", "id": "text_align", "label": "Text Alignment",
+          "options": [
+            { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Button Label", "default": "Shop Now" },
+        { "type": "url", "id": "link", "label": "Button Link" },
+        { "type": "checkbox", "id": "use_outline", "label": "Use Outline Style", "default": false },
+        { "type": "color", "id": "button_bg_color", "label": "Button Color", "default": "#222222" },
+        { "type": "color", "id": "button_text_color", "label": "Button Text Color", "default": "#FFFFFF" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Jumbo Text (FX)",
+      "blocks": [
+        { "type": "letter" }, { "type": "letter" }, { "type": "letter" }, { "type": "letter" },
+        { "type": "letter" }, { "type": "letter" }, { "type": "letter" },
+        { "type": "text" }, { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

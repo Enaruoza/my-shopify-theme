@@ -1,0 +1,258 @@
+{% liquid
+  assign _heading = section.settings.heading | default: "AUTO" | strip
+  assign _subheading = section.settings.subheading | default: "AUTO" | strip
+  assign _json_input = section.settings.json_input | default: "AUTO" | strip
+  assign _accent = section.settings.card_accent | default: "#0E0E10" | strip
+  assign _star = section.settings.star_color | default: "#111111" | strip
+  assign _bg = section.settings.card_bg | default: "#FFFFFF" | strip
+  assign _maxw = section.settings.max_width | default: 1280
+  assign _radius = section.settings.card_radius | default: 22
+  assign _shadow = section.settings.card_shadow | default: 28
+  assign _padding = section.settings.card_padding | default: 22
+  assign _float = section.settings.float_intensity | default: 6
+  assign _autoplay = section.settings.autoplay
+  assign _autoplay_speed = section.settings.autoplay_speed | default: 8
+%}
+<section id="az-freviews-{{ section.id }}" class="az-freviews" data-section-id="{{ section.id }}">
+  <style>
+    #az-freviews-{{ section.id }}{--az-accent: {{ _accent }};--az-star: {{ _star }};--az-card-bg: {{ _bg }};--az-radius: {{ _radius }}px;--az-shadow: {{ _shadow }}px;--az-pad: {{ _padding }}px;--az-float: {{ _float }};--az-max: {{ _maxw }}px;--az-auto-speed: {{ _autoplay_speed }};position:relative;display:block;padding:40px 0;background:transparent}
+    #az-freviews-{{ section.id }} .az-wrap{max-width:var(--az-max);margin:0 auto;padding:0 16px}
+    #az-freviews-{{ section.id }} .az-head{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;text-align:center;margin-bottom:28px}
+    #az-freviews-{{ section.id }} .az-head h2{letter-spacing:-.02em;font-weight:700;font-size:clamp(22px,3vw,34px);margin:0;color:#0a0a0a}
+    #az-freviews-{{ section.id }} .az-head .az-sub{opacity:.7;font-size:clamp(13px,2vw,16px)}
+    #az-freviews-{{ section.id }} .az-viewport{position:relative;overflow:hidden}
+    #az-freviews-{{ section.id }} .az-track{display:flex;gap:18px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+    #az-freviews-{{ section.id }} .az-track::-webkit-scrollbar{height:8px}
+    #az-freviews-{{ section.id }} .az-track::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:999px}
+    #az-freviews-{{ section.id }} .az-card{scroll-snap-align:center;flex:0 0 min(82%,460px);background:var(--az-card-bg);border-radius:var(--az-radius);padding:var(--az-pad);box-shadow:0 20px var(--az-shadow) rgba(0,0,0,.08),0 6px 18px rgba(0,0,0,.06);transform:translateY(0) translateZ(0);transition:transform .4s ease,box-shadow .4s ease}
+    #az-freviews-{{ section.id }} .az-card:hover{transform:translateY(-4px)}
+    #az-freviews-{{ section.id }} .az-float-1{animation:az-f{{ section.id }} 6.2s ease-in-out infinite alternate}
+    #az-freviews-{{ section.id }} .az-float-2{animation:az-f{{ section.id }} 7.1s ease-in-out infinite alternate}
+    #az-freviews-{{ section.id }} .az-float-3{animation:az-f{{ section.id }} 8.4s ease-in-out infinite alternate}
+    @keyframes az-f{{ section.id }}{0%{transform:translateY(calc(var(--az-float)*-1px))}100%{transform:translateY(calc(var(--az-float)*1px))}}
+    #az-freviews-{{ section.id }} .az-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    #az-freviews-{{ section.id }} .az-avatar{width:48px;height:48px;border-radius:999px;display:grid;place-items:center;background:#f1f1f1;color:#111;font-weight:600}
+    #az-freviews-{{ section.id }} .az-author{font-weight:600;color:#0b0b0b}
+    #az-freviews-{{ section.id }} .az-meta{opacity:.6;font-size:12px}
+    #az-freviews-{{ section.id }} .az-stars{display:flex;gap:4px;margin:2px 0}
+    #az-freviews-{{ section.id }} .az-star{width:16px;height:16px;display:inline-block}
+    #az-freviews-{{ section.id }} .az-source{margin-left:auto;font-size:12px;opacity:.7;display:flex;align-items:center;gap:8px}
+    #az-freviews-{{ section.id }} .az-body{font-size:15px;line-height:1.6;color:#0e0e0f}
+    #az-freviews-{{ section.id }} .az-nav{position:absolute;inset:0;pointer-events:none}
+    #az-freviews-{{ section.id }} .az-btn{pointer-events:auto;position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.8);backdrop-filter:saturate(140%) blur(6px);display:grid;place-items:center}
+    #az-freviews-{{ section.id }} .az-btn[disabled]{opacity:.4}
+    #az-freviews-{{ section.id }} .az-prev{left:6px}
+    #az-freviews-{{ section.id }} .az-next{right:6px}
+    #az-freviews-{{ section.id }} .az-edge{position:absolute;top:0;bottom:0;width:80px;pointer-events:none}
+    #az-freviews-{{ section.id }} .az-edge.left{left:0;background:linear-gradient(90deg,rgba(255,255,255,1),rgba(255,255,255,0))}
+    #az-freviews-{{ section.id }} .az-edge.right{right:0;background:linear-gradient(270deg,rgba(255,255,255,1),rgba(255,255,255,0))}
+    #az-freviews-{{ section.id }} .az-dots{display:flex;justify-content:center;gap:8px;margin-top:16px}
+    #az-freviews-{{ section.id }} .az-dot{width:8px;height:8px;border-radius:999px;background:rgba(0,0,0,.18)}
+    #az-freviews-{{ section.id }} .az-dot.active{background:var(--az-accent)}
+    #az-freviews-{{ section.id }} .az-icon{display:inline-block}
+  </style>
+  <div class="az-wrap">
+    <div class="az-head">
+      {% assign _h = _heading %}
+      {% if _h != 'AUTO' %}
+        {% if _h != '' %}
+          <h2>{{ _h }}</h2>
+        {% endif %}
+      {% endif %}
+      {% assign _s = _subheading %}
+      {% if _s != 'AUTO' %}
+        {% if _s != '' %}
+          <div class="az-sub">{{ _s }}</div>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="az-viewport">
+      <div class="az-track" id="az-track-{{ section.id }}">
+        {% for block in section.blocks %}
+          {% if block.type == 'review' %}
+            {% assign _name = block.settings.author | default: 'AUTO' | strip %}
+            {% assign _text = block.settings.body | default: 'AUTO' | strip %}
+            {% assign _when = block.settings.date_label | default: 'AUTO' | strip %}
+            {% assign _src = block.settings.source_label | default: 'AUTO' | strip %}
+            {% assign _rating = block.settings.rating %}
+            <article class="az-card az-float-{% cycle 1,2,3 %}">
+              <div class="az-row">
+                {% if block.settings.avatar != blank %}
+                  <img class="az-avatar" src="{{ block.settings.avatar | image_url: width: 96 }}" width="48" height="48" alt="{{ _name }}" loading="lazy" />
+                {% else %}
+                  <div class="az-avatar">{% assign _n = _name | split: ' ' | first %}{% if _n == 'AUTO' %}A{% else %}{{ _n | slice: 0, 1 | upcase }}{% endif %}</div>
+                {% endif %}
+                <div>
+                  <div class="az-author">{% if _name == 'AUTO' %}Customer{% else %}{{ _name }}{% endif %}</div>
+                  <div class="az-meta">{% if _when == 'AUTO' %}{% else %}{{ _when }}{% endif %}</div>
+                </div>
+                <div class="az-source">
+                  <span>{% if _src == 'AUTO' %}{% else %}{{ _src }}{% endif %}</span>
+                </div>
+              </div>
+              <div class="az-stars">
+                {% assign i = 0 %}
+                {% for i in (1..5) %}
+                  {% assign filled = 0 %}
+                  {% if i <= _rating %}
+                    {% assign filled = 1 %}
+                  {% endif %}
+                  <svg class="az-star" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="{% if filled == 1 %}{{ _star }}{% else %}#E6E6E6{% endif %}" d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.168L12 18.896l-7.336 3.87 1.402-8.168L.132 9.21l8.2-1.192z"/></svg>
+                {% endfor %}
+              </div>
+              <div class="az-body">{% if _text == 'AUTO' %}{% else %}{{ _text }}{% endif %}</div>
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="az-nav">
+        <button class="az-btn az-prev" type="button" aria-label="Prev" id="az-prev-{{ section.id }}">
+          <svg class="az-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </button>
+        <button class="az-btn az-next" type="button" aria-label="Next" id="az-next-{{ section.id }}">
+          <svg class="az-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+        </button>
+        <div class="az-edge left"></div>
+        <div class="az-edge right"></div>
+      </div>
+      <div class="az-dots" id="az-dots-{{ section.id }}"></div>
+    </div>
+  </div>
+  <script type="application/json" id="az-freviews-data-{{ section.id }}">
+    {
+      "manual_reviews": [
+        {% for block in section.blocks %}
+          {% if block.type == 'review' %}
+            {
+              "author": {{ block.settings.author | default: 'AUTO' | json }},
+              "avatar": {% if block.settings.avatar != blank %}{{ block.settings.avatar | image_url: width: 96 | json }}{% else %}null{% endif %},
+              "rating": {{ block.settings.rating | json }},
+              "date_label": {{ block.settings.date_label | default: 'AUTO' | json }},
+              "source": {{ block.settings.source_label | default: 'AUTO' | json }},
+              "body": {{ block.settings.body | default: 'AUTO' | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endif %}
+        {% endfor %}
+      ],
+      "json_input": {{ _json_input | json }},
+      "google_sources": [
+        {% for block in section.blocks %}
+          {% if block.type == 'source_google' %}
+            {
+              "place_id": {{ block.settings.place_id | default: 'AUTO' | json }},
+              "api_key": {{ block.settings.api_key | default: 'AUTO' | json }},
+              "limit": {{ block.settings.limit | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endif %}
+        {% endfor %}
+      ],
+      "json_sources": [
+        {% for block in section.blocks %}
+          {% if block.type == 'source_json' %}
+            {
+              "url": {{ block.settings.url | default: 'AUTO' | json }},
+              "bearer": {{ block.settings.bearer | default: 'AUTO' | json }},
+              "limit": {{ block.settings.limit | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endif %}
+        {% endfor %}
+      ],
+      "design": {"accent": {{ _accent | json }}, "star": {{ _star | json }}, "float": {{ _float | json }}, "autoplay": {{ _autoplay | json }}, "autoplay_speed": {{ _autoplay_speed | json }}}
+    }
+  </script>
+  <script>
+    try{
+      var rootId = "{{ section.id }}";
+      var dataEl = document.getElementById("az-freviews-data-"+rootId);
+      var cfg = JSON.parse(dataEl.textContent||"{}");
+      var track = document.getElementById("az-track-"+rootId);
+      var dots = document.getElementById("az-dots-"+rootId);
+      function makeStarSvg(fill){var s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 24 24");s.setAttribute("width","16");s.setAttribute("height","16");var p=document.createElementNS("http://www.w3.org/2000/svg","path");p.setAttribute("d","M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.168L12 18.896l-7.336 3.87 1.402-8.168L.132 9.21l8.2-1.192z");p.setAttribute("fill",fill);s.appendChild(p);return s}
+      function avatarInitial(name){var n=(name||"").trim();if(!n||n==="AUTO"){return "A"}return n.charAt(0).toUpperCase()}
+      function cardFloatClass(i){var r=(i%3)+1;return "az-float-"+r}
+      function createCard(r,i){var art=document.createElement("article");art.className="az-card "+cardFloatClass(i);
+        var row=document.createElement("div");row.className="az-row";art.appendChild(row);
+        if(r.avatar){var img=document.createElement("img");img.className="az-avatar";img.src=r.avatar;img.width=48;img.height=48;img.loading="lazy";img.alt=r.author||"Customer";row.appendChild(img)}else{var av=document.createElement("div");av.className="az-avatar";av.textContent=avatarInitial(r.author);row.appendChild(av)}
+        var meta=document.createElement("div");var author=document.createElement("div");author.className="az-author";author.textContent=(r.author&&r.author!=="AUTO")?r.author:"Customer";meta.appendChild(author);var when=document.createElement("div");when.className="az-meta";if(r.date_label&&r.date_label!=="AUTO"){when.textContent=r.date_label}meta.appendChild(when);row.appendChild(meta);
+        var src=document.createElement("div");src.className="az-source";if(r.source&&r.source!=="AUTO"){src.textContent=r.source}row.appendChild(src);
+        var stars=document.createElement("div");stars.className="az-stars";var i2=1;while(i2<=5){var fill=(i2<=Number(r.rating||0))?getComputedStyle(document.getElementById("az-freviews-"+rootId)).getPropertyValue('--az-star').trim():"#E6E6E6";stars.appendChild(makeStarSvg(fill));i2=i2+1}art.appendChild(stars);
+        var body=document.createElement("div");body.className="az-body";if(r.body&&r.body!=="AUTO"){body.textContent=r.body}else{body.textContent=""}art.appendChild(body);
+        return art}
+      function normalizeGoogleReview(g){return{author:g.author_name||"Customer",avatar:g.profile_photo_url||null,rating:g.rating||0,date_label:g.relative_time_description||"",source:"Google",body:g.text||""}}
+      function normalizeGeneric(o){return{author:o.author||o.name||"Customer",avatar:o.avatar||o.photo||null,rating:o.rating||o.stars||0,date_label:o.date_label||o.date||"",source:o.source||o.platform||"",body:o.body||o.text||o.content||""}}
+      var reviews=[];if(Array.isArray(cfg.manual_reviews)){cfg.manual_reviews.forEach(function(r){reviews.push(normalizeGeneric(r))})}
+      if(cfg.json_input&&cfg.json_input!=="AUTO"){try{var arr=JSON.parse(cfg.json_input);if(Array.isArray(arr)){arr.forEach(function(x){reviews.push(normalizeGeneric(x))})}}catch(e){}}
+      function fetchJsonSource(s){if(!s||!s.url||s.url==="AUTO"){return Promise.resolve([])}var h={};if(s.bearer&&s.bearer!=="AUTO"){h['Authorization']='Bearer '+s.bearer}return fetch(s.url,{headers:h}).then(function(r){if(!r.ok){return []}return r.json()}).then(function(j){var a=Array.isArray(j)?j:(Array.isArray(j.reviews)?j.reviews:[]);var out=[];a.forEach(function(x){out.push(normalizeGeneric(x))});if(s.limit&&s.limit>0){out=out.slice(0,s.limit)}return out}).catch(function(){return []})}
+      function fetchGoogleSource(s){if(!s||!s.place_id||s.place_id==="AUTO"||!s.api_key||s.api_key==="AUTO"){return Promise.resolve([])}var u="https://maps.googleapis.com/maps/api/place/details/json?place_id="+encodeURIComponent(s.place_id)+"&fields=reviews&key="+encodeURIComponent(s.api_key);return fetch(u).then(function(r){if(!r.ok){return []}return r.json()}).then(function(j){var rev=(j&&j.result&&Array.isArray(j.result.reviews))?j.result.reviews:[];var out=[];rev.forEach(function(g){out.push(normalizeGoogleReview(g))});if(s.limit&&s.limit>0){out=out.slice(0,s.limit)}return out}).catch(function(){return []})}
+      var jsonPromises=[];if(Array.isArray(cfg.json_sources)){cfg.json_sources.forEach(function(s){jsonPromises.push(fetchJsonSource(s))})}
+      var gPromises=[];if(Array.isArray(cfg.google_sources)){cfg.google_sources.forEach(function(s){gPromises.push(fetchGoogleSource(s))})}
+      function render(){track.innerHTML="";var i=0;reviews.forEach(function(r){track.appendChild(createCard(r,i));i=i+1});updateDots()}
+      function updateDots(){dots.innerHTML="";var total=Math.max(1,track.children.length);var perView=1;var pages=Math.ceil(total/perView);var i=0;while(i<pages){var d=document.createElement("div");d.className="az-dot";if(i===0){d.classList.add("active")}dots.appendChild(d);i=i+1}}
+      Promise.all(jsonPromises.concat(gPromises)).then(function(groups){groups.forEach(function(arr){arr.forEach(function(r){reviews.push(r)})});render()});
+      var startX=0,scrollLeft=0,isDown=false;track.addEventListener('pointerdown',function(e){isDown=true;startX=e.clientX;scrollLeft=track.scrollLeft;track.setPointerCapture(e.pointerId)});track.addEventListener('pointermove',function(e){if(!isDown){return}var dx=e.clientX-startX;track.scrollLeft=scrollLeft-dx});track.addEventListener('pointerup',function(){isDown=false});
+      var prev=document.getElementById('az-prev-'+rootId);var next=document.getElementById('az-next-'+rootId);function cardWidth(){var c=track.querySelector('.az-card');if(!c){return 320}return c.getBoundingClientRect().width+18}
+      function canPrev(){return track.scrollLeft>0}
+      function canNext(){return Math.ceil(track.scrollLeft+track.clientWidth)<track.scrollWidth}
+      function updateNav(){prev.disabled=!canPrev();next.disabled=!canNext()}
+      prev.addEventListener('click',function(){track.scrollBy({left:-cardWidth(),behavior:'smooth'})});next.addEventListener('click',function(){track.scrollBy({left:cardWidth(),behavior:'smooth'})});track.addEventListener('scroll',updateNav);window.addEventListener('resize',updateNav);updateNav();
+      if(cfg.design&&cfg.design.autoplay){var dir=1;setInterval(function(){if(!document.body.contains(track)){return}if(!canNext()){dir=-1}if(!canPrev()){dir=1}track.scrollBy({left:dir*cardWidth(),behavior:'smooth'})},Math.max(1500,Number(cfg.design.autoplay_speed||8)*1000))}
+    }catch(e){}
+  </script>
+</section>
+{% schema %}
+{
+  "name": "AZ Floating Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {"type":"text","id":"heading","label":"Heading","default":"AUTO"},
+    {"type":"text","id":"subheading","label":"Subheading","default":"AUTO"},
+    {"type":"textarea","id":"json_input","label":"Import JSON (array of reviews)","default":"AUTO"},
+    {"type":"range","id":"max_width","label":"Max width (px)","min":900,"max":1600,"step":10,"default":1280},
+    {"type":"color","id":"card_bg","label":"Card background","default":"#FFFFFF"},
+    {"type":"color","id":"card_accent","label":"Accent color","default":"#0E0E10"},
+    {"type":"color","id":"star_color","label":"Star color","default":"#111111"},
+    {"type":"range","id":"card_radius","label":"Card corner radius","min":8,"max":36,"step":2,"default":22},
+    {"type":"range","id":"card_shadow","label":"Shadow depth","min":10,"max":40,"step":2,"default":28},
+    {"type":"range","id":"card_padding","label":"Card padding","min":14,"max":30,"step":2,"default":22},
+    {"type":"range","id":"float_intensity","label":"Float intensity","min":0,"max":12,"step":0.2,"default":6},
+    {"type":"checkbox","id":"autoplay","label":"Autoplay scroll","default":false},
+    {"type":"range","id":"autoplay_speed","label":"Autoplay interval (s)","min":4,"max":18,"step":1,"default":8}
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Manual review",
+      "settings": [
+        {"type":"text","id":"author","label":"Name","default":"AUTO"},
+        {"type":"image_picker","id":"avatar","label":"Avatar"},
+        {"type":"range","id":"rating","label":"Rating","min":1,"max":5,"step":1,"default":5},
+        {"type":"text","id":"date_label","label":"Date label","default":"AUTO"},
+        {"type":"text","id":"source_label","label":"Source label","default":"AUTO"},
+        {"type":"textarea","id":"body","label":"Review text","default":"AUTO"}
+      ]
+    },
+    {
+      "type": "source_google",
+      "name": "Google Maps source",
+      "settings": [
+        {"type":"text","id":"place_id","label":"Place ID","default":"AUTO"},
+        {"type":"text","id":"api_key","label":"API key","default":"AUTO"},
+        {"type":"range","id":"limit","label":"Limit","min":1,"max":50,"step":1,"default":10}
+      ]
+    },
+    {
+      "type": "source_json",
+      "name": "JSON endpoint source",
+      "settings": [
+        {"type":"text","id":"url","label":"JSON URL","default":"AUTO"},
+        {"type":"text","id":"bearer","label":"Bearer token (optional)","default":"AUTO"},
+        {"type":"range","id":"limit","label":"Limit","min":1,"max":100,"step":1,"default":20}
+      ]
+    }
+  ],
+  "presets": [
+    {"name":"AZ Floating Reviews","category":"Custom"}
+  ]
+}
+{% endschema %}

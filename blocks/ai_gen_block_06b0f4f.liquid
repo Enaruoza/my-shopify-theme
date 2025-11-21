@@ -1,0 +1,1472 @@
+{% doc %}
+  @prompt
+    mystical "join waiting list" in bosnian" like Rezerviši svoju masku do 15.8
+    
+    it's suipposed to be for a new product thats upcoming, this is its landing page. 
+    
+    just fyi this is the instagram caption on the post: TAWENZA STIŽE — SAMO 100 KOMADA
+    98% organska maska za obnovu kose.
+    Shea. Argan. Vitamin E. Korijen bijelog sljeza.
+    
+    Razvijena uz pomoć ženskih kolektiva, od sastojaka sa lokalnih farmi.
+    
+    Prednaruči do 15.8 — količina je ograničena. and the post;s text on visual is: 98% ORGANSKA MASKA ZA OBNOVU KOSE
+    
+    STIZE USKORO
+    
+    OGRANICENA KOLICINA
+    
+    100 KOMADA
+    
+    
+    PREDNARUCI ODMAH
+    
+    8/15
+    
+    
+    BREAK. knowing all this; make a well designed section that will allow me to put an image of the product (a visual i have designed with the product's name) and have a place to tell the product's story, what it is, ingredients, etc, and a place where people can "pre-order", now I don;t know if there's a shopify native pre-order function but if there is do it here, if there ain't then the pre-order would be something like gathering their phone numbers + emails and how many they want to order.
+    
+    i need to have like big jumbo texts that look visually nice; everything must look pretty, my products colors are pink, yellow, white, and various shades, Create a full-width, mobile-optimized preorder section for a limited-edition product drop.
+    Product: Tawenza – 98% organic hair mask
+    Drop date: 15.8
+    Quantity: 100 units only
+    
+    Section layout:
+    Left side: product image (editable upload)
+    
+    Right side: editable text blocks + preorder form
+    
+    Stack vertically on mobile
+    
+    Design requirements:
+    Full-width layout (not boxed)
+    
+    Custom background gradient: #FFB6C1 to #FFFFE0
+    
+    Accent color: #FF69B4
+    
+    Button gradient: #FF69B4 to #FFD700
+    
+    Text color: #333333
+    
+    Text block settings:
+    Editable headline, subheadline, product story, ingredients title, ingredients list
+    
+    Font size controls: headline (up to 72px), paragraph (16–20px)
+    
+    Alignment and color controls per text block
+    
+    Preorder form:
+    Fields: Name, Phone, Email, Quantity (dropdown)
+    
+    Editable button label, confirmation message, and deadline text
+    
+    Extras:
+    Let me add decorative visuals (e.g. cloud or floral PNGs)
+    
+    Separate style options for desktop and mobile
+    
+    Make this reusable for other product drops., title should be jumbo text that looks like an editorial
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-drop-{{ ai_gen_id }} {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, {{ block.settings.background_gradient_start }} 0%, {{ block.settings.background_gradient_end }} 100%);
+    position: relative;
+    overflow: hidden;}
+
+  .ai-product-drop-container-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    max-width: 100%;
+    margin: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ai-product-drop-image-section-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ block.settings.desktop_padding }}px;
+    position: relative;
+  }
+
+  .ai-product-drop-image-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+  }
+
+  .ai-product-drop-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-product-drop-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-product-drop-image-placeholder-{{ ai_gen_id }} svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.3;
+  }
+
+  .ai-product-drop-content-section-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    padding: {{ block.settings.desktop_padding }}px;
+    background-color: rgba(255, 255, 255, {{ block.settings.content_bg_opacity | divided_by: 100.0 }});
+  }
+
+  .ai-product-drop-content-wrapper-{{ ai_gen_id }} {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.content_spacing }}px;
+  }
+
+  .ai-product-drop-text-block-{{ ai_gen_id }} {
+    margin: 0;
+  }
+
+  .ai-product-drop-headline-{{ ai_gen_id }} {
+    font-size: {{ block.settings.headline_size }}px;
+    font-weight: {{ block.settings.headline_weight }};
+    color: {{ block.settings.headline_color }};
+    text-align: {{ block.settings.headline_alignment }};
+    line-height: {{ block.settings.headline_line_height }};
+    margin: 0;
+    text-transform: {{ block.settings.headline_transform }};
+    letter-spacing: {{ block.settings.headline_letter_spacing }}px;
+    font-family: {{ block.settings.headline_font.family }}, {{ block.settings.headline_font.fallback_families }};
+    font-style: {{ block.settings.headline_font.style }};
+    font-weight: {{ block.settings.headline_font.weight }};
+    position: relative;
+    {% if block.settings.headline_style == 'editorial' %}
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+      background: linear-gradient(45deg, {{ block.settings.headline_gradient_start }}, {{ block.settings.headline_gradient_end }});
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;{% if block.settings.headline_stroke %}
+        -webkit-text-stroke: {{ block.settings.headline_stroke_width }}px {{ block.settings.headline_stroke_color }};
+      {% endif %}
+    {% elsif block.settings.headline_style == 'magazine' %}
+      position: relative;
+      overflow: hidden;
+    {% elsif block.settings.headline_style == 'vintage' %}
+      text-shadow: 
+        3px 3px 0px {{ block.settings.headline_shadow_color }},
+        6px 6px 0px rgba(0,0,0,0.1);
+      transform: perspective(500px) rotateX({{ block.settings.headline_perspective }}deg);
+    {% endif %}
+  }
+
+  {% if block.settings.headline_style == 'magazine' %}
+    .ai-product-drop-headline-{{ ai_gen_id }}::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+      animation: ai-headline-shine-{{ ai_gen_id }} 3s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes ai-headline-shine-{{ ai_gen_id }} {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+  {% endif %}
+
+  .ai-product-drop-subheadline-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheadline_size }}px;
+    font-weight: {{ block.settings.subheadline_weight }};
+    color: {{ block.settings.subheadline_color }};
+    text-align: {{ block.settings.subheadline_alignment }};
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .ai-product-drop-story-{{ ai_gen_id }} {
+    font-size: {{ block.settings.story_size }}px;
+    color: {{ block.settings.story_color }};
+    text-align: {{ block.settings.story_alignment }};
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ai-product-drop-ingredients-{{ ai_gen_id }} {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: {{ block.settings.ingredients_padding }}px;
+    border-radius: {{ block.settings.ingredients_border_radius }}px;
+    backdrop-filter: blur(10px);
+  }
+
+  .ai-product-drop-ingredients-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.ingredients_title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.ingredients_title_color }};
+    text-align: {{ block.settings.ingredients_alignment }};
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .ai-product-drop-ingredients-list-{{ ai_gen_id }} {
+    font-size: {{ block.settings.ingredients_list_size }}px;
+    color: {{ block.settings.ingredients_list_color }};
+    text-align: {{ block.settings.ingredients_alignment }};
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ai-product-drop-form-{{ ai_gen_id }} {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    padding: {{ block.settings.form_padding }}px;
+    border-radius: {{ block.settings.form_border_radius }}px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .ai-product-drop-form-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.form_title_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.text_color }};
+    text-align: center;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .ai-product-drop-form-subtitle-{{ ai_gen_id }} {
+    font-size:14px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.7;
+    text-align: center;
+    margin: 0 0 24px 0;}
+
+  .ai-product-drop-deadline-{{ ai_gen_id }} {
+    background: linear-gradient(135deg, {{ block.settings.accent_color }} 0%, #FFD700 100%);
+    color: white;
+    padding:12px 20px;
+    border-radius: 25px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
+  }
+
+  .ai-product-drop-form-fields-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ai-product-drop-form-row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .ai-product-drop-form-field-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ai-product-drop-form-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    font-weight: 500;
+    color: {{ block.settings.text_color }};}
+
+  .ai-product-drop-form-input-{{ ai_gen_id }} {
+    padding: 14px 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+  }
+
+  .ai-product-drop-form-input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.accent_color }};
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+  }
+
+  .ai-product-drop-form-select-{{ ai_gen_id }} {
+    padding: 14px 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ai-product-drop-form-select-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.accent_color }};
+    background-color: white;
+  }
+
+  .ai-product-drop-form-button-{{ ai_gen_id }} {
+    background: linear-gradient(135deg, {{ block.settings.button_gradient_start }} 0%, {{ block.settings.button_gradient_end }} 100%);
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    padding: 18px 36px;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);position: relative;
+    overflow: hidden;
+  }
+
+  .ai-product-drop-form-button-{{ ai_gen_id }}:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(255, 105, 180, 0.4);
+  }
+
+  .ai-product-drop-form-button-{{ ai_gen_id }}:active {
+    transform: translateY(0);
+  }
+
+  .ai-product-drop-success-{{ ai_gen_id }} {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    padding: 16px 20px;
+    border-radius: {{ block.settings.input_border_radius }}px;
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid #c3e6cb;
+  }
+
+  .ai-product-drop-error-{{ ai_gen_id }} {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    padding: 16px 20px;
+    border-radius: {{ block.settings.input_border_radius }}px;
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid #f5c6cb;
+  }
+
+  .ai-product-drop-decorative-{{ ai_gen_id }} {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .ai-product-drop-decorative-1-{{ ai_gen_id }} {
+    top: {{ block.settings.decorative_1_top }}%;
+    left: {{ block.settings.decorative_1_left }}%;
+    width: {{ block.settings.decorative_1_size }}px;
+    opacity: {{ block.settings.decorative_1_opacity | divided_by: 100.0 }};
+  }
+
+  .ai-product-drop-decorative-2-{{ ai_gen_id }} {
+    top: {{ block.settings.decorative_2_top }}%;
+    right: {{ block.settings.decorative_2_right }}%;
+    width: {{ block.settings.decorative_2_size }}px;
+    opacity: {{ block.settings.decorative_2_opacity | divided_by: 100.0 }};
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-product-drop-container-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .ai-product-drop-image-section-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_padding }}px;order: {{ block.settings.mobile_image_order }};
+    }
+
+    .ai-product-drop-content-section-{{ ai_gen_id }} {
+      padding: {{ block.settings.mobile_padding }}px;
+      order: {{ block.settings.mobile_content_order }};
+    }
+
+    .ai-product-drop-headline-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_headline_size }}px;
+      text-align: {{ block.settings.mobile_headline_alignment }};
+      {% if block.settings.headline_style == 'vintage' %}
+        transform: perspective(300px) rotateX({{ block.settings.headline_perspective | times: 0.5 }}deg);
+      {% endif %}
+    }
+
+    .ai-product-drop-subheadline-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_subheadline_size }}px;
+      text-align: {{ block.settings.mobile_text_alignment }};}
+
+    .ai-product-drop-story-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_story_size }}px;
+      text-align: {{ block.settings.mobile_text_alignment }};
+    }
+
+    .ai-product-drop-ingredients-title-{{ ai_gen_id }} {
+      text-align: {{ block.settings.mobile_text_alignment }};
+    }
+
+    .ai-product-drop-ingredients-list-{{ ai_gen_id }} {
+      text-align: {{ block.settings.mobile_text_alignment }};
+    }
+
+    .ai-product-drop-form-row-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-product-drop-form-button-{{ ai_gen_id }} {
+      font-size: {{ block.settings.mobile_button_font_size }}px;
+    }
+
+    .ai-product-drop-content-wrapper-{{ ai_gen_id }} {
+      gap: {{ block.settings.mobile_content_spacing }}px;
+    }
+
+    .ai-product-drop-decorative-1-{{ ai_gen_id }} {
+      width: {{ block.settings.decorative_1_size | times: 0.7 }}px;
+    }
+
+    .ai-product-drop-decorative-2-{{ ai_gen_id }} {
+      width: {{ block.settings.decorative_2_size | times: 0.7 }}px;
+    }
+  }
+{% endstyle %}
+
+<product-drop-{{ ai_gen_id }}
+  class="ai-product-drop-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.decorative_image_1 %}
+    <img
+      src="{{ block.settings.decorative_image_1 | image_url: width: 400}}"
+      alt=""
+      class="ai-product-drop-decorative-{{ ai_gen_id }} ai-product-drop-decorative-1-{{ ai_gen_id }}"loading="lazy"
+    >
+  {% endif %}
+
+  {% if block.settings.decorative_image_2 %}
+    <img
+      src="{{ block.settings.decorative_image_2 | image_url: width: 400 }}"
+      alt=""
+      class="ai-product-drop-decorative-{{ ai_gen_id }} ai-product-drop-decorative-2-{{ ai_gen_id }}"
+      loading="lazy"
+    >
+  {% endif %}
+
+  <div class="ai-product-drop-container-{{ ai_gen_id }}">
+    <div class="ai-product-drop-image-section-{{ ai_gen_id }}"><div class="ai-product-drop-image-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.product_image %}
+          <img
+            src="{{ block.settings.product_image | image_url: width: 800 }}"
+            alt="{{ block.settings.product_image.alt | escape }}"
+            class="ai-product-drop-image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.product_image.width }}"
+            height="{{ block.settings.product_image.height }}"
+          >
+        {% else %}
+          <div class="ai-product-drop-image-placeholder-{{ ai_gen_id }}">
+            {{'product-apparel-1' | placeholder_svg_tag }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ai-product-drop-content-section-{{ ai_gen_id }}">
+      <div class="ai-product-drop-content-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.headline != blank %}
+          <h1 class="ai-product-drop-text-block-{{ ai_gen_id }} ai-product-drop-headline-{{ ai_gen_id }}">
+            {{ block.settings.headline }}
+          </h1>
+        {% endif %}
+
+        {% if block.settings.subheadline != blank %}
+          <h2 class="ai-product-drop-text-block-{{ ai_gen_id }} ai-product-drop-subheadline-{{ ai_gen_id }}">
+            {{ block.settings.subheadline }}
+          </h2>
+        {% endif %}
+
+        {% if block.settings.product_story != blank %}
+          <div class="ai-product-drop-text-block-{{ ai_gen_id }} ai-product-drop-story-{{ ai_gen_id }}">
+            {{ block.settings.product_story }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.ingredients_title != blank or block.settings.ingredients_list != blank %}
+          <div class="ai-product-drop-ingredients-{{ ai_gen_id }}">
+            {% if block.settings.ingredients_title != blank %}
+              <h3 class="ai-product-drop-ingredients-title-{{ ai_gen_id }}">
+                {{ block.settings.ingredients_title }}
+              </h3>
+            {% endif %}
+            {% if block.settings.ingredients_list != blank %}
+              <div class="ai-product-drop-ingredients-list-{{ ai_gen_id }}">
+                {{ block.settings.ingredients_list }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="ai-product-drop-form-{{ ai_gen_id }}">
+          {% form 'contact' %}
+            <input type="hidden" name="contact[product_drop]" value="{{ block.settings.product_name }}">
+            <input type="hidden" name="contact[drop_date]" value="{{ block.settings.drop_date }}">
+            <input type="hidden" name="contact[quantity_limit]" value="{{ block.settings.quantity_limit }}">
+
+            {% if block.settings.form_title != blank %}
+              <h3 class="ai-product-drop-form-title-{{ ai_gen_id }}">
+                {{ block.settings.form_title }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.form_subtitle != blank %}
+              <p class="ai-product-drop-form-subtitle-{{ ai_gen_id }}">
+                {{ block.settings.form_subtitle }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.deadline_text != blank %}
+              <div class="ai-product-drop-deadline-{{ ai_gen_id }}">
+                {{ block.settings.deadline_text }}
+              </div>
+            {% endif %}
+
+            <div class="ai-product-drop-form-fields-{{ ai_gen_id }}">
+              <div class="ai-product-drop-form-row-{{ ai_gen_id }}"><div class="ai-product-drop-form-field-{{ ai_gen_id }}">
+                  <label class="ai-product-drop-form-label-{{ ai_gen_id }}" for="drop-name-{{ ai_gen_id }}">
+                Ime i prezime *
+                  </label>
+                  <input
+                    type="text"
+                    id="drop-name-{{ ai_gen_id }}"
+                    name="contact[name]"
+                    class="ai-product-drop-form-input-{{ ai_gen_id }}"
+                    required
+                    value="{{ form.name }}"
+                  >
+                </div>
+                <div class="ai-product-drop-form-field-{{ ai_gen_id }}">
+                  <label class="ai-product-drop-form-label-{{ ai_gen_id }}" for="drop-phone-{{ ai_gen_id }}">
+                    Broj telefona *
+                  </label>
+                  <input
+                    type="tel"
+                    id="drop-phone-{{ ai_gen_id }}"
+                    name="contact[phone]"
+                    class="ai-product-drop-form-input-{{ ai_gen_id }}"
+                    required
+                    value="{{ form.phone }}"
+                  >
+                </div>
+              </div>
+
+              <div class="ai-product-drop-form-field-{{ ai_gen_id }}">
+                <label class="ai-product-drop-form-label-{{ ai_gen_id }}" for="drop-email-{{ ai_gen_id }}">
+                  Email adresa *
+                </label>
+                <input
+                  type="email"
+                  id="drop-email-{{ ai_gen_id }}"
+                  name="contact[email]"
+                  class="ai-product-drop-form-input-{{ ai_gen_id }}"
+                  required
+                  value="{{ form.email }}"
+                  {% if form.errors %}
+                    aria-invalid="true"
+                    aria-describedby="drop-error-{{ ai_gen_id }}"
+                  {% endif %}{% if form.posted_successfully? %}
+                    aria-describedby="drop-success-{{ ai_gen_id }}"
+                  {% endif %}
+                >
+              </div>
+
+              <div class="ai-product-drop-form-field-{{ ai_gen_id }}">
+                <label class="ai-product-drop-form-label-{{ ai_gen_id }}" for="drop-quantity-{{ ai_gen_id }}">
+                  Količina *
+                </label>
+                <select
+                  id="drop-quantity-{{ ai_gen_id }}"
+                  name="contact[quantity]"
+                  class="ai-product-drop-form-select-{{ ai_gen_id }}"
+                  required
+                >
+                  <option value="">Izaberite količinu</option>
+                  {% for i in (1..10) %}
+                    <option value="{{ i }}">{{ i }} {% if i == 1 %}komad{% else %}komada{% endif %}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <button type="submit" class="ai-product-drop-form-button-{{ ai_gen_id }}">
+                {{ block.settings.button_label }}
+              </button>
+            </div>
+
+            {% if form.errors %}
+              <div id="drop-error-{{ ai_gen_id }}" class="ai-product-drop-error-{{ ai_gen_id }}">
+                {% for field in form.errors %}
+                  {{ field | capitalize }} {{ form.errors.messages[field] }}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if form.posted_successfully? %}
+              <div id="drop-success-{{ ai_gen_id }}" class="ai-product-drop-success-{{ ai_gen_id }}">
+                {{ block.settings.confirmation_message }}
+              </div>
+            {% endif %}
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</product-drop-{{ ai_gen_id }}><script>
+  (function() {
+    class ProductDrop{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.setupFormValidation();
+        this.setupFormAnimation();
+      }
+
+      setupFormValidation() {
+        const form = this.querySelector('form');
+        const inputs = this.querySelectorAll('input[required], select[required]');
+
+        inputs.forEach(input => {
+          input.addEventListener('blur', () => {
+            this.validateField(input);
+          });
+
+          input.addEventListener('input', () => {
+            if (input.classList.contains('error')) {
+              this.validateField(input);
+            }
+          });
+        });
+
+        form.addEventListener('submit', (e) => {
+          let isValid = true;
+          inputs.forEach(input => {
+            if (!this.validateField(input)) {
+              isValid = false;
+            }
+          });
+
+          if (!isValid) {
+            e.preventDefault();
+          }
+        });
+      }
+
+      validateField(field) {
+        const isValid = field.checkValidity() && field.value.trim() !== '';
+        if (isValid) {
+          field.style.borderColor = 'rgba(0, 0, 0, 0.1)';field.classList.remove('error');
+        } else {
+          field.style.borderColor = '#dc3545';
+          field.classList.add('error');
+        }
+
+        return isValid;
+      }
+
+      setupFormAnimation() {
+        const button = this.querySelector('.ai-product-drop-form-button-{{ ai_gen_id }}');
+        
+        button.addEventListener('click', function() {
+          this.style.transform = 'scale(0.98)';
+          setTimeout(() => {
+            this.style.transform = '';
+          }, 150);
+        });
+      }
+    }
+
+    customElements.define('product-drop-{{ ai_gen_id }}', ProductDrop{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product Drop Preorder",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Information"
+    },
+    {
+      "type": "text",
+      "id": "product_name",
+      "label": "Product name",
+      "default": "Tawenza"
+    },
+    {
+      "type": "text",
+      "id": "drop_date",
+      "label": "Drop date",
+      "default": "15.8"
+    },
+    {
+      "type": "text",
+      "id": "quantity_limit",
+      "label": "Quantity limit",
+      "default": "100"
+    },
+    {
+      "type": "header",
+      "content": "Product Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "TAWENZA STIŽE"
+    },
+    {
+      "type": "text",
+      "id": "subheadline",
+      "label": "Subheadline",
+      "default": "98% Organska maska za obnovu kose"
+    },
+    {
+      "type": "textarea",
+      "id": "product_story",
+      "label": "Product story",
+      "default": "Razvijena uz pomoć ženskih kolektiva, od sastojaka sa lokalnih farmi. Ova maska će transformisati vašu kosu prirodnim putem."
+    },
+    {
+      "type": "text",
+      "id": "ingredients_title",
+      "label": "Ingredients title",
+      "default": "Sastojci"
+    },
+    {
+      "type": "richtext",
+      "id": "ingredients_list",
+      "label": "Ingredients list",
+      "default": "<p>Shea • Argan • Vitamin E • Korijen bijelog sljeza</p>"
+    },
+    {
+      "type": "header",
+      "content": "Form Content"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Form title",
+      "default": "Rezerviši svoju masku"
+    },
+    {
+      "type": "text",
+      "id": "form_subtitle",
+      "label": "Form subtitle",
+      "default": "Popuni formu i bićeš među prvima"
+    },
+    {
+      "type": "text",
+      "id": "deadline_text",
+      "label": "Deadline text",
+      "default": "Prednaruči do 15.8 — količina je ograničena"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "PREDNARUČI ODMAH"
+    },
+    {
+      "type": "textarea",
+      "id": "confirmation_message",
+      "label": "Confirmation message",
+      "default": "Hvala! Vaša prednarudžba je uspješno poslana. Kontaktiraćemo vasuskoro sa detaljima o dostupnosti."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_gradient_start",
+      "label": "Background gradient start",
+      "default": "#FFB6C1"
+    },
+    {
+      "type": "color",
+      "id": "background_gradient_end",
+      "label": "Background gradient end",
+      "default": "#FFFFE0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#FF69B4"
+    },
+    {
+      "type": "color",
+      "id": "button_gradient_start",
+      "label": "Button gradient start",
+      "default": "#FF69B4"
+    },
+    {
+      "type": "color",
+      "id": "button_gradient_end",
+      "label": "Button gradient end",
+      "default": "#FFD700"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Editorial Headline Style"
+    },
+    {
+      "type": "font_picker",
+      "id": "headline_font",
+      "label": "Headline font",
+      "default": "montserrat_n7"
+    },
+    {
+      "type": "select",
+      "id": "headline_style",
+      "label": "Headline style",
+      "options": [
+        {"value": "standard", "label": "Standard"},
+        {"value": "editorial", "label": "Editorial Gradient"},
+        {"value": "magazine", "label": "Magazine Shine"},
+        {"value": "vintage", "label": "Vintage3D"}
+      ],
+      "default": "editorial"
+    },
+    {
+      "type": "range",
+      "id": "headline_size",
+      "min": 32,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Headline size",
+      "default": 72
+    },
+    {
+      "type": "select",
+      "id": "headline_weight",
+      "label": "Headline weight",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semibold"},
+        {"value": "700", "label": "Bold"},
+        {"value": "800", "label": "Extra Bold"},
+        {"value": "900", "label": "Black"}
+      ],
+      "default": "900"
+    },
+    {
+      "type": "color",
+      "id": "headline_color",
+      "label": "Headline color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "headline_gradient_start",
+      "label": "Headline gradient start",
+      "default": "#FF69B4"
+    },
+    {
+      "type": "color",
+      "id": "headline_gradient_end",
+      "label": "Headline gradient end",
+      "default": "#FFD700"
+    },
+    {
+      "type": "checkbox",
+      "id": "headline_stroke",
+      "label": "Add text stroke",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "headline_stroke_width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Stroke width",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "headline_stroke_color",
+      "label": "Stroke color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "headline_shadow_color",
+      "label": "Shadow color (vintage style)",
+      "default": "#FF69B4"
+    },
+    {
+      "type": "range",
+      "id": "headline_perspective",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "label": "3D perspective (vintage style)",
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "headline_alignment",
+      "label": "Headline alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "headline_transform",
+      "label": "Headline text transform",
+      "options": [
+        {"value": "none", "label": "None"},
+        {"value": "uppercase", "label": "Uppercase"},
+        {"value": "lowercase", "label": "Lowercase"}
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "headline_line_height",
+      "min": 0.8,
+      "max": 1.5,
+      "step": 0.1,
+      "label": "Headline line height",
+      "default": 0.9
+    },
+    {
+      "type": "range",
+      "id": "headline_letter_spacing",
+      "min": -5,
+      "max": 10,
+      "step": 0.5,
+      "unit": "px",
+      "label": "Headline letter spacing",
+      "default": -2
+    },
+    {
+      "type": "header",
+      "content": "Subheadline Typography"
+    },
+    {
+      "type": "range",
+      "id": "subheadline_size",
+      "min": 16,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheadline size",
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "subheadline_weight",
+      "label": "Subheadline weight",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semibold"}
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "subheadline_color",
+      "label": "Subheadline color",
+      "default": "#333333"
+    },
+    {
+      "type": "select",
+      "id": "subheadline_alignment",
+      "label": "Subheadline alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Story Typography"
+    },
+    {
+      "type": "range",
+      "id": "story_size",
+      "min": 16,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Story text size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "story_color",
+      "label": "Story text color",
+      "default": "#333333"
+    },
+    {
+      "type": "select",
+      "id": "story_alignment",
+      "label": "Story text alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Ingredients Typography"
+    },
+    {
+      "type": "range",
+      "id": "ingredients_title_size",
+      "min": 16,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Ingredients title size",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "ingredients_title_color",
+      "label": "Ingredients title color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "ingredients_list_size",
+      "min": 14,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Ingredients list size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "ingredients_list_color",
+      "label": "Ingredients list color",
+      "default": "#333333"
+    },
+    {
+      "type": "select",
+      "id": "ingredients_alignment",
+      "label": "Ingredients alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Typography"
+    },
+    {
+      "type": "range",
+      "id": "mobile_headline_size",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile headline size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "mobile_subheadline_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile subheadline size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "mobile_story_size",
+      "min": 14,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile story size",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "mobile_headline_alignment",
+      "label": "Mobile headline alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_alignment",
+      "label": "Mobile text alignment",
+      "options": [
+        {"value": "left", "label": "Left"},
+        {"value": "center", "label": "Center"},
+        {"value": "right", "label": "Right"}
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "content_spacing",
+      "min": 16,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Content spacing",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "mobile_content_spacing",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile content spacing",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "content_bg_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Content background opacity",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_order",
+      "label": "Mobile image order",
+      "options": [
+        {"value": "1", "label": "First"},
+        {"value": "2", "label": "Second"}
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_order",
+      "label": "Mobile content order",
+      "options": [
+        {"value": "1", "label": "First"},
+        {"value": "2", "label": "Second"}
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "Form Styling"
+    },
+    {
+      "type": "range",
+      "id": "form_title_size",
+      "min": 18,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Form title size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "form_padding",
+      "min": 20,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Form padding",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "form_border_radius",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Form border radius",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 4,
+      "max": 25,
+      "step": 1,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Button font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_font_size",
+      "min": 14,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile button font size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "ingredients_padding",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Ingredients box padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "ingredients_border_radius",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Ingredients box border radius",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Decorative Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "decorative_image_1",
+      "label": "Decorative image 1"
+    },
+    {
+      "type": "range",
+      "id": "decorative_1_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Decorative 1 top position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "decorative_1_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Decorative 1 left position",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "decorative_1_size",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Decorative 1 size",
+      "default": 150
+    },
+    {
+      "type": "range",
+      "id": "decorative_1_opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Decorative 1 opacity",
+      "default": 30
+    },
+    {
+      "type": "image_picker",
+      "id": "decorative_image_2",
+      "label": "Decorative image 2"
+    },
+    {
+      "type": "range",
+      "id": "decorative_2_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Decorative 2 top position",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "decorative_2_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Decorative 2 right position",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "decorative_2_size",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Decorative 2 size",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "decorative_2_opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Decorative 2 opacity",
+      "default": 25
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Drop Preorder"
+    }
+  ]
+}
+{% endschema %}

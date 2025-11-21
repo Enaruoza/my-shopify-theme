@@ -1,0 +1,605 @@
+<section class="az-selector" data-section-id="{{ section.id }}">
+  <div class="az-container">
+    <header class="az-selector__header">
+      <h2 class="az-h2">{{ section.settings.heading }}</h2>
+      {% if section.settings.subheading != blank %}
+        <p class="az-copy az-selector__subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+      <button class="az-selector__filter-trigger" data-filter-toggle type="button" aria-controls="az-filter-{{ section.id }}" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        {{ section.settings.filter_button_label }}
+      </button>
+    </header>
+
+    <div class="az-selector__controls" id="az-filter-{{ section.id }}" data-filter-panel role="dialog" aria-modal="true" aria-label="Filter">
+      <div class="az-selector__drawer-header">
+        <span>Filter</span>
+        <button class="az-selector__drawer-close" data-filter-toggle type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="az-selector__filters">
+        <div class="az-selector__filter-group" data-filter-group="area">
+          <label class="az-selector__label">Za</label>
+          <div class="az-selector__pills">
+            <button class="az-selector__pill active" data-filter-value="all" type="button">Sve</button>
+            <button class="az-selector__pill" data-filter-value="lice" type="button">Lice</button>
+            <button class="az-selector__pill" data-filter-value="tijelo" type="button">Tijelo</button>
+            <button class="az-selector__pill" data-filter-value="kosa" type="button">Kosu</button>
+          </div>
+        </div>
+
+        <div class="az-selector__filter-group" data-filter-group="type">
+          <label class="az-selector__label">Tip proizvoda</label>
+          <div class="az-selector__pills">
+            <button class="az-selector__pill active" data-filter-value="all" type="button">Svi</button>
+            <button class="az-selector__pill" data-filter-value="cleanser" type="button">Čišćenje</button>
+            <button class="az-selector__pill" data-filter-value="moisturizer" type="button">Hidratacija</button>
+            <button class="az-selector__pill" data-filter-value="treatment" type="button">Tretman</button>
+            <button class="az-selector__pill" data-filter-value="oil" type="button">Ulje</button>
+            <button class="az-selector__pill" data-filter-value="mask" type="button">Maska</button>
+            <button class="az-selector__pill" data-filter-value="soap" type="button">Sapun</button>
+          </div>
+        </div>
+
+        <div class="az-selector__filter-group" data-filter-group="concern">
+          <label class="az-selector__label">Problem</label>
+          <div class="az-selector__pills">
+            <button class="az-selector__pill active" data-filter-value="all" type="button">Svi</button>
+            <button class="az-selector__pill" data-filter-value="dryness" type="button">Suhoća</button>
+            <button class="az-selector__pill" data-filter-value="sensitivity" type="button">Osjetljivost</button>
+            <button class="az-selector__pill" data-filter-value="aging" type="button">Anti-age</button>
+            <button class="az-selector__pill" data-filter-value="acne" type="button">Akne</button>
+            <button class="az-selector__pill" data-filter-value="damage" type="button">Oštećenje</button>
+            <button class="az-selector__pill" data-filter-value="dullness" type="button">Bez sjaja</button>
+            <button class="az-selector__pill" data-filter-value="pores" type="button">Pore</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="az-selector__actions" hidden>
+        <div class="az-selector__count"><span data-product-count>{{ section.blocks.size }}</span> proizvoda</div>
+        <button class="az-selector__reset" data-reset type="button">Reset</button>
+      </div>
+    </div>
+
+    <div class="az-selector__results">
+      <div class="az-selector__grid" data-products-grid style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: {{ section.settings.columns_mobile }};">
+        {% for block in section.blocks %}
+          {% if block.type == 'product' and block.settings.product != blank %}
+            {% assign p = all_products[block.settings.product] %}
+            {% if p %}
+              {% assign img = p.featured_image %}
+              <article class="az-card"
+                data-product-handle="{{ p.handle }}"
+                data-areas="{{ block.settings.areas | downcase | replace: ' ', '' }}"
+                data-types="{{ block.settings.types | downcase | replace: ' ', '' }}"
+                data-concerns="{{ block.settings.concerns | downcase | replace: ' ', '' }}"
+                data-badge-back="{{ block.settings.show_badge_on_back | default: false }}"
+                data-back-align="{{ block.settings.back_align | default: 'top' }}">
+
+                {% if block.settings.badge != blank %}
+                  <span class="az-card__badge">{{ block.settings.badge }}</span>
+                {% endif %}
+
+                <button class="az-card__flip" type="button" data-flip-toggle aria-label="{{ section.settings.flip_icon_aria }}" aria-pressed="false"></button>
+
+                <div class="az-card__faces">
+                  <div class="az-card__face az-card__face--front">
+                    <a class="az-card__link" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+                      <div class="az-card__media">
+                        <div class="az-card__ar"></div>
+                        {% if img %}
+                          <img src="{{ img | image_url: width: 900 }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy" alt="{{ img.alt | default: p.title | escape }}">
+                        {% else %}
+                          <div class="az-card__ph">Bez slike</div>
+                        {% endif %}
+                      </div>
+
+                      <div class="az-card__body">
+                        <div class="az-card__vendor">{{ p.vendor | default: 'AZOURANE' }}</div>
+                        <h3 class="az-card__title">{{ p.title }}</h3>
+
+                        {% if block.settings.benefits != blank %}
+                          <div class="az-card__chips">
+                            {% assign benefits = block.settings.benefits | split: ',' %}
+                            {% for benefit in benefits limit: 3 %}
+                              <span class="az-chip">{{ benefit | strip }}</span>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+
+                        <div class="az-card__price">
+                          {% if p.compare_at_price > p.price %}
+                            <span class="az-price--was">{{ p.compare_at_price | money }}</span>
+                          {% endif %}
+                          <span class="az-price">{{ p.price | money }}</span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+
+                  <div class="az-card__face az-card__face--back">
+                    <div class="az-card__back">
+                      <h4 class="az-card__back-title">{{ block.settings.flip_title }}</h4>
+                      <div class="az-card__back-text">{{ block.settings.flip_text }}</div>
+                      {% if block.settings.flip_points != blank %}
+                        {% assign points_source = block.settings.flip_points | strip | newline_to_br %}
+                        {% assign pts = points_source | split: '<br />' %}
+                        <ul class="az-card__back-list">
+                          {% for li in pts %}
+                            {% assign point_item = li | strip | remove: '<br>' | remove: '<br />' %}
+                            {% if point_item != '' %}
+                              <li>{{ point_item }}</li>
+                            {% endif %}
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                {% if p.available %}
+                  <div class="az-card__action-bar" data-variant-id="{{ p.selected_or_first_available_variant.id }}">
+                    <div class="az-qty" data-qty>
+                      <button class="az-qty__btn" data-minus type="button" aria-label="Smanji">−</button>
+                      <output class="az-qty__val" data-qty-val>0</output>
+                      <button class="az-qty__btn" data-plus type="button" aria-label="Povećaj">+</button>
+                    </div>
+                    <div class="az-card__action-info" data-action-info hidden>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span>U košarici</span>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="az-card__sold">Nije dostupno</div>
+                {% endif %}
+              </article>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="az-empty" data-empty-state hidden>
+        <h3>Nema proizvoda koji odgovaraju filterima</h3>
+        <button class="az-btn" data-reset-alt type="button">Resetuj filtere</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="az-sticky" data-sticky data-collapsible hidden>
+    <div class="az-sticky__inner">
+      <button class="az-sticky__toggle" type="button" aria-expanded="true" aria-label="{{ section.settings.sticky_toggle_label }}"></button>
+      <div class="az-sticky__mini" aria-hidden="true">
+        <span class="az-sticky__mini-label">Ukupno</span>
+        <strong class="az-sticky__mini-total" data-sticky-total-mini>KM 0,00</strong>
+      </div>
+      <div class="az-sticky__left">
+        <div class="az-sticky__line">
+          <span class="az-sticky__label">Ukupno:</span>
+          <strong class="az-sticky__total" data-sticky-total>KM 0,00</strong>
+        </div>
+        <div class="az-ship-flowerH" data-ship-flower aria-live="polite" aria-label="Napredak do besplatne dostave">
+          <div class="az-ship-flowerH__plant" data-plant>
+            <div class="az-ship-flowerH__stem-track" data-stem-track>
+              <span class="az-ship-flowerH__stem-fill" data-stem></span>
+              <span class="az-ship-flowerH__leaf l"></span>
+              <span class="az-ship-flowerH__leaf r"></span>
+            </div>
+            <div class="az-ship-flowerH__bud" data-bud aria-hidden="true">
+              <span class="core"></span>
+              <span class="petal p1"></span>
+              <span class="petal p2"></span>
+              <span class="petal p3"></span>
+              <span class="petal p4"></span>
+              <span class="petal p5"></span>
+              <span class="glow"></span>
+            </div>
+          </div>
+          <div class="az-ship-flowerH__text" data-ship-text>Još <strong data-ship-remaining>0</strong> KM do besplatne dostave</div>
+        </div>
+      </div>
+      <a class="az-sticky__cta" href="{{ routes.cart_url }}">{{ section.settings.sticky_button_label }}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .az-selector{--accent:{{ section.settings.accent_color }};--thr:{{ section.settings.free_shipping_threshold | default: 100 }};--filter-bg:{{ section.settings.filter_button_bg }};--filter-fg:{{ section.settings.filter_button_fg }}}
+  .az-selector,.az-selector *{box-sizing:border-box}
+  .az-selector{background:#fff;padding:48px 0 96px;overflow-x:clip;position:relative}
+  .az-container{max-width:1200px;margin:0 auto;padding:0 24px}
+  .az-selector__header{text-align:center;margin-bottom:16px}
+  .az-h2{font-size:clamp(28px,4vw,40px);margin:0 0 8px;color:#111;font-weight:600}
+  .az-copy{color:#666}
+  .az-selector__filter-trigger{display:none;align-items:center;gap:8px;width:100%;justify-content:center;border:1px solid #e6e6e6;border-radius:24px;padding:12px 16px;background:var(--filter-bg);color:var(--filter-fg);font-weight:600;transition:filter .2s}
+  .az-selector__filter-trigger:hover{filter:brightness(.97)}
+  .az-selector__controls{position:static;margin-bottom:24px}
+  .az-selector__drawer-header{display:none}
+  @media(max-width:992px){
+    .az-selector__filter-trigger{display:inline-flex}
+    .az-selector__controls{position:fixed;top:0;left:0;width:100vw;max-width:340px;height:100vh;background:#fff;z-index:1200;transform:translateX(-110%);transition:transform .3s;padding:24px;overflow:auto;box-shadow:0 0 40px rgba(0,0,0,.12)}
+    .az-selector__drawer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    body.filters-open .az-selector__controls{transform:none}
+  }
+  .az-selector__filters{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px}
+  @media(max-width:992px){.az-selector__filters{grid-template-columns:1fr}}
+  .az-selector__filter-group{display:flex;flex-direction:column;gap:8px}
+  .az-selector__label{font-size:13px;font-weight:600;color:#444}
+  .az-selector__pills{display:flex;gap:8px;flex-wrap:wrap}
+  .az-selector__pill{padding:8px 14px;border:1px solid #e6e6e6;border-radius:20px;background:#fff;color:#555;cursor:pointer;font-weight:500;transition:transform .05s}
+  .az-selector__pill:active{transform:scale(.98)}
+  .az-selector__pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .az-selector__actions{display:none!important}
+  .az-selector__grid{display:grid;gap:24px;grid-template-columns:repeat(var(--columns-mobile,2),1fr)}
+  @media(min-width:768px){.az-selector__grid{gap:32px;grid-template-columns:repeat(var(--columns-desktop,4),1fr)}}
+  .az-card{position:relative;border:1px solid #eee;border-radius:20px;overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s;perspective:1000px;display:flex;flex-direction:column}
+  .az-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.08)}
+  .az-card:focus-within{outline:2px solid rgba(0,0,0,.06)}
+  .az-card__badge{position:absolute;z-index:3;top:14px;left:14px;background:#fff;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .az-card.is-flipped[data-badge-back="false"] .az-card__badge{display:none}
+  .az-card__flip{position:absolute;z-index:3;top:12px;right:12px;width:34px;height:34px;border:1px solid #e5e5e5;border-radius:999px;background:#fff;cursor:pointer;transition:transform .2s}
+  .az-card__flip:before{content:"↺";display:block;text-align:center;line-height:34px;font-weight:700;color:#333}
+  .az-card.is-flipped .az-card__flip{transform:rotate(180deg)}
+  .az-card__faces{position:relative;transform-style:preserve-3d;transition:transform .5s;flex:1;display:flex;flex-direction:column}
+  .az-card.is-flipped .az-card__faces{transform:rotateY(180deg)}
+  .az-card__face{backface-visibility:hidden;width:100%}
+  .az-card__face--front{position:relative;display:flex;flex-direction:column;height:100%}
+  .az-card__face--back{position:absolute;inset:0;transform:rotateY(180deg);background:#fff;display:flex}
+  .az-card__back{padding:18px;display:flex;flex-direction:column;gap:10px;width:100%}
+  .az-card[data-back-align="top"] .az-card__face--back{align-items:flex-start}
+  .az-card[data-back-align="center"] .az-card__face--back{align-items:center}
+  .az-card[data-back-align="bottom"] .az-card__face--back{align-items:flex-end}
+  .az-card__back-title{margin:0 0 6px;font-size:16px;font-weight:700;color:#111}
+  .az-card__back-text{color:#333;font-size:14px;line-height:1.5}
+  .az-card__back-list{margin:6px 0 0 18px;padding:0;display:block}
+  .az-card__link{display:flex;flex-direction:column;color:inherit;text-decoration:none;flex:1}
+  .az-card__media{position:relative;background:#f6f6f6}
+  .az-card__ar{padding-top:100%}
+  .az-card__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .az-card__ph{position:absolute;inset:0;display:grid;place-items:center;color:#aaa}
+  .az-card__body{padding:18px 18px 72px;flex:1;display:flex;flex-direction:column}
+  .az-card__vendor{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#888}
+  .az-card__title{margin:6px 0 10px;font-size:16px;font-weight:600;color:#111}
+  .az-card__chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .az-chip{font-size:12px;background:#f0f0f0;border-radius:10px;padding:4px 10px;color:#666}
+  .az-card__price{display:flex;gap:8px;align-items:center;margin-top:auto}
+  .az-price--was{text-decoration:line-through;opacity:.5}
+  .az-price{font-weight:700;color:#111}
+  .az-card__action-bar{position:absolute;left:0;right:0;bottom:0;padding:12px 18px;background:linear-gradient(0deg,rgba(255,255,255,1) 85%,rgba(255,255,255,0));display:flex;align-items:center;gap:12px;z-index:4}
+  .az-qty{display:inline-flex;align-items:center;gap:10px;background:#f5f5f5;border-radius:12px;padding:6px 10px;box-shadow:0 6px 14px rgba(0,0,0,.06)}
+  .az-qty__btn{width:28px;height:28px;border-radius:8px;border:0;background:#fff;cursor:pointer;line-height:28px;font-size:18px;font-weight:700;color:#444;transition:transform .05s}
+  .az-qty__btn:active{transform:scale(.95)}
+  .az-qty__btn:disabled{opacity:.4;cursor:not-allowed}
+  .az-qty__val{min-width:20px;text-align:center;font-weight:700}
+  .az-card__action-info{display:flex;align-items:center;gap:6px;color:#2e7d32;font-size:13px;font-weight:600}
+  .az-card__action-info[hidden]{display:none!important}
+  .az-selector [hidden]{display:none!important}
+  .az-card__sold{position:absolute;left:18px;right:18px;bottom:14px;text-align:center;color:#999;font-size:14px}
+  .az-empty{text-align:center;padding:48px 16px}
+  .az-btn{background:var(--accent);color:#fff;padding:12px 24px;border-radius:12px;border:0;font-weight:600;cursor:pointer;transition:filter .15s}
+  .az-btn:hover{filter:brightness(.9)}
+  .az-sticky{position:fixed;left:0;right:0;bottom:0;z-index:1500;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);box-shadow:0 -8px 24px rgba(0,0,0,.12);animation:az-slideUp .3s ease}
+  @keyframes az-slideUp{from{transform:translateY(100%)}}
+  .az-sticky__inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .az-sticky__left{display:flex;flex-direction:column;gap:8px;min-width:0}
+  .az-sticky__line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .az-sticky__label{color:#555}
+  .az-sticky__total{font-size:16px}
+  .az-sticky__cta{background:var(--accent);color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700;white-space:nowrap;transition:filter .15s}
+  .az-sticky__cta:hover{filter:brightness(.9)}
+  .az-sticky__toggle{width:34px;height:34px;border-radius:999px;border:1px solid #e5e5e5;background:#fff;flex-shrink:0;cursor:pointer}
+  .az-sticky__toggle:before{content:"▾";display:block;text-align:center;line-height:34px;font-weight:700;color:#333}
+  .az-sticky[data-collapsed="true"] .az-sticky__left{display:none}
+  .az-sticky[data-collapsed="true"] .az-sticky__cta{display:none}
+  .az-sticky[data-collapsed="true"] .az-sticky__toggle:before{content:"▴"}
+  .az-sticky__mini{display:none;align-items:center;gap:6px;padding:6px 10px;border:1px solid #e5e5e5;border-radius:999px;background:#fff;white-space:nowrap}
+  .az-sticky__mini-label{font-size:12px;color:#666}
+  .az-sticky__mini-total{font-size:13px}
+  .az-sticky[data-collapsed="true"] .az-sticky__mini{display:inline-flex}
+  @media(max-width:680px){.az-sticky__inner{flex-direction:column;align-items:stretch}.az-sticky__cta{width:100%;text-align:center}}
+  .az-ship-flowerH,.az-ship-flowerH *{pointer-events:none}
+  .az-ship-flowerH{--pct:0;display:flex;align-items:center;gap:12px;line-height:1}
+  .az-ship-flowerH__text{font-size:13px;color:#222;white-space:normal}
+  .az-ship-flowerH__plant{position:relative;display:flex;align-items:center;height:56px}
+  .az-ship-flowerH__stem-track{position:relative;height:10px;width:min(280px,32vw);background:#eaf4ea;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);overflow:hidden}
+  .az-ship-flowerH__stem-fill{position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,#66bb6a,#2e7d32);border-radius:999px;transition:width .35s ease}
+  .az-ship-flowerH__leaf{position:absolute;top:-8px;width:14px;height:14px;background:#66bb6a;border-radius:0 999px 999px 999px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.15));opacity:0;transition:opacity .3s ease}
+  .az-ship-flowerH__leaf.l{left:18%}
+  .az-ship-flowerH__leaf.r{left:42%;transform:scaleX(-1)}
+  .az-ship-flowerH[data-leaves="on"] .az-ship-flowerH__leaf{opacity:1}
+  .az-ship-flowerH__bud{position:absolute;top:50%;transform:translate(-50%,-50%) scale(.85);width:56px;height:56px;opacity:0;transition:opacity .35s ease, transform .45s ease;left:0}
+  .az-ship-flowerH__bud .core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:999px;background:#ffd54f;box-shadow:0 0 0 2px rgba(255,213,79,.5)}
+  .az-ship-flowerH__bud .petal{position:absolute;left:50%;top:50%;width:20px;height:30px;border-radius:999px;background:{{ section.settings.petals_color | default: '#e86b91' }};transform-origin:50% 100%;opacity:0;transition:opacity .45s ease, transform .6s ease}
+  .az-ship-flowerH__bud .p1{transform:translate(-50%,-100%) rotate(0deg)}
+  .az-ship-flowerH__bud .p2{transform:translate(-50%,-100%) rotate(72deg)}
+  .az-ship-flowerH__bud .p3{transform:translate(-50%,-100%) rotate(144deg)}
+  .az-ship-flowerH__bud .p4{transform:translate(-50%,-100%) rotate(216deg)}
+  .az-ship-flowerH__bud .p5{transform:translate(-50%,-100%) rotate(288deg)}
+  .az-ship-flowerH__bud .glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.85);width:72px;height:72px;border-radius:999px;background:radial-gradient(circle, rgba(255,235,59,.35), transparent 60%);opacity:0;transition:opacity .4s ease, transform .4s ease}
+  .az-ship-flowerH.bloomed .az-ship-flowerH__bud{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .az-ship-flowerH.bloomed .petal{opacity:1}
+  .az-ship-flowerH.bloomed .glow{opacity:1;transform:translate(-50%,-50%) scale(1)}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const root = document.querySelector('[data-section-id="{{ section.id }}"]'); if (!root) return;
+
+    const THRESHOLD = Number({{ section.settings.free_shipping_threshold | default: 100 }});
+    const enableMulti = {{ section.settings.enable_multiselect | json }};
+
+    const sticky = root.querySelector('[data-sticky]');
+    const stickyTotal = root.querySelector('[data-sticky-total]');
+    const stickyTotalMini = root.querySelector('[data-sticky-total-mini]');
+    const stickyToggle = root.querySelector('.az-sticky__toggle');
+    const collapseKey = 'azStickyCollapsed';
+
+    const flower = root.querySelector('[data-ship-flower]');
+    const stemTrack = root.querySelector('[data-stem-track]');
+    const stemFill  = root.querySelector('[data-stem]');
+    const bud       = root.querySelector('[data-bud]');
+    const shipText  = root.querySelector('[data-ship-text]');
+
+    let localQty = {};
+    let inflight = new Set();
+    let syncTimer = null;
+
+    const getCart = () => fetch('{{ routes.cart_url }}.js', { credentials:'same-origin' }).then(r => r.json());
+    const add = (id, q=1) => fetch('{{ routes.cart_add_url }}.js', {
+      method:'POST', credentials:'same-origin',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({ id:Number(id), quantity:Number(q) })
+    }).then(r => r.json());
+    const update = (updates) => fetch('{{ routes.cart_update_url }}.js', {
+      method:'POST', credentials:'same-origin',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({ updates })
+    }).then(r => r.json());
+
+    function showToast(message){}
+
+    function renderFlower(total){
+      const subtotal = Number(total) || 0;
+      const remain   = Math.max(THRESHOLD - subtotal, 0);
+      const pct      = THRESHOLD > 0 ? Math.min((subtotal/THRESHOLD)*100, 100) : 100;
+
+      const trackW = stemTrack ? stemTrack.clientWidth : 0;
+      const fillPx = Math.round(trackW * (pct/100));
+
+      if (stemFill) stemFill.style.width = fillPx + 'px';
+      if (bud) bud.style.left = Math.max(0, Math.min(trackW, fillPx)) + 'px';
+      if (flower) flower.setAttribute('data-leaves', pct > 25 ? 'on' : 'off');
+
+      if (remain <= 0){
+        flower.classList.add('bloomed');
+        shipText.textContent = 'Besplatna dostava';
+      } else {
+        flower.classList.remove('bloomed');
+        const str = remain.toFixed(remain % 1 === 0 ? 0 : 2);
+        shipText.innerHTML = 'Još <strong>' + str + '</strong> KM do besplatne dostave';
+      }
+    }
+
+    function renderSticky(cart){
+      const has = (cart.item_count || 0) > 0;
+      sticky.hidden = !has;
+      if (has) {
+        const formatted = (cart.total_price/100).toLocaleString('bs-BA',{style:'currency',currency:'BAM'}).replace('BAM','KM');
+        stickyTotal.textContent = formatted;
+        if (stickyTotalMini) stickyTotalMini.textContent = formatted;
+      }
+      renderFlower(cart.total_price/100);
+    }
+
+    function syncFromCart(cart){
+      renderSticky(cart);
+      localQty = {};
+      (cart.items || []).forEach(item => {
+        localQty[String(item.variant_id)] = (localQty[String(item.variant_id)] || 0) + item.quantity;
+      });
+
+      root.querySelectorAll('.az-card__action-bar[data-variant-id]').forEach(bar => {
+        const id = String(bar.dataset.variantId);
+        const qty = localQty[id] || 0;
+        const val = bar.querySelector('[data-qty-val]');
+        const minus = bar.querySelector('[data-minus]');
+        const info = bar.querySelector('[data-action-info]');
+        if (val) val.textContent = qty;
+        if (minus) minus.disabled = qty <= 0;
+        if (info) info.hidden = qty === 0;
+      });
+    }
+
+    getCart().then(syncFromCart).catch(()=>{});
+
+    root.querySelectorAll('.az-card__action-bar').forEach(bar => {
+      const id   = bar.dataset.variantId;
+      const plus = bar.querySelector('[data-plus]');
+      const minus= bar.querySelector('[data-minus]');
+
+      function lock(){ inflight.add(id); [plus,minus].forEach(b=>b&&(b.disabled=true)); }
+      function unlock(){ inflight.delete(id); [plus,minus].forEach(b=>b&&(b.disabled=false)); }
+
+      async function increment(){
+        if (inflight.has(id)) return;
+        lock();
+        try{ await add(id,1); const newCart = await getCart(); syncFromCart(newCart); showToast('Dodano u košaricu'); }
+        finally{ unlock(); }
+      }
+      async function decrement(){
+        if (inflight.has(id)) return;
+        const curr = localQty[String(id)] || 0;
+        if (curr <= 0) return;
+        lock();
+        try{ const updates = { [id]: Math.max(0, curr-1) }; const newCart = await update(updates); syncFromCart(newCart); if (curr-1===0) showToast('Uklonjeno iz košarice'); }
+        finally{ unlock(); }
+      }
+
+      if (plus) plus.addEventListener('click', increment);
+      if (minus) minus.addEventListener('click', decrement);
+    });
+
+    Array.from(root.querySelectorAll('.az-card')).forEach(card => {
+      const btn = card.querySelector('[data-flip-toggle]');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const flipped = card.classList.toggle('is-flipped');
+        btn.setAttribute('aria-pressed', String(flipped));
+      });
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+      });
+    });
+
+    const groups = root.querySelectorAll('[data-filter-group]');
+    const resetBtns = root.querySelectorAll('[data-reset],[data-reset-alt]');
+    const countEl = root.querySelector('[data-product-count]');
+    const emptyEl = root.querySelector('[data-empty-state]');
+    const grid = root.querySelector('[data-products-grid]');
+    const cards = Array.from(grid.querySelectorAll('.az-card'));
+
+    let active = { area: enableMulti ? [] : 'all', type: enableMulti ? [] : 'all', concern: enableMulti ? [] : 'all' };
+
+    function match(card){
+      const attr = {
+        areas: (card.getAttribute('data-areas')||'').split(',').filter(Boolean),
+        types: (card.getAttribute('data-types')||'').split(',').filter(Boolean),
+        concerns: (card.getAttribute('data-concerns')||'').split(',').filter(Boolean)
+      };
+      for (const k of ['area','type','concern']){
+        const sel = active[k], list = attr[k+'s'];
+        if (enableMulti){ if (sel.length && !sel.some(v=>list.includes(v))) return false; }
+        else{ if (sel !== 'all' && !list.includes(sel)) return false; }
+      }
+      return true;
+    }
+    function apply(){
+      let visible = 0;
+      cards.forEach(c => {
+        const ok = match(c);
+        c.style.display = ok ? '' : 'none';
+        if (ok) visible++;
+      });
+      if (countEl) countEl.textContent = String(visible);
+      const none = visible === 0;
+      if (emptyEl) emptyEl.hidden = !none;
+      grid.style.display = none ? 'none' : 'grid';
+    }
+    function reset(){
+      active = { area: enableMulti ? [] : 'all', type: enableMulti ? [] : 'all', concern: enableMulti ? [] : 'all' };
+      groups.forEach(g => g.querySelectorAll('.az-selector__pill').forEach(p => p.classList.toggle('active', p.dataset.filterValue==='all')));
+      apply();
+    }
+    groups.forEach(g => {
+      const key = g.dataset.filterGroup;
+      g.querySelectorAll('.az-selector__pill').forEach(p => p.addEventListener('click', () => {
+        const val = p.dataset.filterValue, allBtn = g.querySelector('[data-filter-value="all"]');
+        if (enableMulti){
+          if (val==='all'){ active[key]=[]; g.querySelectorAll('.az-selector__pill').forEach(x=>x.classList.remove('active')); allBtn.classList.add('active'); }
+          else{
+            allBtn.classList.remove('active');
+            const arr = active[key], i = arr.indexOf(val);
+            if (i>-1){ arr.splice(i,1); p.classList.remove('active'); }
+            else{ arr.push(val); p.classList.add('active'); }
+            if (!arr.length) allBtn.classList.add('active');
+          }
+        } else {
+          active[key]=val;
+          g.querySelectorAll('.az-selector__pill').forEach(x=>x.classList.remove('active'));
+          p.classList.add('active');
+        }
+        apply();
+      }));
+    });
+    resetBtns.forEach(b=>b.addEventListener('click', reset));
+
+    const toggles = root.querySelectorAll('[data-filter-toggle]');
+    const backdrop=document.createElement('div');
+    backdrop.style.cssText='position:fixed;inset:0;z-index:1199;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;transition:opacity .3s';
+    document.body.appendChild(backdrop);
+    function toggleDrawer(){
+      const open=!document.body.classList.contains('filters-open');
+      document.body.classList.toggle('filters-open', open);
+      backdrop.style.opacity=open?'1':'0';
+      backdrop.style.visibility=open?'visible':'hidden';
+      toggles.forEach(t=>t.setAttribute('aria-expanded', String(open)));
+      document.documentElement.style.overflow=open?'hidden':'';
+      document.body.style.overflow=open?'hidden':'';
+    }
+    toggles.forEach(t=>t.addEventListener('click', toggleDrawer));
+    backdrop.addEventListener('click', toggleDrawer);
+
+    if (localStorage.getItem(collapseKey) === '1') {
+      sticky.dataset.collapsed = 'true';
+      stickyToggle.setAttribute('aria-expanded','false');
+    }
+    stickyToggle.addEventListener('click', () => {
+      const collapsed = sticky.dataset.collapsed === 'true' ? 'false' : 'true';
+      sticky.dataset.collapsed = collapsed;
+      stickyToggle.setAttribute('aria-expanded', collapsed === 'true' ? 'false' : 'true');
+      localStorage.setItem(collapseKey, collapsed === 'true' ? '1' : '0');
+    });
+
+    function startSync(){
+      if (syncTimer) return;
+      syncTimer = setInterval(async () => {
+        if (!document.hidden && !inflight.size) {
+          const cart = await getCart();
+          syncFromCart(cart);
+        }
+      }, 5000);
+    }
+    function stopSync(){ if (syncTimer){ clearInterval(syncTimer); syncTimer=null; } }
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopSync(); else startSync(); });
+    getCart().then(syncFromCart).then(startSync);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "AZ Concern Selector",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Odaberi po problemu" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Filtriraj po dijelu tijela, tipu proizvoda i problemu koji želiš riješiti." },
+    { "type": "header", "content": "Shipping" },
+    { "type": "number", "id": "free_shipping_threshold", "label": "Free shipping threshold (KM)", "default": 100 },
+    { "type": "header", "content": "Layout & Colors" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "default": "#111111" },
+    { "type": "color", "id": "petals_color", "label": "Flower petals color", "default": "#e86b91" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Products per row (Desktop)", "default": 4 },
+    { "type": "radio", "id": "columns_mobile", "label": "Products per row (Mobile)", "options": [ { "value": "1", "label": "1" }, { "value": "2", "label": "2" } ], "default": "2" },
+    { "type": "header", "content": "Filter Button (Mobile)" },
+    { "type": "text", "id": "filter_button_label", "label": "Filter button label", "default": "Filter" },
+    { "type": "color", "id": "filter_button_bg", "label": "Filter button background", "default": "#f5f5f7" },
+    { "type": "color", "id": "filter_button_fg", "label": "Filter button text color", "default": "#111111" },
+    { "type": "header", "content": "Sticky Footer" },
+    { "type": "text", "id": "sticky_button_label", "label": "Checkout button label", "default": "Završi kupovinu" },
+    { "type": "text", "id": "sticky_toggle_label", "label": "Progress toggle aria label", "default": "Prikaži ili sakrij traku za dostavu" },
+    { "type": "header", "content": "Accessibility" },
+    { "type": "text", "id": "flip_icon_aria", "label": "Flip icon aria-label", "default": "Okreni karticu" },
+    { "type": "header", "content": "Functionality" },
+    { "type": "checkbox", "id": "enable_multiselect", "label": "Enable multi-select filtering", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "areas", "label": "Areas (comma separated)", "default": "lice,tijelo" },
+        { "type": "text", "id": "types", "label": "Types (comma separated)", "default": "oil,treatment" },
+        { "type": "text", "id": "concerns", "label": "Concerns (comma separated)", "default": "dryness,aging,damage" },
+        { "type": "text", "id": "benefits", "label": "Front chips (comma separated)", "default": "Hidratacija, Anti-age, Sjaj" },
+        { "type": "text", "id": "badge", "label": "Badge (leave blank to hide)" },
+        { "type": "select", "id": "back_align", "label": "Back content alignment", "options": [ { "value": "top", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "bottom", "label": "Bottom" } ], "default": "top" },
+        { "type": "text", "id": "flip_title", "label": "Back title", "default": "Zašto će ti se svidjeti" },
+        { "type": "richtext", "id": "flip_text", "label": "Back description", "default": "<p>Kratak opis ključnih sastojaka i efekata.</p>" },
+        { "type": "textarea", "id": "flip_points", "label": "Back bullet points (one per line)", "default": "Ključna tvrdnja 1\nKljučna tvrdnja 2\nKljučna tvrdnja 3" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "AZ Concern Selector", "blocks": [ { "type": "product" } ] }
+  ]
+}
+{% endschema %}

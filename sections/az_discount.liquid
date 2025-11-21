@@ -1,0 +1,650 @@
+{%- liquid
+  assign sid = section.id | replace: '_', '' | downcase
+  assign s = section.settings
+
+  if s.enable
+    if customer and customer.orders_count > 0
+      assign eligible = false
+    else
+      assign eligible = true
+    endif
+  else
+    assign eligible = false
+  endif
+
+  assign form_id = 'azr-' | append: sid | append: '-form'
+-%}
+
+{%- if eligible -%}
+<button
+  class="azr-{{ sid }}-ribbon azr-{{ sid }}-ribbon-{{ s.ribbon_side }}"
+  type="button"
+>
+  <span class="azr-{{ sid }}-ribbon-inner">
+    {{ s.ribbon_label }}
+  </span>
+</button>
+{%- endif -%}
+
+<div
+  class="azr-{{ sid }}"
+  data-section-id="{{ sid }}"
+  style="display:none"
+>
+  <div class="azr-{{ sid }}-overlay" aria-hidden="true"></div>
+
+  <div
+    class="azr-{{ sid }}-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="azr-{{ sid }}-title"
+  >
+    <div
+      class="azr-{{ sid }}-grid desktop-image-{{ s.img_pos_dk }} mobile-image-{{ s.img_pos_mb }}"
+    >
+      {%- if s.image != blank -%}
+        <div class="azr-{{ sid }}-media">
+          <img
+            src="{{ s.image | image_url: width: 900 }}"
+            srcset="{{ s.image | image_url: width: 450 }} 450w, {{ s.image | image_url: width: 900 }} 900w"
+            sizes="(max-width: 900px) 100vw, 450px"
+            width="{{ s.image.width }}"
+            height="{{ s.image.height }}"
+            alt="{{ s.image_alt | escape }}"
+            loading="lazy"
+          >
+        </div>
+      {%- endif -%}
+
+      <div class="azr-{{ sid }}-content">
+        <p class="azr-{{ sid }}-eyebrow">{{ s.eyebrow }}</p>
+        <h2 id="azr-{{ sid }}-title" class="azr-{{ sid }}-title">{{ s.heading }}</h2>
+        <div class="azr-{{ sid }}-text">{{ s.body }}</div>
+
+        {%- form 'customer', id: form_id -%}
+          <input type="hidden" name="contact[tags]" value="newsletter, popup-{{ sid }}">
+          <input type="hidden" name="return_to" id="azr-{{ sid }}-return">
+
+          <div class="azr-{{ sid }}-field">
+            <label for="azr-{{ sid }}-email" class="visually-hidden">Email</label>
+            <input
+              id="azr-{{ sid }}-email"
+              type="email"
+              name="contact[email]"
+              required
+              placeholder="{{ s.email_placeholder }}"
+            >
+          </div>
+          <button
+            class="azr-{{ sid }}-cta"
+            type="submit"
+            data-discount="{{ s.discount_code | strip }}"
+          >
+            {{ s.cta_label }}
+          </button>
+
+          {%- if form.posted_successfully? -%}
+            <p class="azr-{{ sid }}-success">{{ s.success_msg }}</p>
+          {%- endif -%}
+          {%- if form.errors -%}
+            <p class="azr-{{ sid }}-error">{{ form.errors | default_errors }}</p>
+          {%- endif -%}
+        {%- endform -%}
+
+        <button class="azr-{{ sid }}-skip" type="button">
+          {{ s.skip_label }}
+        </button>
+      </div>
+    </div>
+    <button class="azr-{{ sid }}-close" type="button" aria-label="Close">×</button>
+  </div>
+</div>
+
+<style>
+  :root {
+    --azr-{{ sid }}-head-font: {{ s.head_font.family }}, {{ s.head_font.fallback_families }};
+    --azr-{{ sid }}-head-font-style: {{ s.head_font.style }};
+    --azr-{{ sid }}-head-font-weight: {{ s.head_font.weight }};
+    --azr-{{ sid }}-body-font: {{ s.body_font.family }}, {{ s.body_font.fallback_families }};
+    --azr-{{ sid }}-body-font-style: {{ s.body_font.style }};
+    --azr-{{ sid }}-body-font-weight: {{ s.body_font.weight }};
+  }
+
+  .azr-{{ sid }} {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+  }
+
+  .azr-{{ sid }}-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 18, 25, {{ s.overlay_op }});
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+
+  .azr-{{ sid }}-modal {
+    position: relative;
+    margin: {{ s.margin_dk }}px auto;
+    max-width: {{ s.width }}px;
+    background: {{ s.bg_color }};
+    border-radius: {{ s.radius }}px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.18);
+    overflow: hidden;
+    transform: translateY(16px) scale(.96);
+    opacity: 0;
+    transition: transform .26s cubic-bezier(0.22, 0.61, 0.36, 1), opacity .22s ease;
+  }
+
+  .azr-{{ sid }}[data-open="1"] .azr-{{ sid }}-overlay {
+    opacity: 1;
+  }
+
+  .azr-{{ sid }}[data-open="1"] .azr-{{ sid }}-modal {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: azr-{{ sid }}-pop .32s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  @keyframes azr-{{ sid }}-pop {
+    0% { transform: translateY(24px) scale(.9); }
+    60% { transform: translateY(-6px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  .azr-{{ sid }}-grid {
+    display: grid;
+    grid-template-columns: {% if s.image != blank %}1.05fr 1fr{% else %}1fr{% endif %};
+    align-items: stretch;
+  }
+
+  .azr-{{ sid }}-grid.desktop-image-right .azr-{{ sid }}-media {
+    order: 2;
+  }
+
+  .azr-{{ sid }}-media {
+    background: #f5f6f8;
+  }
+
+  .azr-{{ sid }}-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .azr-{{ sid }}-content {
+    padding: {{ s.pad_y }}px {{ s.pad_x }}px;
+    text-align: {{ s.text_align }};
+  }
+
+  .azr-{{ sid }}-eyebrow {
+    font-size: {{ s.eyebrow_size }}px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+    color: {{ s.eyebrow_color }};
+    font-family: var(--azr-{{ sid }}-body-font);
+  }
+
+  .azr-{{ sid }}-title {
+    font-family: var(--azr-{{ sid }}-head-font);
+    font-style: var(--azr-{{ sid }}-head-font-style);
+    font-weight: var(--azr-{{ sid }}-head-font-weight);
+    font-size: {{ s.head_size }}px;
+    line-height: 1.2;
+    margin: 0 0 10px;
+    color: {{ s.head_color }};
+  }
+
+  .azr-{{ sid }}-text {
+    font-family: var(--azr-{{ sid }}-body-font);
+    font-style: var(--azr-{{ sid }}-body-font-style);
+    font-weight: var(--azr-{{ sid }}-body-font-weight);
+    font-size: {{ s.body_size }}px;
+    margin: 0 0 16px;
+    color: {{ s.text_color }};
+    line-height: 1.5;
+  }
+
+  .azr-{{ sid }}-text p {
+    margin: 0;
+  }
+
+  .azr-{{ sid }}-field {
+    margin: 0 0 12px;
+  }
+
+  .azr-{{ sid }}-field input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid {{ s.in_border_color }};
+    background: {{ s.in_bg }};
+    color: {{ s.in_text_color }};
+    border-radius: 12px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+    text-align: {{ s.text_align }};
+  }
+
+  .azr-{{ sid }}-field input:focus {
+    border-color: {{ s.cta_bg }};
+    box-shadow: 0 0 0 3px {{ s.cta_bg | color_modify: 'alpha', 0.2 }};
+  }
+
+  .azr-{{ sid }}-field input::placeholder {
+    color: {{ s.in_text_color | color_modify: 'alpha', 0.7 }};
+  }
+
+  .azr-{{ sid }}-cta {
+    font-family: var(--azr-{{ sid }}-body-font);
+    width: 100%;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: {{ s.cta_bg }};
+    color: {{ s.cta_color }};
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    box-shadow: 0 12px 25px rgba(0,0,0,.14);
+  }
+
+  .azr-{{ sid }}-cta:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 16px 40px rgba(0,0,0,.16);
+  }
+
+  .azr-{{ sid }}-cta:active {
+    transform: scale(.98);
+  }
+
+  .azr-{{ sid }}-skip {
+    margin-top: 10px;
+    background: transparent;
+    border: 0;
+    color: {{ s.skip_color }};
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .azr-{{ sid }}-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    line-height: 1;
+    background: rgba(0, 0, 0, 0.08);
+    border: 0;
+    color: {{ s.head_color }};
+    font-size: 22px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .2s ease, transform .12s ease;
+  }
+
+  .azr-{{ sid }}-close:hover {
+    background: rgba(0, 0, 0, 0.12);
+    transform: scale(1.02);
+  }
+
+  .azr-{{ sid }}-success {
+    margin-top: 10px;
+    color: #047857;
+  }
+
+  .azr-{{ sid }}-error {
+    margin-top: 10px;
+    color: #b91c1c;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+  }
+
+  .azr-{{ sid }}-ribbon {
+    position: fixed;
+    top: 50%;
+    z-index: 9998;
+    transform: translateY(-50%);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .azr-{{ sid }}-ribbon-right {
+    right: -52px;
+  }
+
+  .azr-{{ sid }}-ribbon-left {
+    left: -52px;
+  }
+
+  .azr-{{ sid }}-ribbon-inner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: {{ s.ribbon_bg }};
+    color: {{ s.ribbon_color }};
+    font-family: var(--azr-{{ sid }}-body-font);
+    font-size: {{ s.ribbon_size }}px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    box-shadow: 0 18px 45px rgba(0,0,0,.4);
+    transform: rotate(-90deg);
+    animation: azr-{{ sid }}-ribbon-float 3.2s ease-in-out infinite;
+    white-space: nowrap;
+  }
+
+  .azr-{{ sid }}-ribbon-hidden .azr-{{ sid }}-ribbon-inner {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes azr-{{ sid }}-ribbon-float {
+    0%, 100% { transform: rotate(-90deg) translateY(0); }
+    50% { transform: rotate(-90deg) translateY(5px); }
+  }
+
+  @media(max-width: 900px) {
+    .azr-{{ sid }}-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .azr-{{ sid }}-grid.mobile-image-bottom .azr-{{ sid }}-media {
+      order: 2;
+    }
+
+    .azr-{{ sid }}-grid.mobile-image-hide .azr-{{ sid }}-media {
+      display: none;
+    }
+
+    .azr-{{ sid }}-modal {
+      margin: {{ s.margin_mb }}px 14px;
+      max-width: none;
+    }
+
+    .azr-{{ sid }}-title {
+      font-size: {{ s.head_size | times: 0.85 | round }}px;
+    }
+
+    .azr-{{ sid }}-ribbon {
+      top: auto;
+      bottom: 24px;
+      transform: none;
+    }
+
+    .azr-{{ sid }}-ribbon-right {
+      right: 16px;
+    }
+
+    .azr-{{ sid }}-ribbon-left {
+      left: 16px;
+    }
+
+    .azr-{{ sid }}-ribbon-inner {
+      transform: none;
+      animation: none;
+      border-radius: 999px;
+      padding-inline: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+  }
+</style>
+
+<script>
+(function(){
+  var root = document.querySelector('.azr-{{ sid }}');
+  var ribbon = document.querySelector('.azr-{{ sid }}-ribbon');
+  var eligible = {{ eligible | json }};
+  var autoOpen = {{ s.auto_open | json }};
+
+  if (!eligible) {
+    if (ribbon && ribbon.parentNode) {
+      ribbon.parentNode.removeChild(ribbon);
+    }
+    return;
+  }
+
+  var key = 'azr_pop_seen_v4';
+
+  function markSeen() {
+    try { localStorage.setItem(key, '1'); } catch(e) {}
+  }
+
+  function hasSeen() {
+    try { return localStorage.getItem(key) === '1'; } catch(e) { return false; }
+  }
+
+  function openNow() {
+    if (!root) return;
+    root.style.display = 'block';
+    setTimeout(function() {
+      root.setAttribute('data-open', '1');
+      document.documentElement.style.overflow = 'hidden';
+    }, 10);
+    if (ribbon) {
+      ribbon.classList.add('azr-{{ sid }}-ribbon-hidden');
+    }
+  }
+
+  function closeNow() {
+    if (!root) return;
+    root.removeAttribute('data-open');
+    document.documentElement.style.overflow = '';
+    setTimeout(function() {
+      root.style.display = 'none';
+    }, 300);
+    if (ribbon) {
+      ribbon.classList.remove('azr-{{ sid }}-ribbon-hidden');
+    }
+    markSeen();
+  }
+
+  function applyDiscount(discount) {
+    if (!discount) { return; }
+    var redirect = window.location.pathname + window.location.search;
+    var url = '/discount/' + encodeURIComponent(discount) + '?redirect=' + encodeURIComponent(redirect);
+    window.location.href = url;
+  }
+
+  if (ribbon) {
+    ribbon.addEventListener('click', function() {
+      if (root && root.getAttribute('data-open') === '1') {
+        closeNow();
+      } else {
+        openNow();
+      }
+    });
+  }
+
+  if (root) {
+    root.addEventListener('click', function(e) {
+      if (e.target.classList.contains('azr-{{ sid }}-overlay')) {
+        closeNow();
+      }
+    });
+
+    var btnClose = root.querySelector('.azr-{{ sid }}-close');
+    if (btnClose) {
+      btnClose.addEventListener('click', closeNow);
+    }
+
+    var btnSkip = root.querySelector('.azr-{{ sid }}-skip');
+    if (btnSkip) {
+      btnSkip.addEventListener('click', closeNow);
+    }
+
+    var form = root.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', function() {
+        var btn = root.querySelector('.azr-{{ sid }}-cta');
+        var code = btn ? btn.getAttribute('data-discount') : '';
+
+        try { localStorage.setItem('azr_discount_code', code || ''); } catch(e) {}
+
+        var ret = root.querySelector('#azr-{{ sid }}-return');
+        if (ret && code) {
+          var redirect = window.location.pathname + window.location.search;
+          ret.value = '/discount/' + encodeURIComponent(code) + '?redirect=' + encodeURIComponent(redirect);
+        }
+
+        markSeen();
+      });
+    }
+  }
+
+  if (autoOpen && !hasSeen()) {
+    setTimeout(function() { openNow(); }, {{ s.delay }});
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "AZR – Popup",
+  "settings": [
+    { "type": "checkbox", "id": "enable", "label": "Enable", "default": true },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A SPECIAL OFFER" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "You deserve it" },
+    { "type": "richtext", "id": "body", "label": "Body Text", "default": "<p>A special offer for your first order. Join our list and unlock 10% off.</p>" },
+    { "type": "text", "id": "email_placeholder", "label": "Email Placeholder", "default": "Your email" },
+    { "type": "text", "id": "cta_label", "label": "Button Label", "default": "Claim 10% off" },
+    { "type": "text", "id": "skip_label", "label": "Skip Label", "default": "No thanks" },
+    { "type": "text", "id": "success_msg", "label": "Success Message", "default": "Success! Applying your discount..." },
+    {
+      "type": "header",
+      "content": "Discount"
+    },
+    { "type": "text", "id": "discount_code", "label": "Discount Code", "default": "WELCOME10" },
+    {
+      "type": "header",
+      "content": "Layout & Display"
+    },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image Alt Text", "default": "Promo image" },
+    {
+      "type": "select",
+      "id": "img_pos_dk",
+      "label": "Image Position (Desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "img_pos_mb",
+      "label": "Image Position (Mobile)",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "hide", "label": "Hide" }
+      ],
+      "default": "hide"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "delay",
+      "label": "Show Popup After",
+      "options": [
+        { "value": "1500", "label": "1.5 Seconds" },
+        { "value": "3000", "label": "3 Seconds" },
+        { "value": "5000", "label": "5 Seconds" },
+        { "value": "10000", "label": "10 Seconds" }
+      ],
+      "default": "1500"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_open",
+      "label": "Open Automatically After Delay",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    { "type": "font_picker", "id": "head_font", "label": "Heading Font", "default": "sans-serif" },
+    { "type": "range", "id": "head_size", "label": "Heading Size (px)", "min": 20, "max": 60, "step": 1, "default": 28 },
+    { "type": "font_picker", "id": "body_font", "label": "Body Font", "default": "sans-serif" },
+    { "type": "range", "id": "body_size", "label": "Body Size (px)", "min": 12, "max": 24, "step": 1, "default": 16 },
+    { "type": "range", "id": "eyebrow_size", "label": "Eyebrow Size (px)", "min": 10, "max": 16, "step": 1, "default": 12 },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "head_color", "label": "Heading", "default": "#111827" },
+    { "type": "color", "id": "text_color", "label": "Body Text", "default": "#374151" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow", "default": "#6b7280" },
+    { "type": "color", "id": "skip_color", "label": "Skip Button", "default": "#6b7280" },
+    { "type": "color", "id": "cta_bg", "label": "CTA Button BG", "default": "#111827" },
+    { "type": "color", "id": "cta_color", "label": "CTA Button Text", "default": "#FFFFFF" },
+    { "type": "color", "id": "in_bg", "label": "Input BG", "default": "#FFFFFF" },
+    { "type": "color", "id": "in_text_color", "label": "Input Text", "default": "#111827" },
+    { "type": "color", "id": "in_border_color", "label": "Input Border", "default": "#d1d5db" },
+    {
+      "type": "header",
+      "content": "Sizing & Spacing"
+    },
+    { "type": "range", "id": "width", "label": "Max Width (px)", "min": 520, "max": 1000, "step": 20, "default": 800 },
+    { "type": "range", "id": "radius", "label": "Corner Radius (px)", "min": 0, "max": 40, "step": 1, "default": 18 },
+    { "type": "range", "id": "pad_y", "label": "Vertical Padding (px)", "min": 20, "max": 80, "step": 2, "default": 40 },
+    { "type": "range", "id": "pad_x", "label": "Horizontal Padding (px)", "min": 20, "max": 80, "step": 2, "default": 40 },
+    { "type": "range", "id": "margin_dk", "label": "Top Margin Desktop (px)", "min": 10, "max": 120, "step": 2, "default": 60 },
+    { "type": "range", "id": "margin_mb", "label": "Top Margin Mobile (px)", "min": 10, "max": 120, "step": 2, "default": 40 },
+    { "type": "range", "id": "overlay_op", "label": "Overlay Opacity", "min": 0.0, "max": 0.9, "step": 0.1, "default": 0.5 },
+    {
+      "type": "header",
+      "content": "Ribbon Trigger"
+    },
+    { "type": "text", "id": "ribbon_label", "label": "Ribbon Label", "default": "10% OFF" },
+    {
+      "type": "select",
+      "id": "ribbon_side",
+      "label": "Ribbon Side",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "right"
+    },
+    { "type": "range", "id": "ribbon_size", "label": "Ribbon Font Size (px)", "min": 10, "max": 16, "step": 1, "default": 12 },
+    { "type": "color", "id": "ribbon_bg", "label": "Ribbon Background", "default": "#111827" },
+    { "type": "color", "id": "ribbon_color", "label": "Ribbon Text", "default": "#FFFFFF" }
+  ],
+  "presets": [
+    { "name": "AZR – Popup" }
+  ]
+}
+{% endschema %}

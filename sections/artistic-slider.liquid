@@ -1,0 +1,213 @@
+{%- comment -%}
+  =====================================================================================
+  Artistic Slider v1
+  - Built with Swiper.js and GSAP for high-performance, custom animations.
+  - Implements a "Brush Wipe" transition effect.
+  - Each slide is a block with its own background and content settings.
+  - Fully responsive and touch-enabled.
+  =====================================================================================
+{%- endcomment -%}
+
+{%- comment -%} Load the necessary JS libraries from a reliable CDN {%- endcomment -%}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+{%- comment -%} This is the SVG for our brush wipe mask {%- endcomment -%}
+<svg id="artistic-slider-svg-mask" style="display: none;">
+  <defs>
+    <mask id="brush-mask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+      <rect width="1" height="1" fill="white" />
+      <image id="brush-image" href="https://i.imgur.com/d2vK2Gk.png" x="-1" y="0" width="2" height="1" preserveAspectRatio="none" />
+    </mask>
+  </defs>
+</svg>
+
+<div class="artistic-slider-section" data-section-id="{{ section.id }}">
+  <div class="swiper artistic-slider-container">
+    <div class="swiper-wrapper">
+      {%- for block in section.blocks -%}
+        <div class="swiper-slide artistic-slide" data-slide-index="{{ forloop.index0 }}">
+          <div
+            class="artistic-slide__background"
+            style="background-image: url('{{ block.settings.background_image | image_url: width: 1920 }}'); background-color: {{ block.settings.background_color }};"
+          ></div>
+          <div class="artistic-slide__content page-width-fx">
+            {{ block.settings.content }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --swiper-theme-color: {{ section.settings.nav_color }};
+  }
+  .artistic-slider-section {
+    width: 100%;
+    height: {{ section.settings.section_height }}vh;
+    margin: 0;
+    padding: 0;
+  }
+  .artistic-slider-container {
+    width: 100%;
+    height: 100%;
+  }
+  .artistic-slide {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+  }
+  .artistic-slide__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+  .artistic-slide__content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    color: var(--text-color);
+  }
+  .artistic-slide__content > *:first-child { margin-top: 0; }
+  .artistic-slide__content > *:last-child { margin-bottom: 0; }
+
+  /* This is the key for the transition effect */
+  .slide-is-transitioning {
+    mask-image: url(#brush-mask);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-image: url(#brush-mask);
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sectionId = '{{ section.id }}';
+  const sliderContainer = document.querySelector(`.artistic-slider-section[data-section-id="${sectionId}"] .artistic-slider-container`);
+  const maskImage = document.querySelector('#brush-image');
+
+  // Do nothing if the slider doesn't exist on the page
+  if (!sliderContainer) return;
+  
+  // GSAP timeline for the mask animation
+  const maskAnimation = gsap.timeline({ paused: true, reversed: true });
+  maskAnimation.to(maskImage, {
+    x: 0,
+    duration: 1.2,
+    ease: 'power3.inOut'
+  });
+
+  const swiper = new Swiper(sliderContainer, {
+    loop: true,
+    speed: 0, // We control the speed with GSAP
+    effect: 'fade', // Use fade as a fallback effect
+    fadeEffect: {
+      crossFade: true
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    on: {
+      slideChangeTransitionStart: function () {
+        // When a slide starts to change, find the previously active slide
+        const previousSlide = this.slides[this.previousIndex];
+        if (previousSlide) {
+          previousSlide.classList.add('slide-is-transitioning');
+        }
+        
+        // Play the "paint away" animation
+        maskAnimation.reversed(false).play();
+      },
+      slideChangeTransitionEnd: function() {
+        // When the slide has finished changing, reset the animation and remove the class
+        const previousSlide = this.slides[this.previousIndex];
+        if (previousSlide) {
+          previousSlide.classList.remove('slide-is-transitioning');
+        }
+        maskAnimation.reversed(true);
+      }
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Artistic Slider",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section Height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90,
+      "info": "Height relative to the viewport height. 100vh is full screen."
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Navigation Arrow & Dot Color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#1A1A1A"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background Image"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Slide Content",
+          "default": "<h2>Artistic Slide</h2><p>Use this space to add your jumbo text or any other content.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artistic Slider",
+      "blocks": [
+        { "type": "slide" },
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

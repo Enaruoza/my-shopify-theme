@@ -1,0 +1,658 @@
+{% doc %}
+  @prompt
+    An interactive vertical timeline that highlights as the user scrolls, have it be more interactive; rather than it being laid out like that; it needs to be "pressed" to "extend"; sort of like a story telling experience, chapter by chapter. 
+    
+    also switch up the place holder text so its more appropriate for a "your journey with argan oil"
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-timeline-{{ ai_gen_id }} {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .ai-timeline-line-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 30px;
+    width: {{ block.settings.line_width }}px;
+    background-color: {{ block.settings.line_color }};
+  }
+
+  .ai-timeline-progress-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    width: {{ block.settings.line_width }}px;
+    background-color: {{ block.settings.progress_color }};
+    height: 0;
+    transition: height 0.5s ease;
+  }
+
+  .ai-timeline-items-{{ ai_gen_id }} {
+    position: relative;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }} {
+    position: relative;
+    margin-bottom: {{ block.settings.item_spacing }}px;
+    padding-left: 60px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}.is-active {
+    opacity: 1;
+  }
+
+  .ai-timeline-dot-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 28px;
+    width: {{ block.settings.dot_size }}px;
+    height: {{ block.settings.dot_size }}px;
+    background-color: {{ block.settings.dot_color }};
+    border-radius: 50%;
+    transform: translateX(-50%);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    z-index: 2;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}.is-active .ai-timeline-dot-{{ ai_gen_id }} {
+    background-color: {{ block.settings.dot_active_color }};
+    transform: translateX(-50%) scale(1.2);
+  }
+
+  .ai-timeline-item-header-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .ai-timeline-date-{{ ai_gen_id }} {
+    font-size: {{ block.settings.date_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.date_color }};
+    margin-right: 12px;
+  }
+
+  .ai-timeline-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: 700;
+    color: {{ block.settings.title_color }};
+  }
+
+  .ai-timeline-content-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+    background-color: {{ block.settings.item_background }};
+    border-radius: {{ block.settings.item_border_radius }}px;
+    margin-top: 10px;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}.is-active .ai-timeline-content-{{ ai_gen_id }} {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-timeline-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_font_size }}px;
+    color: {{ block.settings.description_color }};
+    line-height: 1.6;
+  }
+
+  .ai-timeline-expand-icon-{{ ai_gen_id }} {
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-timeline-expand-icon-{{ ai_gen_id }}::before,
+  .ai-timeline-expand-icon-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    background-color: {{ block.settings.title_color }};
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .ai-timeline-expand-icon-{{ ai_gen_id }}::before {
+    width: 2px;
+    height: 12px;
+    transition: height 0.3s ease;
+  }
+
+  .ai-timeline-expand-icon-{{ ai_gen_id }}::after {
+    width: 12px;
+    height: 2px;
+  }
+
+  .ai-timeline-item-{{ ai_gen_id }}.is-active .ai-timeline-expand-icon-{{ ai_gen_id }}::before {
+    height: 0;
+  }
+
+  .ai-timeline-cta-{{ ai_gen_id }} {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: {{ block.settings.cta_background }};
+    color: {{ block.settings.cta_text_color }};
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-timeline-cta-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.cta_hover_background }};
+  }
+
+  @media screen and (max-width: 767px) {
+    .ai-timeline-item-{{ ai_gen_id }} {
+      padding-left: 50px;
+    }
+    
+    .ai-timeline-line-{{ ai_gen_id }},
+    .ai-timeline-progress-{{ ai_gen_id }} {
+      left: 25px;
+    }
+    
+    .ai-timeline-dot-{{ ai_gen_id }} {
+      left: 23px;
+    }
+  }
+{% endstyle %}
+
+<interactive-timeline-{{ ai_gen_id }} class="ai-timeline-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-timeline-line-{{ ai_gen_id }}"></div>
+  <div class="ai-timeline-progress-{{ ai_gen_id }}"></div>
+  <div class="ai-timeline-items-{{ ai_gen_id }}">
+    {% for i in (1..6) %}
+      {% assign date_key = 'item_' | append: i | append: '_date' %}
+      {% assign title_key = 'item_' | append: i | append: '_title' %}
+      {% assign description_key = 'item_' | append: i | append: '_description' %}
+      {% assign cta_text_key = 'item_' | append: i | append: '_cta_text' %}
+      {% assign cta_link_key = 'item_' | append: i | append: '_cta_link' %}
+      
+      {% if block.settings[title_key] != blank %}
+        <div class="ai-timeline-item-{{ ai_gen_id }}" data-index="{{ forloop.index0 }}">
+          <div class="ai-timeline-dot-{{ ai_gen_id }}"></div>
+          <div class="ai-timeline-item-header-{{ ai_gen_id }}">
+            {% if block.settings[date_key] != blank %}
+              <div class="ai-timeline-date-{{ ai_gen_id }}">{{ block.settings[date_key] }}</div>
+            {% endif %}
+            <h3 class="ai-timeline-title-{{ ai_gen_id }}">{{ block.settings[title_key] }}</h3>
+            <div class="ai-timeline-expand-icon-{{ ai_gen_id }}"></div>
+          </div>
+          <div class="ai-timeline-content-{{ ai_gen_id }}">
+            {% if block.settings[description_key] != blank %}
+              <div class="ai-timeline-description-{{ ai_gen_id }}">{{ block.settings[description_key] }}</div>
+            {% endif %}
+            {% if block.settings[cta_text_key] != blank and block.settings[cta_link_key] != blank %}
+              <a href="{{ block.settings[cta_link_key] }}" class="ai-timeline-cta-{{ ai_gen_id }}">{{ block.settings[cta_text_key] }}</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</interactive-timeline-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class InteractiveTimeline{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.timelineItems = this.querySelectorAll('.ai-timeline-item-{{ ai_gen_id }}');
+        this.progressBar = this.querySelector('.ai-timeline-progress-{{ ai_gen_id }}');
+        this.activeIndex = -1;
+        this.totalItems = this.timelineItems.length;
+      }
+
+      connectedCallback() {
+        this.setupEventListeners();
+        // Activate the first item by default
+        if (this.timelineItems.length > 0) {
+          this.activateItem(0);
+        }
+      }
+
+      setupEventListeners() {
+        this.timelineItems.forEach((item, index) => {
+          item.addEventListener('click', () => {
+            this.activateItem(index);
+          });
+          
+          // Make header accessible via keyboard
+          const header = item.querySelector('.ai-timeline-item-header-{{ ai_gen_id }}');
+          header.setAttribute('tabindex', '0');
+          header.setAttribute('role', 'button');
+          header.setAttribute('aria-expanded', 'false');
+          header.setAttribute('aria-controls', `timeline-content-${index}-{{ ai_gen_id }}`);
+          
+          const content = item.querySelector('.ai-timeline-content-{{ ai_gen_id }}');
+          content.setAttribute('id', `timeline-content-${index}-{{ ai_gen_id }}`);
+          
+          header.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.activateItem(index);
+            }
+          });
+        });
+      }
+
+      activateItem(index) {
+        // If clicking the already active item, do nothing
+        if (this.activeIndex === index) {
+          return;
+        }
+
+        // Deactivate all items
+        this.timelineItems.forEach((item, i) => {
+          item.classList.remove('is-active');
+          const header = item.querySelector('.ai-timeline-item-header-{{ ai_gen_id }}');
+          header.setAttribute('aria-expanded', 'false');
+        });
+
+        // Activate the clicked item
+        const activeItem = this.timelineItems[index];
+        activeItem.classList.add('is-active');
+        
+        const header = activeItem.querySelector('.ai-timeline-item-header-{{ ai_gen_id }}');
+        header.setAttribute('aria-expanded', 'true');
+        
+        // Update progress bar
+        const progressPercentage = ((index + 1) / this.totalItems) * 100;
+        this.progressBar.style.height = `${progressPercentage}%`;
+        
+        // Update active index
+        this.activeIndex = index;
+        
+        // Scroll the active item into view if needed
+        activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    customElements.define('interactive-timeline-{{ ai_gen_id }}', InteractiveTimeline{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Argan Oil Journey",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Timeline Structure"
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Line width",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "color",
+      "id": "progress_color",
+      "label": "Progress color",
+      "default": "#000f9f"
+    },
+    {
+      "type": "range",
+      "id": "dot_size",
+      "min": 10,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Dot size",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Active dot color",
+      "default": "#000f9f"
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Space between items",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Item Style"
+    },
+    {
+      "type": "color",
+      "id": "item_background",
+      "label": "Content background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "item_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "date_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Date font size",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "date_color",
+      "label": "Date color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Title font size",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Description font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "color",
+      "id": "cta_background",
+      "label": "CTA background color",
+      "default": "#000f9f"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "CTA hover background",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Chapter 1: Discovery"
+    },
+    {
+      "type": "text",
+      "id": "item_1_date",
+      "label": "Date",
+      "default": "Day 1"
+    },
+    {
+      "type": "text",
+      "id": "item_1_title",
+      "label": "Title",
+      "default": "Discovering Argan Oil"
+    },
+    {
+      "type": "textarea",
+      "id": "item_1_description",
+      "label": "Description",
+      "default": "Your journey begins as you discover the golden elixir of Morocco. Argan oil, often called 'liquid gold,' has been treasured for centuries by Berber women for its remarkable beauty benefits."
+    },
+    {
+      "type": "text",
+      "id": "item_1_cta_text",
+      "label": "CTA Text",
+      "default": "Learn about our sourcing"
+    },
+    {
+      "type": "url",
+      "id": "item_1_cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "header",
+      "content": "Chapter 2: First Application"
+    },
+    {
+      "type": "text",
+      "id": "item_2_date",
+      "label": "Date",
+      "default": "Week 1"
+    },
+    {
+      "type": "text",
+      "id": "item_2_title",
+      "label": "Title",
+      "default": "First Application"
+    },
+    {
+      "type": "textarea",
+      "id": "item_2_description",
+      "label": "Description",
+      "default": "As you apply argan oil for the first time, you notice its lightweight texture that absorbs quickly without leaving a greasy residue. Your skin and hair immediately feel nourished and hydrated."
+    },
+    {
+      "type": "text",
+      "id": "item_2_cta_text",
+      "label": "CTA Text",
+      "default": "Application tips"
+    },
+    {
+      "type": "url",
+      "id": "item_2_cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "header",
+      "content": "Chapter 3: Visible Results"
+    },
+    {
+      "type": "text",
+      "id": "item_3_date",
+      "label": "Date",
+      "default": "Week 3"
+    },
+    {
+      "type": "text",
+      "id": "item_3_title",
+      "label": "Title",
+      "default": "Visible Results"
+    },
+    {
+      "type": "textarea",
+      "id": "item_3_description",
+      "label": "Description",
+      "default": "After consistent use, you begin to notice visible changes. Your skin appears more radiant and feels softer. Hair becomes shinier and more manageable, with fewer split ends. The vitamin E and fatty acids in argan oil are working their magic."
+    },
+    {
+      "type": "text",
+      "id": "item_3_cta_text",
+      "label": "CTA Text",
+      "default": "See before & after"
+    },
+    {
+      "type": "url",
+      "id": "item_3_cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "header",
+      "content": "Chapter 4: Daily Ritual"
+    },
+    {
+      "type": "text",
+      "id": "item_4_date",
+      "label": "Date",
+      "default": "Month 1"
+    },
+    {
+      "type": "text",
+      "id": "item_4_title",
+      "label": "Title",
+      "default": "A Daily Ritual"
+    },
+    {
+      "type": "textarea",
+      "id": "item_4_description",
+      "label": "Description",
+      "default": "Argan oil has become an essential part of your daily beauty routine. Whether you're using it as a moisturizer, hair treatment, or nail conditioner, it has transformed your self-care ritual into a luxurious experience."
+    },
+    {
+      "type": "text",
+      "id": "item_4_cta_text",
+      "label": "CTA Text",
+      "default": "Ritual suggestions"
+    },
+    {
+      "type": "url",
+      "id": "item_4_cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "header",
+      "content": "Chapter 5: Long-term Benefits"
+    },
+    {
+      "type": "text",
+      "id": "item_5_date",
+      "label": "Date",
+      "default": "Month 3"
+    },
+    {
+      "type": "text",
+      "id": "item_5_title",
+      "label": "Title",
+      "default": "Long-term Benefits"
+    },
+    {
+      "type": "textarea",
+      "id": "item_5_description",
+      "label": "Description",
+      "default": "The antioxidant properties of argan oil have helped protect your skin from environmental damage. Fine lines appear diminished, and your complexion has a healthy glow. Your hair is stronger and more resilient against heat styling."
+    },
+    {
+      "type": "text",
+      "id": "item_5_cta_text",
+      "label": "CTA Text",
+      "default": "Read testimonials"
+    },
+    {
+      "type": "url",
+      "id": "item_5_cta_link",
+      "label": "CTA Link"
+    },
+    {
+      "type": "header",
+      "content": "Chapter 6: Sustainable Beauty"
+    },
+    {
+      "type": "text",
+      "id": "item_6_date",
+      "label": "Date",
+      "default": "Ongoing"
+    },
+    {
+      "type": "text",
+      "id": "item_6_title",
+      "label": "Title",
+      "default": "Sustainable Beauty"
+    },
+    {
+      "type": "textarea",
+      "id": "item_6_description",
+      "label": "Description",
+      "default": "Beyond the personal benefits, you're now part of a sustainable beauty movement. Your purchase supports the Berber women who harvest the argan nuts and traditional extraction methods that preserve this precious resource for generations to come."
+    },
+    {
+      "type": "text",
+      "id": "item_6_cta_text",
+      "label": "CTA Text",
+      "default": "Our sustainability commitment"
+    },
+    {
+      "type": "url",
+      "id": "item_6_cta_link",
+      "label": "CTA Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Argan Oil Journey"
+    }
+  ]
+}
+{% endschema %}

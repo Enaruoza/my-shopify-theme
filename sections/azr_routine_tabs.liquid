@@ -1,0 +1,734 @@
+{% liquid
+  assign sid = section.id | replace: '_', '' | downcase
+  assign scheme_accent = section.settings.color_accent
+  assign scheme_bg = section.settings.color_bg
+  assign scheme_text = section.settings.color_text
+%}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    --bg: {{ scheme_bg }};
+    --text: {{ scheme_text }};
+    --accent: {{ scheme_accent }};
+    --border: {{ section.settings.color_border }};
+    --font-hd: {{ section.settings.font_heading.family }}, {{ section.settings.font_heading.fallback_families }};
+    --font-bd: {{ section.settings.font_body.family }}, {{ section.settings.font_body.fallback_families }};
+    --pad-y: {{ section.settings.padding_y }}px;
+    background-color: var(--bg);
+    color: var(--text);
+    padding-top: var(--pad-y);
+    padding-bottom: var(--pad-y);
+    overflow: hidden;
+  }
+
+  /* Layout Grid */
+  .rb-{{ sid }} .wrapper {
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media(min-width: 990px) {
+    .rb-{{ sid }} .wrapper {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .rb-{{ sid }} .content-col {
+      position: sticky;
+      top: 40px;
+    }
+  }
+
+  /* Left Column: Content */
+  .rb-{{ sid }} .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .rb-{{ sid }} .heading {
+    font-family: var(--font-hd);
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.1;
+    margin: 0 0 24px;
+    font-weight: 400;
+  }
+  .rb-{{ sid }} .desc {
+    font-family: var(--font-bd);
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 32px;
+    max-width: 450px;
+  }
+
+  /* Main Tabs (Zone) */
+  .rb-{{ sid }} .tabs {
+    display: inline-flex;
+    background: rgba(0,0,0,0.04);
+    padding: 4px;
+    border-radius: 99px;
+    margin-bottom: 24px;
+  }
+  .rb-{{ sid }} .tab-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 24px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text);
+    opacity: 0.6;
+  }
+  .rb-{{ sid }} .tab-btn.active {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  /* Concern Chips (Dynamic) */
+  .rb-{{ sid }} .concern-area {
+    margin-bottom: 24px;
+    min-height: 40px; /* Prevent layout shift */
+  }
+  .rb-{{ sid }} .concern-label {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: block;
+    opacity: 0.7;
+  }
+  .rb-{{ sid }} .concern-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rb-{{ sid }} .concern-chip {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .rb-{{ sid }} .concern-chip:hover {
+    border-color: var(--accent);
+  }
+  .rb-{{ sid }} .concern-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* Right Column: Ritual List */
+  .rb-{{ sid }} .ritual-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .rb-{{ sid }} .r-card {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 20px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    position: relative;
+  }
+  .rb-{{ sid }} .r-card[data-hidden="true"] {
+    display: none;
+  }
+  .rb-{{ sid }} .r-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    border-color: var(--accent);
+  }
+
+  /* Step Indicator */
+  .rb-{{ sid }} .step-num {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 2;
+  }
+
+  /* Product Image */
+  .rb-{{ sid }} .r-img-wrap {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: #f4f4f4;
+    overflow: hidden;
+    position: relative;
+  }
+  .rb-{{ sid }} .r-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Product Info */
+  .rb-{{ sid }} .r-info h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: var(--font-hd);
+  }
+  .rb-{{ sid }} .r-info p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    opacity: 0.7;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .rb-{{ sid }} .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .rb-{{ sid }} .tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: {{ section.settings.color_tag_bg }};
+    color: {{ section.settings.color_tag_text }};
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* Actions */
+  .rb-{{ sid }} .r-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    min-width: 100px;
+  }
+  .rb-{{ sid }} .price {
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .rb-{{ sid }} .btn-add {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .rb-{{ sid }} .btn-add:hover {
+    background: var(--accent);
+  }
+  .rb-{{ sid }} .btn-add[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    display: none;
+  }
+  .btn-add.loading .spinner { display: block; }
+  .btn-add.loading span { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Success State */
+  .btn-add.added {
+    background: #27ae60;
+    pointer-events: none;
+  }
+
+  /* Mobile Optimization */
+  @media(max-width: 767px) {
+    .rb-{{ sid }} .r-card {
+      grid-template-columns: 70px 1fr;
+      gap: 16px;
+      padding: 12px;
+    }
+    .rb-{{ sid }} .r-actions {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 12px;
+      border-top: 1px solid #eee;
+    }
+    .rb-{{ sid }} .btn-add {
+      width: auto;
+      min-width: 120px;
+    }
+  }
+
+  [hidden] { display: none !important; }
+</style>
+
+<div class="rb-{{ sid }}" id="RitualBuilder-{{ sid }}">
+  <div class="wrapper">
+    
+    <div class="content-col">
+      {% if section.settings.eyebrow != blank %}
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      
+      <h2 class="heading">{{ section.settings.title }}</h2>
+      
+      {% if section.settings.description != blank %}
+        <div class="desc">{{ section.settings.description }}</div>
+      {% endif %}
+
+      <div class="tabs" role="tablist">
+        {% assign tabs = section.blocks | map: 'settings' | map: 'tab_name' | uniq %}
+        {% for tab in tabs %}
+          <button class="tab-btn {% if forloop.first %}active{% endif %}" 
+                  data-target="{{ tab | handleize }}"
+                  role="tab"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+            {{ tab }}
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="concern-area" id="concern-container-{{ sid }}" hidden>
+        <span class="concern-label">Filtriraj po potrebi:</span>
+        <div class="concern-list" id="concern-list-{{ sid }}">
+          </div>
+      </div>
+
+      <div style="display:flex; gap:16px; margin-top:24px; opacity:0.7;">
+        <div style="display:flex; align-items:center; gap:6px; font-size:12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Dermatološki testirano</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; font-size:12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5zM16 8L2 22"/></svg>
+          <span>100% Vegan</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="list-col">
+      {% for tab in tabs %}
+        <div class="ritual-list" id="panel-{{ tab | handleize }}" {% unless forloop.first %}hidden{% endunless %}>
+          
+          {% assign step_counter = 0 %}
+          {% for block in section.blocks %}
+            {% if block.settings.tab_name == tab %}
+              {% assign product = block.settings.product %}
+              {% assign step_counter = step_counter | plus: 1 %}
+              
+              <div class="r-card" 
+                   {{ block.shopify_attributes }}
+                   data-concerns="{{ block.settings.concern_tags | downcase }}"
+                   data-universal="{% if block.settings.concern_tags == blank %}true{% else %}false{% endif %}">
+                
+                <div class="step-num">0{{ step_counter }}</div>
+                
+                <div class="r-img-wrap">
+                  {% if product.featured_media %}
+                    <img src="{{ product.featured_media | image_url: width: 200 }}" alt="{{ product.title }}" loading="lazy">
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  {% endif %}
+                </div>
+
+                <div class="r-info">
+                  <h3>{{ product.title | default: 'Select Product' }}</h3>
+                  <p>{{ block.settings.benefit_text | default: product.description | strip_html | truncate: 80 }}</p>
+                  {% if block.settings.ingredients != blank %}
+                    <div class="tags">
+                      {% assign ingredients = block.settings.ingredients | split: ',' %}
+                      {% for ing in ingredients %}
+                        <span class="tag">{{ ing | strip }}</span>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+
+                <div class="r-actions">
+                  <div class="price">{{ product.price | money }}</div>
+                  {% if product.available %}
+                    <button class="btn-add js-add-cart" data-id="{{ product.selected_or_first_available_variant.id }}">
+                      <span>Dodaj +</span>
+                      <div class="spinner"></div>
+                    </button>
+                  {% else %}
+                    <button class="btn-add" disabled style="opacity:0.5; background:#ccc;">Sold Out</button>
+                  {% endif %}
+                </div>
+              </div>
+
+            {% endif %}
+          {% endfor %}
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.getElementById('RitualBuilder-{{ sid }}');
+    if (!section) return;
+
+    const tabs = section.querySelectorAll('.tab-btn');
+    const panels = section.querySelectorAll('.ritual-list');
+    const concernContainer = document.getElementById('concern-container-{{ sid }}');
+    const concernList = document.getElementById('concern-list-{{ sid }}');
+
+    // Helper: Generate Concern Chips for the active panel
+    function buildConcernFilters(panelId) {
+      const panel = section.querySelector(`#panel-${panelId}`);
+      if(!panel) return;
+
+      // Find all unique concern tags in this panel
+      const cards = panel.querySelectorAll('.r-card');
+      const tagsSet = new Set();
+      
+      cards.forEach(card => {
+        const tags = card.getAttribute('data-concerns');
+        if(tags && tags.trim() !== "") {
+          tags.split(',').forEach(t => tagsSet.add(t.trim()));
+        }
+      });
+
+      // Clear list
+      concernList.innerHTML = '';
+
+      if(tagsSet.size === 0) {
+        concernContainer.hidden = true;
+        return;
+      }
+
+      concernContainer.hidden = false;
+
+      // Create "All" button
+      const allBtn = document.createElement('button');
+      allBtn.className = 'concern-chip active';
+      allBtn.textContent = 'Sve';
+      allBtn.onclick = () => filterCards(panel, 'all', allBtn);
+      concernList.appendChild(allBtn);
+
+      // Create specific buttons
+      tagsSet.forEach(tag => {
+        // Capitalize first letter for display
+        const displayTag = tag.charAt(0).toUpperCase() + tag.slice(1);
+        
+        const btn = document.createElement('button');
+        btn.className = 'concern-chip';
+        btn.textContent = displayTag;
+        btn.onclick = () => filterCards(panel, tag, btn);
+        concernList.appendChild(btn);
+      });
+    }
+
+    // Helper: Filter Logic
+    function filterCards(panel, tag, clickedBtn) {
+      // Update active chip visual
+      const chips = concernList.querySelectorAll('.concern-chip');
+      chips.forEach(c => c.classList.remove('active'));
+      clickedBtn.classList.add('active');
+
+      const cards = panel.querySelectorAll('.r-card');
+      
+      cards.forEach(card => {
+        const cardTags = card.getAttribute('data-concerns');
+        const isUniversal = card.getAttribute('data-universal') === 'true';
+
+        if (tag === 'all') {
+          // Show everything
+          card.style.display = 'grid';
+          setTimeout(() => card.style.opacity = '1', 50);
+        } else {
+          // Check if card matches tag OR is universal
+          if (isUniversal || (cardTags && cardTags.includes(tag))) {
+             card.style.display = 'grid';
+             setTimeout(() => card.style.opacity = '1', 50);
+          } else {
+             card.style.display = 'none';
+             card.style.opacity = '0';
+          }
+        }
+      });
+    }
+
+    // Tab Logic
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Reset tabs
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(p => p.hidden = true);
+
+        // Activate new tab
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        const target = tab.getAttribute('data-target');
+        const targetPanel = section.querySelector(`#panel-${target}`);
+        
+        if(targetPanel) {
+          targetPanel.hidden = false;
+          // Re-build concern filters for this tab
+          buildConcernFilters(target);
+        }
+      });
+    });
+
+    // Init: Build filters for the initially active tab
+    const initialTab = section.querySelector('.tab-btn.active');
+    if(initialTab) {
+      buildConcernFilters(initialTab.getAttribute('data-target'));
+    }
+
+    // Add to Cart Logic
+    section.querySelectorAll('.js-add-cart').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-id');
+        if (!id) return;
+
+        btn.classList.add('loading');
+        
+        try {
+          const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: [{ id: Number(id), quantity: 1 }] })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            btn.classList.remove('loading');
+            btn.classList.add('added');
+            btn.innerHTML = '<span>Dodan ✓</span>';
+            
+            window.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true, detail: { cart: data } }));
+            const cartIcon = document.querySelector('a[href="/cart"], #cart-icon-bubble');
+            if(cartIcon) cartIcon.click();
+
+            setTimeout(() => {
+              btn.classList.remove('added');
+              btn.innerHTML = '<span>Dodaj +</span>';
+            }, 3000);
+          } else {
+            throw new Error(data.description);
+          }
+        } catch (error) {
+          console.error(error);
+          btn.classList.remove('loading');
+          alert('Error: ' + error.message);
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "AZR Ritual Builder + Filt",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small Tagline",
+      "default": "TVOJA NOVA RUTINA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Izgradi svoj ritual njege"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Prati ove jednostavne korake za postizanje zdravog sjaja. Filtriraj proizvode prema potrebama tvoje kože."
+    },
+    {
+      "type": "header",
+      "content": "Design"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background",
+      "default": "#fcfbf9"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text",
+      "default": "#1c1d1d"
+    },
+    {
+      "type": "color",
+      "id": "color_accent",
+      "label": "Accent Color",
+      "default": "#a67c52"
+    },
+    {
+      "type": "color",
+      "id": "color_border",
+      "label": "Card Border",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "color",
+      "id": "color_tag_bg",
+      "label": "Ingredient Tag BG",
+      "default": "#f0ebe6"
+    },
+    {
+      "type": "color",
+      "id": "color_tag_text",
+      "label": "Ingredient Tag Text",
+      "default": "#5c4a3d"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "label": "Container Width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Vertical Padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Ritual Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_name",
+          "label": "Zone / Tab",
+          "default": "Lice",
+          "info": "e.g. Face, Hands, Hair"
+        },
+        {
+          "type": "textarea",
+          "id": "concern_tags",
+          "label": "Filter Tags (Concerns)",
+          "info": "Comma separated tags. If user filters by this tag, this product will show. LEAVE BLANK if this product should show for EVERYONE (Universal step). Example: 'suha koža, osjetljiva, ekcem'"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "benefit_text",
+          "label": "Benefit Short Text",
+          "default": "Dubinski čisti pore bez isušivanja."
+        },
+        {
+          "type": "text",
+          "id": "ingredients",
+          "label": "Key Ingredients",
+          "default": "Niacinamide, Zinc"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AZR Ritual Builder + Filt",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "suha koža, ekcem",
+            "benefit_text": "Nježan sapun za osjetljive ruke."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "starost, pigmentacija",
+            "benefit_text": "Sapun za obnavljanje kože."
+          }
+        },
+         {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "",
+            "benefit_text": "Univerzalna krema za ruke (vidljiva svima).",
+            "ingredients": "Shea Butter"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

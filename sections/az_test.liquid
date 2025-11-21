@@ -1,0 +1,366 @@
+<section class="az-bestsellers" data-section-id="{{ section.id }}">
+  <div class="az-container page-width">
+    {% assign words_raw = section.settings.rotating_words | default: "prirodni, učinkoviti, svježi, sigurni, certificirani" | strip %}
+    {% assign words_array = words_raw | split: "," %}
+    {% assign words_clean = "" %}
+    {% assign words_count = 0 %}
+    {% for x in words_array %}
+      {% assign t = x | strip %}
+      {% if t != "" %}
+        {% if words_count > 0 %}{% assign words_clean = words_clean | append: "|" %}{% endif %}
+        {% assign words_clean = words_clean | append: t %}
+        {% assign words_count = words_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    {% assign words = words_clean | split: "|" %}
+
+    {% if section.settings.show_claims and words_count > 0 %}
+      <div class="az-claims">
+        <span class="az-claims__lead" style="color: {{ section.settings.claims_lead_color }};">{{ section.settings.claims_lead }}</span>
+        <span class="az-rotator" style="--rotator-color: {{ section.settings.claims_text_color }};">
+          <span class="az-rotator__track az-rotator__track--{{ section.id }}{% if words_count <= 1 %} az-rotator__track--static{% endif %}">
+            {% for w in words %}<span class="az-rotator__item">{{ w }}</span>{% endfor %}
+          </span>
+        </span>
+        {% assign tail = section.settings.claims_tail %}
+        {% if tail != blank and tail != 'AUTO' %}
+          <span class="az-claims__tail" style="color: {{ section.settings.claims_lead_color }};">{{ tail }}</span>
+        {% endif %}
+      </div>
+      {% if section.settings.show_divider %}
+        <hr class="az-divider" style="background: {{ section.settings.divider_color }};">
+      {% endif %}
+    {% endif %}
+
+    <div class="az-head"
+      style="--h-size: {{ section.settings.heading_size }}px; --h-size-sm: {{ section.settings.heading_size_mobile }}px; --h-w: {{ section.settings.heading_weight }};
+             --h-track: {{ section.settings.heading_tracking }}em; --h-col: {{ section.settings.heading_color }};
+             --sub-size: {{ section.settings.sub_size }}px; --sub-size-sm: {{ section.settings.sub_size_mobile }}px; --sub-col: {{ section.settings.sub_color }};
+             --align: {{ section.settings.heading_align }};">
+      <div>
+        <h2 class="az-title">{{ section.settings.heading }}</h2>
+        {% assign sub = section.settings.subheading %}
+        {% if sub != blank and sub != 'AUTO' %}
+          <p class="az-subtitle">{{ sub }}</p>
+        {% endif %}
+      </div>
+      {% assign view_lbl = section.settings.view_all_label %}
+      {% if section.settings.view_all_link != blank and view_lbl != blank and view_lbl != 'AUTO' %}
+        <a class="az-viewall" href="{{ section.settings.view_all_link }}" style="--viewall-col: {{ section.settings.view_all_color }};">{{ view_lbl }}</a>
+      {% endif %}
+    </div>
+
+    <div class="az-grid" role="list" style="--gap: {{ section.settings.gap }}px;">
+      {% assign manual = section.blocks | where: 'type', 'product' %}
+      {% if manual.size > 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'product' and block.settings.product != blank %}
+            {% assign p = all_products[block.settings.product] %}
+            {% assign badge_text = block.settings.badge_text | default: 'Best seller' %}
+            {% assign subtitle_override = block.settings.subtitle_override | default: 'AUTO' %}
+            {% liquid
+              assign subtitle_key = section.settings.subtitle_key | default: 'custom.subtitle'
+              assign show_subtitle = section.settings.show_subtitle | default: true
+              assign show_compare = section.settings.show_compare | default: true
+              assign show_from = section.settings.show_from | default: true
+              assign show_cta = section.settings.show_cta | default: false
+              assign cta_text = section.settings.cta_text | default: 'Pogledaj proizvod'
+              assign img_bg = section.settings.img_bg | default: '#FAFAFA'
+              assign radius = section.settings.card_radius | default: 16
+              assign border_color = section.settings.card_border_color | default: '#EDEDED'
+              assign shadow_css = section.settings.card_shadow | default: '0 1px 0 rgba(0,0,0,.03)'
+              assign title_size = section.settings.title_size | default: 16
+              assign title_weight = section.settings.title_weight | default: '700'
+              assign title_color = section.settings.title_color | default: '#111111'
+              assign card_sub_size = section.settings.card_sub_size | default: 13
+              assign card_sub_color = section.settings.card_sub_color | default: '#666666'
+              assign price_size = section.settings.price_size | default: 14
+              assign price_color = section.settings.price_color | default: '#111111'
+              assign badge_bg = section.settings.badge_bg | default: '#111111'
+              assign badge_fg = section.settings.badge_fg | default: '#FFFFFF'
+              assign aspect = section.settings.aspect_ratio | default: 'square'
+              assign enable_hover = section.settings.enable_hover | default: true
+              assign enable_reveal = section.settings.enable_reveal | default: true
+              assign enable_tilt = section.settings.enable_tilt | default: false
+              assign featured = p.featured_image
+              assign w = 800
+              assign h = w
+              if featured and featured.aspect_ratio and aspect == 'image'
+                assign h = w | divided_by: featured.aspect_ratio
+              endif
+              assign sub_from_meta = ''
+              if p.metafields
+                assign ns = subtitle_key | split: '.' | first
+                assign key = subtitle_key | split: '.' | last
+                if ns != blank and key != blank
+                  assign mf = p.metafields[ns][key]
+                  if mf
+                    assign sub_from_meta = mf
+                  endif
+                endif
+              endif
+              assign subtitle = ''
+              if subtitle_override != 'AUTO' and subtitle_override != blank
+                assign subtitle = subtitle_override
+              else
+                assign subtitle = sub_from_meta
+              endif
+              assign has_compare = false
+              if show_compare and p.compare_at_price_max > p.price_max
+                assign has_compare = true
+              endif
+            %}
+            <article class="az-card" role="listitem"
+              style="--radius: {{ radius }}px; --img-bg: {{ img_bg }}; --border: {{ border_color }}; --shadow: {{ shadow_css }};
+                     --title-size: {{ title_size }}px; --title-w: {{ title_weight }}; --title-col: {{ title_color }};
+                     --sub-size: {{ card_sub_size }}px; --sub-col: {{ card_sub_color }}; --price-size: {{ price_size }}px; --price-col: {{ price_color }};
+                     --badge-bg: {{ badge_bg }}; --badge-fg: {{ badge_fg }}; --hover: {% if enable_hover %}1{% else %}0{% endif %};
+                     --reveal: {% if enable_reveal %}1{% else %}0{% endif %}; --tilt: {% if enable_tilt %}1{% else %}0{% endif %};">
+              <a href="{{ p.url }}" class="az-card__link">
+                <div class="az-card__media az-media-{{ aspect }} az-badge-{{ section.settings.badge_variant }} az-badgepos-{{ section.settings.badge_position }}">
+                  {% if badge_text != blank and section.settings.show_badge %}
+                    <span class="az-card__badge">{{ badge_text | upcase }}</span>
+                  {% endif %}
+                  {% if featured %}
+                    <img class="az-card__img" src="{{ featured | image_url: width: w, height: h, crop: 'center' }}" width="{{ w }}" height="{{ h | round }}" alt="{{ featured.alt | escape }}" loading="lazy">
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'az-card__img' }}
+                  {% endif %}
+                </div>
+                <div class="az-card__body">
+                  <h3 class="az-card__title">{{ p.title }}</h3>
+                  {% if show_subtitle and subtitle != blank %}<p class="az-card__sub">{{ subtitle }}</p>{% endif %}
+                  <div class="az-card__price">
+                    {% if show_from and p.price_varies %}From {{ p.price_min | money }}{% else %}{{ p.price | money }}{% endif %}
+                    {% if has_compare %}<del>{{ p.compare_at_price_max | money }}</del>{% endif %}
+                  </div>
+                  {% if show_cta %}<div class="az-card__cta">{{ cta_text }}</div>{% endif %}
+                </div>
+              </a>
+            </article>
+          {% endif %}
+        {% endfor %}
+      {% elsif section.settings.collection != blank %}
+        {% for p in collections[section.settings.collection].products limit: section.settings.max_items %}
+          {% assign badge_text = section.settings.collection_badge_text | default: 'Best seller' %}
+          {% assign subtitle_override = 'AUTO' %}
+          {% liquid
+            assign subtitle_key = section.settings.subtitle_key | default: 'custom.subtitle'
+            assign show_subtitle = section.settings.show_subtitle | default: true
+            assign show_compare = section.settings.show_compare | default: true
+            assign show_from = section.settings.show_from | default: true
+            assign show_cta = section.settings.show_cta | default: false
+            assign cta_text = section.settings.cta_text | default: 'Pogledaj proizvod'
+            assign img_bg = section.settings.img_bg | default: '#FAFAFA'
+            assign radius = section.settings.card_radius | default: 16
+            assign border_color = section.settings.card_border_color | default: '#EDEDED'
+            assign shadow_css = section.settings.card_shadow | default: '0 1px 0 rgba(0,0,0,.03)'
+            assign title_size = section.settings.title_size | default: 16
+            assign title_weight = section.settings.title_weight | default: '700'
+            assign title_color = section.settings.title_color | default: '#111111'
+            assign card_sub_size = section.settings.card_sub_size | default: 13
+            assign card_sub_color = section.settings.card_sub_color | default: '#666666'
+            assign price_size = section.settings.price_size | default: 14
+            assign price_color = section.settings.price_color | default: '#111111'
+            assign badge_bg = section.settings.badge_bg | default: '#111111'
+            assign badge_fg = section.settings.badge_fg | default: '#FFFFFF'
+            assign aspect = section.settings.aspect_ratio | default: 'square'
+            assign enable_hover = section.settings.enable_hover | default: true
+            assign enable_reveal = section.settings.enable_reveal | default: true
+            assign enable_tilt = section.settings.enable_tilt | default: false
+            assign featured = p.featured_image
+            assign w = 800
+            assign h = w
+            if featured and featured.aspect_ratio and aspect == 'image'
+              assign h = w | divided_by: featured.aspect_ratio
+            endif
+            assign sub_from_meta = ''
+            if p.metafields
+              assign ns = subtitle_key | split: '.' | first
+              assign key = subtitle_key | split: '.' | last
+              if ns != blank and key != blank
+                assign mf = p.metafields[ns][key]
+                if mf
+                  assign sub_from_meta = mf
+                endif
+              endif
+            endif
+            assign subtitle = ''
+            if subtitle_override != 'AUTO' and subtitle_override != blank
+              assign subtitle = subtitle_override
+            else
+              assign subtitle = sub_from_meta
+            endif
+            assign has_compare = false
+            if show_compare and p.compare_at_price_max > p.price_max
+              assign has_compare = true
+            endif
+          %}
+          <article class="az-card" role="listitem"
+            style="--radius: {{ radius }}px; --img-bg: {{ img_bg }}; --border: {{ border_color }}; --shadow: {{ shadow_css }};
+                   --title-size: {{ title_size }}px; --title-w: {{ title_weight }}; --title-col: {{ title_color }};
+                   --sub-size: {{ card_sub_size }}px; --sub-col: {{ card_sub_color }}; --price-size: {{ price_size }}px; --price-col: {{ price_color }};
+                   --badge-bg: {{ badge_bg }}; --badge-fg: {{ badge_fg }}; --hover: {% if enable_hover %}1{% else %}0{% endif %};
+                   --reveal: {% if enable_reveal %}1{% else %}0{% endif %}; --tilt: {% if enable_tilt %}1{% else %}0{% endif %};">
+            <a href="{{ p.url }}" class="az-card__link">
+              <div class="az-card__media az-media-{{ aspect }} az-badge-{{ section.settings.badge_variant }} az-badgepos-{{ section.settings.badge_position }}">
+                {% if badge_text != blank and section.settings.show_badge %}
+                  <span class="az-card__badge">{{ badge_text | upcase }}</span>
+                {% endif %}
+                {% if featured %}
+                  <img class="az-card__img" src="{{ featured | image_url: width: w, height: h, crop: 'center' }}" width="{{ w }}" height="{{ h | round }}" alt="{{ featured.alt | escape }}" loading="lazy">
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'az-card__img' }}
+                {% endif %}
+              </div>
+              <div class="az-card__body">
+                <h3 class="az-card__title">{{ p.title }}</h3>
+                {% if show_subtitle and subtitle != blank %}<p class="az-card__sub">{{ subtitle }}</p>{% endif %}
+                <div class="az-card__price">
+                  {% if show_from and p.price_varies %}From {{ p.price_min | money }}{% else %}{{ p.price | money }}{% endif %}
+                  {% if has_compare %}<del>{{ p.compare_at_price_max | money }}</del>{% endif %}
+                </div>
+                {% if show_cta %}<div class="az-card__cta">{{ cta_text }}</div>{% endif %}
+              </div>
+            </a>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="az-empty">Add products or choose a collection in section settings.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+.az-bestsellers{padding:{{ section.settings.section_padding_y }}px 0;background:{{ section.settings.section_bg }}}
+.az-divider{height:1px;border:0;margin:14px 0 18px}
+.az-claims{display:flex;gap:.5rem;align-items:center;font-size:14px;margin-bottom:10px}
+.az-rotator{display:inline-block;position:relative;height:1.25em;line-height:1.25em;overflow:hidden}
+.az-rotator__track{display:flex;flex-direction:column}
+.az-rotator__track--static{animation:none}
+.az-rotator__item{display:block;color:var(--rotator-color);font-weight:700;white-space:nowrap}
+.az-rotator__track--{{ section.id }}{animation: az-rotate-{{ section.id }} {{ section.settings.rotate_speed }}s steps({{ words_count }}) infinite}
+@keyframes az-rotate-{{ section.id }}{0%{transform:translateY(0)}100%{transform:translateY(-{{ 100 | times: words_count | minus: 100 }}%)}}
+.az-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:{{ section.settings.header_spacing }}px;flex-wrap:wrap;text-align:var(--align)}
+.az-title{margin:0;font-size:var(--h-size);letter-spacing:var(--h-track);font-weight:var(--h-w);color:var(--h-col);line-height:.92}
+.az-subtitle{margin:8px 0 0;font-size:var(--sub-size);color:var(--sub-col)}
+@media (max-width:699px){.az-title{font-size:var(--h-size-sm)}.az-subtitle{font-size:var(--sub-size-sm)}}
+.az-viewall{font-weight:600;font-size:14px;color:var(--viewall-col);text-decoration:none;border-bottom:1px solid var(--viewall-col);padding-bottom:2px}
+.az-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gap)}
+.az-grid>*{grid-column:span {{ section.settings.cols_sm }}}
+@media (min-width:700px){.az-grid>*{grid-column:span {{ section.settings.cols_md }};}}
+@media (min-width:990px){.az-grid>*{grid-column:span {{ section.settings.cols_lg }};}}
+.az-card{display:block;color:inherit;border:1px solid var(--border);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow);overflow:hidden;opacity:calc(0.8 + 0.2*var(--reveal))}
+.az-card__link{display:block;text-decoration:none}
+.az-card__media{position:relative;background:var(--img-bg);overflow:hidden;border-bottom:1px solid var(--border)}
+.az-media-square{aspect-ratio:1/1}.az-media-portrait{aspect-ratio:4/5}.az-media-tall{aspect-ratio:3/4}.az-media-landscape{aspect-ratio:4/3}
+.az-card__img{width:100%;height:100%;object-fit:contain;display:block;transform:perspective(800px) rotateX(0) rotateY(0);transition:transform .25s ease}
+.az-card__body{padding:12px 14px}
+.az-card__title{font-size:var(--title-size);line-height:1.2;margin:0 0 4px;font-weight:var(--title-w);color:var(--title-col)}
+.az-card__sub{font-size:var(--sub-size);color:var(--sub-col);margin:0 0 10px}
+.az-card__price{font-size:var(--price-size);font-weight:700;color:var(--price-col)}
+.az-card__price del{color:#888;font-weight:500;margin-left:6px}
+.az-card__cta{margin-top:10px;font-size:13px;text-decoration:underline}
+.az-card__badge{position:absolute;top:10px;left:10px;z-index:2;font-size:11px;letter-spacing:.08em;padding:6px 10px;border-radius:999px}
+.az-badge-outline .az-card__badge{background:rgba(255,255,255,.8);color:{% if section.settings.badge_bg != blank %}{{ section.settings.badge_bg }}{% else %}#111111{% endif %};border:1px solid {{ section.settings.badge_bg }};backdrop-filter:saturate(180%) blur(6px)}
+.az-badge-solid .az-card__badge{background:{{ section.settings.badge_bg }};color:{{ section.settings.badge_fg }}}
+.az-badgepos-tr .az-card__badge{left:auto;right:10px}
+@media (hover:hover){.az-card__link:hover .az-card__media{filter:brightness(0.98)}.az-card__link:hover .az-card__img{transform:translateY(-2px) rotateX(calc(2deg * {% if section.settings.enable_tilt %}1{% else %}0{% endif %}))}}
+@media (prefers-reduced-motion:reduce){.az-card__img{transition:none}}
+</style>
+
+{% schema %}
+{
+  "name": "AZ Best Sellers",
+  "settings": [
+    { "type": "checkbox", "id": "show_claims", "label": "Show claims bar", "default": true },
+    { "type": "text", "id": "claims_lead", "label": "Claims lead text", "default": "Naši proizvodi su" },
+    { "type": "text", "id": "rotating_words", "label": "Rotating words (comma-separated)", "default": "prirodni, učinkoviti, svježi, sigurni, certificirani" },
+    { "type": "text", "id": "claims_tail", "label": "Trailing text (optional)", "default": "AUTO" },
+    { "type": "range", "id": "rotate_speed", "label": "Rotator speed (seconds)", "min": 4, "max": 20, "step": 1, "default": 8 },
+    { "type": "color", "id": "claims_text_color", "label": "Claims words color", "default": "#111111" },
+    { "type": "color", "id": "claims_lead_color", "label": "Claims lead color", "default": "#666666" },
+    { "type": "checkbox", "id": "show_divider", "label": "Show divider under claims", "default": true },
+    { "type": "color", "id": "divider_color", "label": "Divider color", "default": "#E8E8E8" },
+
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Najprodavanije" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "AUTO" },
+    { "type": "range", "id": "heading_size", "label": "Heading size desktop (px)", "min": 28, "max": 96, "step": 1, "default": 64 },
+    { "type": "range", "id": "heading_size_mobile", "label": "Heading size mobile (px)", "min": 22, "max": 56, "step": 1, "default": 34 },
+    { "type": "text", "id": "heading_weight", "label": "Heading weight", "default": "800" },
+    { "type": "text", "id": "heading_tracking", "label": "Heading letter-spacing (em)", "default": "-0.02" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#111111" },
+    { "type": "range", "id": "sub_size", "label": "Subheading size desktop (px)", "min": 10, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "sub_size_mobile", "label": "Subheading size mobile (px)", "min": 10, "max": 24, "step": 1, "default": 12 },
+    { "type": "color", "id": "sub_color", "label": "Subheading color", "default": "#555555" },
+    { "type": "select", "id": "heading_align", "label": "Heading alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ] },
+    { "type": "color", "id": "view_all_color", "label": "View all color", "default": "#111111" },
+    { "type": "url", "id": "view_all_link", "label": "View all link" },
+    { "type": "text", "id": "view_all_label", "label": "View all label", "default": "AUTO" },
+
+    { "type": "collection", "id": "collection", "label": "Fallback collection" },
+    { "type": "range", "id": "max_items", "label": "Max items", "min": 3, "max": 12, "step": 1, "default": 6 },
+
+    { "type": "checkbox", "id": "show_badge", "label": "Show badge", "default": true },
+    { "type": "select", "id": "badge_variant", "label": "Badge style", "default": "outline", "options": [ { "value": "outline", "label": "Outline" }, { "value": "solid", "label": "Solid" } ] },
+    { "type": "select", "id": "badge_position", "label": "Badge position", "default": "tr", "options": [ { "value": "tr", "label": "Top right" }, { "value": "tl", "label": "Top left" } ] },
+    { "type": "text", "id": "collection_badge_text", "label": "Badge text for collection items", "default": "Best seller" },
+    { "type": "color", "id": "badge_bg", "label": "Badge background", "default": "#111111" },
+    { "type": "color", "id": "badge_fg", "label": "Badge text color", "default": "#FFFFFF" },
+
+    { "type": "text", "id": "subtitle_key", "label": "Product subtitle metafield (namespace.key)", "default": "custom.subtitle" },
+    { "type": "checkbox", "id": "show_subtitle", "label": "Show product subtitle", "default": true },
+
+    { "type": "checkbox", "id": "show_from", "label": "Show From for variant prices", "default": true },
+    { "type": "checkbox", "id": "show_compare", "label": "Show compare-at price", "default": true },
+    { "type": "checkbox", "id": "show_cta", "label": "Show CTA under price", "default": false },
+    { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Pogledaj proizvod" },
+
+    { "type": "color", "id": "img_bg", "label": "Image background", "default": "#FAFAFA" },
+    { "type": "range", "id": "card_radius", "label": "Card radius (px)", "min": 0, "max": 32, "step": 1, "default": 16 },
+    { "type": "color", "id": "card_border_color", "label": "Card border color", "default": "#EDEDED" },
+    { "type": "text", "id": "card_shadow", "label": "Card shadow CSS", "default": "0 1px 0 rgba(0,0,0,0.03)" },
+
+    { "type": "range", "id": "title_size", "label": "Product title size (px)", "min": 12, "max": 24, "step": 1, "default": 16 },
+    { "type": "text", "id": "title_weight", "label": "Product title weight", "default": "700" },
+    { "type": "color", "id": "title_color", "label": "Product title color", "default": "#111111" },
+    { "type": "range", "id": "card_sub_size", "label": "Product subtitle size (px)", "min": 10, "max": 18, "step": 1, "default": 13 },
+    { "type": "color", "id": "card_sub_color", "label": "Product subtitle color", "default": "#666666" },
+    { "type": "range", "id": "price_size", "label": "Price size (px)", "min": 12, "max": 22, "step": 1, "default": 14 },
+    { "type": "color", "id": "price_color", "label": "Price color", "default": "#111111" },
+
+    { "type": "range", "id": "gap", "label": "Grid gap (px)", "min": 8, "max": 40, "step": 1, "default": 20 },
+    { "type": "select", "id": "cols_sm", "label": "Columns mobile", "default": "12", "options": [ { "value": "12", "label": "1 per row" }, { "value": "6", "label": "2 per row" }, { "value": "4", "label": "3 per row" } ] },
+    { "type": "select", "id": "cols_md", "label": "Columns tablet", "default": "6", "options": [ { "value": "12", "label": "1 per row" }, { "value": "6", "label": "2 per row" } ] },
+    { "type": "select", "id": "cols_lg", "label": "Columns desktop", "default": "4", "options": [ { "value": "6", "label": "2 per row" }, { "value": "4", "label": "3 per row" }, { "value": "3", "label": "4 per row" } ] },
+
+    { "type": "select", "id": "aspect_ratio", "label": "Image aspect ratio", "default": "square", "options": [
+      { "value": "square", "label": "1:1" }, { "value": "portrait", "label": "4:5" }, { "value": "tall", "label": "3:4" }, { "value": "landscape", "label": "4:3" }, { "value": "image", "label": "Use image aspect" }
+    ]},
+
+    { "type": "checkbox", "id": "enable_hover", "label": "Enable hover lift", "default": true },
+    { "type": "checkbox", "id": "enable_reveal", "label": "Enable fade-up on load", "default": true },
+    { "type": "checkbox", "id": "enable_tilt", "label": "Enable subtle image tilt", "default": false },
+
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#FFFFFF" },
+    { "type": "range", "id": "section_padding_y", "label": "Section padding Y (px)", "min": 24, "max": 120, "step": 2, "default": 48 },
+    { "type": "range", "id": "header_spacing", "label": "Spacing below heading (px)", "min": 8, "max": 48, "step": 1, "default": 22 }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "badge_text", "label": "Badge text", "default": "Best seller" },
+        { "type": "text", "id": "subtitle_override", "label": "Subtitle override (keep 'AUTO' to use metafield)", "default": "AUTO" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    { "name": "AZ Best Sellers", "blocks": [ { "type": "product" }, { "type": "product" }, { "type": "product" } ] }
+  ]
+}
+{% endschema %}

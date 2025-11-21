@@ -1,0 +1,77 @@
+{% liquid
+  assign p = product
+  assign badge_text = badge_text | default: ''
+  assign subtitle_override = subtitle_override | default: 'AUTO'
+  assign subtitle_key = subtitle_key | default: 'custom.subtitle'
+
+  assign featured = p.featured_image
+  assign w = 900
+  assign h = w
+  if featured and featured.aspect_ratio
+    assign h = w | divided_by: featured.aspect_ratio
+  endif
+
+  assign sub_from_meta = ''
+  if p.metafields
+    assign ns = subtitle_key | split: '.' | first
+    assign key = subtitle_key | split: '.' | last
+    if ns != blank and key != blank
+      assign mf = p.metafields[ns][key]
+      if mf
+        assign sub_from_meta = mf
+      endif
+    endif
+  endif
+
+  assign subtitle = ''
+  if subtitle_override != 'AUTO' and subtitle_override != blank
+    assign subtitle = subtitle_override
+  else
+    assign subtitle = sub_from_meta
+  endif
+
+  assign has_compare = false
+  if p.compare_at_price_max > p.price_max
+    assign has_compare = true
+  endif
+%}
+
+<article class="az-card" role="listitem">
+  <a href="{{ p.url }}" class="az-card">
+    <div class="az-card__media">
+      {% if badge_text != blank %}
+        <span class="az-card__badge">{{ badge_text }}</span>
+      {% endif %}
+      {% if featured %}
+        <img
+          class="az-card__img"
+          src="{{ featured | image_url: width: w, height: h, crop: 'center' }}"
+          width="{{ w }}"
+          height="{{ h | round }}"
+          alt="{{ featured.alt | escape }}"
+          loading="lazy">
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'az-card__img' }}
+      {% endif %}
+    </div>
+    <div class="az-card__body">
+      <h3 class="az-card__title">{{ p.title }}</h3>
+      {% if subtitle != blank %}
+        <p class="az-card__sub">{{ subtitle }}</p>
+      {% endif %}
+      <div class="az-card__price">
+        {% if p.price_varies %}
+          Od {{ p.price_min | money }}
+        {% else %}
+          {{ p.price | money }}
+        {% endif %}
+        {% if has_compare %}
+          <del>{{ p.compare_at_price_max | money }}</del>
+        {% endif %}
+      </div>
+      {% if section.settings.view_all_link == blank %}
+        <div class="az-card__cta">Pogledaj proizvod</div>
+      {% endif %}
+    </div>
+  </a>
+</article>

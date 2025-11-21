@@ -1,0 +1,1977 @@
+{% schema %}
+{
+  "name": "Argan Benefit Explorer",
+  "class": "argan-solution-finder-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width_background",
+      "label": "Use Full Width Background",
+      "default": true,
+      "info": "If checked, the section background spans the entire width. Content inside will still be limited by 'Content Max Width'."
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content Max Width (px)",
+      "min": 600,
+      "max": 1600,
+      "step": 50,
+      "default": 1200,
+      "unit": "px",
+      "info": "Maximum width for the content area within the section."
+    },
+    {
+      "type": "header",
+      "content": "Teaser Step (Step 0)"
+    },
+    {
+      "type": "text",
+      "id": "teaser_line1_en",
+      "label": "Teaser Line 1 (English)",
+      "default": "Find a solution to your"
+    },
+    {
+      "type": "text",
+      "id": "teaser_line1_bs",
+      "label": "Teaser Line 1 (Bosnian)",
+      "default": "Pronađi rješenje za svoje"
+    },
+    {
+      "type": "textarea",
+      "id": "teaser_animated_problems_en",
+      "label": "Animated Problems (English, comma-separated)",
+      "default": "dry skin, frizzy hair, brittle nails, signs of aging, dull complexion"
+    },
+    {
+      "type": "textarea",
+      "id": "teaser_animated_problems_bs",
+      "label": "Animated Problems (Bosnian, comma-separated)",
+      "default": "suhu kožu, neposlušnu kosu, lomljive nokte, znakove starenja, beživotan ten"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_teaser_animated",
+      "label": "Teaser Animated Text Font",
+      "default": "helvetica_n7"
+    },
+    {
+      "type": "range",
+      "id": "font_teaser_animated_size_desktop",
+      "label": "Teaser Animated Text Size (Desktop)",
+      "min": 16, "max": 60, "step": 1, "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "font_teaser_animated_size_mobile",
+      "label": "Teaser Animated Text Size (Mobile)",
+      "min": 14, "max": 40, "step": 1, "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "text",
+      "id": "teaser_button_en",
+      "label": "Teaser Start Button (English)",
+      "default": "Discover Your Solution"
+    },
+    {
+      "type": "text",
+      "id": "teaser_button_bs",
+      "label": "Teaser Start Button (Bosnian)",
+      "default": "Otkrij Svoje Rješenje"
+    },
+    {
+      "type": "header",
+      "content": "Main Section Titles & Subtitles"
+    },
+    {
+      "type": "text",
+      "id": "title_en",
+      "label": "Main Title (English)",
+      "default": "Find Your Argan Oil Solution"
+    },
+    {
+      "type": "text",
+      "id": "title_bs",
+      "label": "Main Title (Bosnian)",
+      "default": "Pronađi Svoje Arganovo Rješenje"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_title",
+      "label": "Main Title Font",
+      "default": "helvetica_n7"
+    },
+    {
+      "type": "range",
+      "id": "font_title_size_desktop",
+      "label": "Main Title Size (Desktop)",
+      "min": 20, "max": 72, "step": 1, "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "font_title_size_mobile",
+      "label": "Main Title Size (Mobile)",
+      "min": 18, "max": 48, "step": 1, "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "text",
+      "id": "subtitle_en",
+      "label": "Main Subtitle (English)",
+      "default": "Select a concern, identify your specific issue, and discover how our pure argan oil can help."
+    },
+    {
+      "type": "text",
+      "id": "subtitle_bs",
+      "label": "Main Subtitle (Bosnian)",
+      "default": "Odaberite područje, identificirajte svoj specifični problem i otkrijte kako naše čisto arganovo ulje može pomoći."
+    },
+    {
+      "type": "font_picker",
+      "id": "font_subtitle",
+      "label": "Main Subtitle Font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "font_subtitle_size_desktop",
+      "label": "Main Subtitle Size (Desktop)",
+      "min": 12, "max": 32, "step": 1, "unit": "px",
+      "default": 19
+    },
+    {
+      "type": "range",
+      "id": "font_subtitle_size_mobile",
+      "label": "Main Subtitle Size (Mobile)",
+      "min": 10, "max": 24, "step": 1, "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Step Specific Text Customization"
+    },
+    {
+      "type": "text",
+      "id": "step2_title_template_en",
+      "label": "Step 2 Title Template (EN)",
+      "default": "__BODY_PART_NAME_PLACEHOLDER__: What's Your Concern?",
+      "info": "Use __BODY_PART_NAME_PLACEHOLDER__ as a placeholder for the selected body part."
+    },
+    {
+      "type": "text",
+      "id": "step2_title_template_bs",
+      "label": "Step 2 Title Template (BS)",
+      "default": "__BODY_PART_NAME_PLACEHOLDER__: Koji je Vaš problem?",
+      "info": "Use __BODY_PART_NAME_PLACEHOLDER__ as a placeholder for the selected body part."
+    },
+    {
+      "type": "text",
+      "id": "solution_card_title_prefix_en",
+      "label": "Solution Card Title Prefix (EN)",
+      "default": "Solution for: "
+    },
+    {
+      "type": "text",
+      "id": "solution_card_title_prefix_bs",
+      "label": "Solution Card Title Prefix (BS)",
+      "default": "Rješenje za: "
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_separator",
+      "label": "Breadcrumb Separator",
+      "default": " &rsaquo; "
+    },
+    {
+      "type": "header",
+      "content": "View Height Customization"
+    },
+    {
+      "type": "number",
+      "id": "teaser_view_min_height_mobile",
+      "label": "Teaser View Min Height (Mobile)",
+      "default": 280,
+      "info": "Set in pixels. 0 for auto default (280px)."
+    },
+    {
+      "type": "number",
+      "id": "teaser_view_min_height_desktop",
+      "label": "Teaser View Min Height (Desktop)",
+      "default": 320,
+      "info": "Set in pixels. 0 for auto default (320px)."
+    },
+    {
+      "type": "number",
+      "id": "step1_view_height_mobile",
+      "label": "Body Parts View Height (Mobile)",
+      "default": 0,
+      "info": "Set fixed height in pixels. 0 for auto (content height)."
+    },
+    {
+      "type": "number",
+      "id": "step1_view_height_desktop",
+      "label": "Body Parts View Height (Desktop)",
+      "default": 0,
+      "info": "Set fixed height in pixels. 0 for auto (content height)."
+    },
+    {
+      "type": "number",
+      "id": "step2_view_height_mobile",
+      "label": "Problems View Height (Mobile)",
+      "default": 0,
+      "info": "Set fixed height in pixels. 0 for auto (content height)."
+    },
+    {
+      "type": "number",
+      "id": "step2_view_height_desktop",
+      "label": "Problems View Height (Desktop)",
+      "default": 0,
+      "info": "Set fixed height in pixels. 0 for auto (content height)."
+    },
+    {
+      "type": "number",
+      "id": "step3_view_height_mobile",
+      "label": "Solution View Height (Mobile)",
+      "default": 0,
+      "info": "Set fixed height in pixels. 0 for auto (content height)."
+    },
+    {
+      "type": "number",
+      "id": "step3_view_height_desktop",
+      "label": "Solution View Height (Desktop)",
+      "default": 0,
+      "info": "Set fixed height in pixels. 0 for auto (content height)."
+    },
+    {
+      "type": "header",
+      "content": "Item & Content Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_item_names",
+      "label": "Body Part/Problem Name Font",
+      "default": "helvetica_n7"
+    },
+    {
+      "type": "range",
+      "id": "font_item_name_size_desktop",
+      "label": "Item Name Size (Desktop)",
+      "min": 12, "max": 32, "step": 1, "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "font_item_name_size_mobile",
+      "label": "Item Name Size (Mobile)",
+      "min": 10, "max": 24, "step": 1, "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "font_picker",
+      "id": "font_body_text",
+      "label": "General Content Text Font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "font_body_text_size_desktop",
+      "label": "Content Text Size (Desktop)",
+      "min": 10, "max": 24, "step": 1, "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "font_body_text_size_mobile",
+      "label": "Content Text Size (Mobile)",
+      "min": 9, "max": 20, "step": 1, "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Progress Bar Typography"
+    },
+    {
+      "type": "range",
+      "id": "progress_marker_size",
+      "label": "Progress Marker (Number Circle) Size",
+      "min": 20, "max": 50, "step": 1, "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "progress_marker_font_size",
+      "label": "Progress Marker Number Font Size",
+      "min": 10, "max": 24, "step": 1, "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "font_picker",
+      "id": "font_progress_label",
+      "label": "Progress Label Font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "progress_label_font_size",
+      "label": "Progress Label Font Size",
+      "min": 8, "max": 16, "step": 1, "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Layout, Colors & Links"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Body Part Layout Style (Desktop)",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal Scroll" },
+        { "value": "grid", "label": "Grid View" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color",
+      "default": "#E9B44C"
+    },
+    {
+      "type": "color",
+      "id": "secondary_color",
+      "label": "Secondary Color",
+      "default": "#726E60"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#9CB380"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFFBF2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "text",
+      "id": "product_handle",
+      "label": "Product Handle for CTA",
+      "default": "argan-oil",
+      "info": "Fallback if the URL link below is empty. Enter the handle of your product (e.g., 'pure-argan-oil')."
+    },
+    {
+      "type": "url",
+      "id": "final_cta_url",
+      "label": "Final CTA Button Link",
+      "info": "Links the final 'Shop Solution' button. Overrides the Product Handle setting if filled."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "body_part",
+      "name": "Body Part",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name_en",
+          "label": "Name (English)",
+          "default": "Face"
+        },
+        {
+          "type": "text",
+          "id": "name_bs",
+          "label": "Name (Bosnian)",
+          "default": "Lice"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon Image (50x50px recommended)"
+        },
+        {
+          "type": "select",
+          "id": "default_icon_svg",
+          "label": "Default Icon (if no image)",
+          "options": [
+            { "value": "face", "label": "Face Icon" },
+            { "value": "hair", "label": "Hair Icon" },
+            { "value": "body", "label": "Body Icon" },
+            { "value": "nails", "label": "Nails Icon" },
+            { "value": "beard", "label": "Beard Icon" },
+            { "value": "scalp", "label": "Scalp Icon" },
+            { "value": "mothers_kids", "label": "Mothers & Kids Icon (Heart)" },
+            { "value": "generic", "label": "Generic Icon (Circle)" }
+          ],
+          "default": "face"
+        }
+      ]
+    },
+    {
+      "type": "problem",
+      "name": "Problem",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name_en",
+          "label": "Problem Name (English)"
+        },
+        {
+          "type": "text",
+          "id": "name_bs",
+          "label": "Problem Name (Bosnian)"
+        },
+        {
+          "type": "textarea",
+          "id": "description_en",
+          "label": "Problem Description (English)"
+        },
+        {
+          "type": "textarea",
+          "id": "description_bs",
+          "label": "Problem Description (Bosnian)"
+        },
+        {
+          "type": "richtext",
+          "id": "solution_en",
+          "label": "Solution (English)"
+        },
+        {
+          "type": "richtext",
+          "id": "solution_bs",
+          "label": "Solution (Bosnian)"
+        },
+        {
+          "type": "richtext",
+          "id": "usage_en",
+          "label": "How to Use (English)"
+        },
+        {
+          "type": "richtext",
+          "id": "usage_bs",
+          "label": "How to Use (Bosnian)"
+        },
+        {
+          "type": "header",
+          "content": "Benefit Timeline Estimates"
+        },
+        {
+          "type": "richtext",
+          "id": "timeline_7_day_en",
+          "label": "7-Day Benefit (English)",
+          "default": "<p>Initial improvements in hydration or comfort.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "timeline_7_day_bs",
+          "label": "7-Day Benefit (Bosnian)",
+          "default": "<p>Početna poboljšanja u hidrataciji ili udobnosti.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "timeline_14_day_en",
+          "label": "14-Day Benefit (English)",
+          "default": "<p>More noticeable changes in texture or appearance.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "timeline_14_day_bs",
+          "label": "14-Day Benefit (Bosnian)",
+          "default": "<p>Primjetnije promjene u teksturi ili izgledu.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "timeline_30_day_en",
+          "label": "30-Day Benefit (English)",
+          "default": "<p>Significant, sustained improvements with consistent use.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "timeline_30_day_bs",
+          "label": "30-Day Benefit (Bosnian)",
+          "default": "<p>Značajna, održiva poboljšanja uz dosljednu upotrebu.</p>"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial_en",
+          "label": "Testimonial (English)"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial_bs",
+          "label": "Testimonial (Bosnian)"
+        },
+        {
+          "type": "text",
+          "id": "testimonial_author",
+          "label": "Testimonial Author"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Argan Benefit Explorer",
+      "category": "Custom Content",
+      "blocks": [
+        { "type": "body_part", "settings": { "name_en": "FACE", "name_bs": "Lice", "default_icon_svg": "face" }},
+        {
+          "type": "problem",
+          "settings": {
+            "name_en": "Dry, Dehydrated Skin",
+            "name_bs": "Suha, Dehidrirana Koža"
+          }
+        },
+        {
+          "type": "problem",
+          "settings": {
+            "name_en": "Oily & Acne-Prone Skin",
+            "name_bs": "Masna Koža Sklona Aknama"
+          }
+        },
+        { "type": "body_part", "settings": { "name_en": "BODY", "name_bs": "Tijelo", "default_icon_svg": "body" }},
+        {
+          "type": "problem",
+          "settings": {
+            "name_en": "Overall Body Dryness",
+            "name_bs": "Opšta Suhoća Kože Tijela"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div
+  class="argan-solution-finder"
+  data-section-id="{{ section.id }}"
+  data-layout="{{ section.settings.layout_style }}"
+  style="
+    --asf-primary-color: {{ section.settings.primary_color }};
+    --asf-secondary-color: {{ section.settings.secondary_color }};
+    --asf-accent-color: {{ section.settings.accent_color }};
+    --asf-bg-color: {{ section.settings.bg_color }};
+    --asf-text-color: {{ section.settings.text_color }};
+    --asf-light-color: #FFFFFF;
+    --asf-shadow-color: rgba(0, 0, 0, 0.1);
+    --asf-transition-speed: 0.45s;
+    --asf-border-radius: 12px;
+    --asf-font-title-family: {{ section.settings.font_title.family }}{% if section.settings.font_title.fallback_families != blank %}, {{ section.settings.font_title.fallback_families }}{% endif %};
+    --asf-font-title-weight: {{ section.settings.font_title.weight }};
+    --asf-font-title-style: {{ section.settings.font_title.style }};
+    --asf-font-teaser-animated-family: {{ section.settings.font_teaser_animated.family }}{% if section.settings.font_teaser_animated.fallback_families != blank %}, {{ section.settings.font_teaser_animated.fallback_families }}{% endif %};
+    --asf-font-teaser-animated-weight: {{ section.settings.font_teaser_animated.weight }};
+    --asf-font-teaser-animated-style: {{ section.settings.font_teaser_animated.style }};
+    --asf-font-subtitle-family: {{ section.settings.font_subtitle.family }}{% if section.settings.font_subtitle.fallback_families != blank %}, {{ section.settings.font_subtitle.fallback_families }}{% endif %};
+    --asf-font-subtitle-weight: {{ section.settings.font_subtitle.weight }};
+    --asf-font-subtitle-style: {{ section.settings.font_subtitle.style }};
+    --asf-font-item-names-family: {{ section.settings.font_item_names.family }}{% if section.settings.font_item_names.fallback_families != blank %}, {{ section.settings.font_item_names.fallback_families }}{% endif %};
+    --asf-font-item-names-weight: {{ section.settings.font_item_names.weight }};
+    --asf-font-item-names-style: {{ section.settings.font_item_names.style }};
+    --asf-font-body-text-family: {{ section.settings.font_body_text.family }}{% if section.settings.font_body_text.fallback_families != blank %}, {{ section.settings.font_body_text.fallback_families }}{% endif %};
+    --asf-font-body-text-weight: {{ section.settings.font_body_text.weight }};
+    --asf-font-body-text-style: {{ section.settings.font_body_text.style }};
+    --asf-font-progress-label-family: {{ section.settings.font_progress_label.family }}{% if section.settings.font_progress_label.fallback_families != blank %}, {{ section.settings.font_progress_label.fallback_families }}{% endif %};
+    --asf-font-progress-label-weight: {{ section.settings.font_progress_label.weight }};
+    --asf-font-progress-label-style: {{ section.settings.font_progress_label.style }};
+    --asf-teaser-min-height-mobile: {{ section.settings.teaser_view_min_height_mobile | default: 280 }}px;
+    --asf-teaser-min-height-desktop: {{ section.settings.teaser_view_min_height_desktop | default: 320 }}px;
+    --asf-content-max-width: {{ section.settings.content_max_width | default: 1200 }}px;
+  "
+>
+  <div class="asf-inner-content-limiter">
+    <div class="asf-main-header" style="display: none;">
+      <div class="asf-header">
+        <h2 class="asf-title">
+          {%- if request.locale.iso_code == 'bs' -%}
+            {{- section.settings.title_bs -}}
+          {%- else -%}
+            {{- section.settings.title_en -}}
+          {%- endif -%}
+        </h2>
+        <p class="asf-subtitle">
+          {%- if request.locale.iso_code == 'bs' -%}
+            {{- section.settings.subtitle_bs -}}
+          {%- else -%}
+            {{- section.settings.subtitle_en -}}
+          {%- endif -%}
+        </p>
+      </div>
+      <div class="asf-progress-bar hidden">
+        <div class="asf-progress-step" data-step="1">
+          <div class="asf-progress-marker">1</div>
+          <div class="asf-progress-label">
+            {%- if request.locale.iso_code == 'bs' -%}Područje{%- else -%}Body Part{%- endif -%}
+          </div>
+        </div>
+        <div class="asf-progress-connector"></div>
+        <div class="asf-progress-step" data-step="2">
+          <div class="asf-progress-marker">2</div>
+          <div class="asf-progress-label">
+            {%- if request.locale.iso_code == 'bs' -%}Problem{%- else -%}Issue{%- endif -%}
+          </div>
+        </div>
+        <div class="asf-progress-connector"></div>
+        <div class="asf-progress-step" data-step="3">
+          <div class="asf-progress-marker">3</div>
+          <div class="asf-progress-label">
+            {%- if request.locale.iso_code == 'bs' -%}Rješenje{%- else -%}Solution{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asf-content-wrapper">
+      <div class="asf-view asf-teaser-view" data-view-step="0">
+        <div class="asf-teaser-content">
+          <h2 class="asf-teaser-title">
+            <span class="asf-teaser-line-1">
+              {%- if request.locale.iso_code == 'bs' -%}
+                {{- section.settings.teaser_line1_bs -}}
+              {%- else -%}
+                {{- section.settings.teaser_line1_en -}}
+              {%- endif -%}
+            </span>
+            <span class="asf-animated-problem-text-container">
+              <span class="asf-animated-problem-text"></span><span class="asf-typewriter-cursor"></span>
+            </span>
+          </h2>
+          <button type="button" class="asf-button asf-start-button">
+            {%- if request.locale.iso_code == 'bs' -%}
+              {{- section.settings.teaser_button_bs -}}
+            {%- else -%}
+              {{- section.settings.teaser_button_en -}}
+            {%- endif -%}
+          </button>
+        </div>
+      </div>
+
+      <div class="asf-main-content">
+        <div class="asf-view asf-body-parts-view" data-view-step="1">
+          <div class="asf-body-parts-container asf-layout-{{ section.settings.layout_style }}">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'body_part' -%}
+                <div class="asf-body-part-item" data-body-part-id="{{ block.id }}" tabindex="0">
+                  <div class="asf-body-part-icon">
+                    {%- if block.settings.icon != blank -%}
+                      <img
+                        src="{{ block.settings.icon | image_url: width: 100, height: 100 }}"
+                        alt="{%- if request.locale.iso_code == 'bs' and block.settings.name_bs != blank -%}{{- block.settings.name_bs | escape -}}{%- else -%}{{- block.settings.name_en | escape -}}{%- endif -%}"
+                        loading="lazy"
+                        width="50"
+                        height="50"
+                      >
+                    {%- else -%}
+                      {%- assign icon_svg = block.settings.default_icon_svg -%}
+                      {%- case icon_svg -%}
+                        {%- when 'face' -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line>
+                          </svg>
+                        {%- when 'hair' -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <path d="M18 11C18 7 15.5 4 12 4C8.5 4 6 7 6 11C6 14.5 7.5 17 10 18.5V20H14V18.5C16.5 17 18 14.5 18 11Z" /><line x1="12" y1="18.5" x2="12" y2="7"/><line x1="9.5" y1="17" x2="9.5" y2="9"/><line x1="14.5" y1="17" x2="14.5" y2="9"/>
+                          </svg>
+                        {%- when 'body' -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="6.5" r="2.5" /><path d="M17 10H7C5.895 10 5 10.895 5 12.25V17C5 19.209 6.791 21 9 21H15C17.209 21 19 19.209 19 17V12.25C19 10.895 18.105 10 17 10Z" />
+                          </svg>
+                        {%- when 'nails' -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <path d="M6 14.5c0 2 2 3.5 4 3.5s4-1.5 4-3.5V5.5C14 3.5 12 2 10 2S6 3.5 6 5.5v9z"></path><path d="M18 14.5c0 2-2 3.5-4 3.5s-4-1.5-4-3.5V10"></path>
+                          </svg>
+                        {%- when 'beard' -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <path d="M8 5h8"></path><path d="M8 10h8"></path><path d="M12 2v3"></path><path d="M8 14c0 4 3.5 6 4 6 .5 0 4-2 4-6v-4H8v4z"></path>
+                          </svg>
+                        {%- when 'scalp' -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="12" r="8.5" /><circle cx="13.2" cy="13.2" r="2.8" />
+                          </svg>
+                        {%- when 'mothers_kids' -%}
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="100%"
+                            height="100%"
+                            aria-hidden="true"
+                            focusable="false"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            fill="none"
+                            stroke="currentColor"
+                          >
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                          </svg>
+                        {%- else -%}
+                          <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="12" r="10"></circle>
+                          </svg>
+                      {%- endcase -%}
+                    {%- endif -%}
+                  </div>
+                  <div class="asf-body-part-name">
+                    {%- if request.locale.iso_code == 'bs' and block.settings.name_bs != blank -%}
+                      {{- block.settings.name_bs -}}
+                    {%- else -%}
+                      {{- block.settings.name_en -}}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="asf-view asf-problems-view" data-view-step="2">
+          <button
+            type="button"
+            class="asf-back-button"
+            data-target-step="1"
+            aria-label="{%- if request.locale.iso_code == 'bs' -%}Nazad na odabir područja{%- else -%}Back to body part selection{%- endif -%}"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>
+              {%- if request.locale.iso_code == 'bs' -%}Nazad na područja{%- else -%}Back to Body Parts{%- endif -%}
+            </span>
+          </button>
+          <h3 class="asf-current-selection-title" data-js-step2-title></h3>
+          <div class="asf-problems-grid">
+            {%- liquid
+              assign current_body_part_id_for_problems = ''
+              for block_item in section.blocks
+                if block_item.type == 'body_part'
+                  assign current_body_part_id_for_problems = block_item.id
+                elsif block_item.type == 'problem' and current_body_part_id_for_problems != ''
+                  assign problem_html = '<div class="asf-problem-item" role="button" data-problem-id="' | append: block_item.id | append: '" data-parent-body-part-id="' | append: current_body_part_id_for_problems | append: '" tabindex="0">'
+                  assign problem_html = problem_html | append: '<h4 class="asf-problem-name">'
+                  if request.locale.iso_code == 'bs' and block_item.settings.name_bs != blank
+                    assign problem_html = problem_html | append: block_item.settings.name_bs
+                  else
+                    assign problem_html = problem_html | append: block_item.settings.name_en
+                  endif
+                  assign problem_html = problem_html | append: '</h4>'
+                  assign problem_html = problem_html | append: '<p class="asf-problem-description">'
+                  if request.locale.iso_code == 'bs' and block_item.settings.description_bs != blank
+                    assign problem_html = problem_html | append: block_item.settings.description_bs
+                  else
+                    assign problem_html = problem_html | append: block_item.settings.description_en
+                  endif
+                  assign problem_html = problem_html | append: '</p>'
+                  assign problem_html = problem_html | append: '<span class="asf-problem-arrow" aria-hidden="true">&rarr;</span>'
+                  assign problem_html = problem_html | append: '</div>'
+                  echo problem_html
+                endif
+              endfor
+            -%}
+          </div>
+        </div>
+
+        <div class="asf-view asf-solution-view" data-view-step="3">
+          <button
+            type="button"
+            class="asf-back-button"
+            data-target-step="2"
+            aria-label="{%- if request.locale.iso_code == 'bs' -%}Nazad na odabir problema{%- else -%}Back to issue selection{%- endif -%}"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>
+              {%- if request.locale.iso_code == 'bs' -%}Nazad na probleme{%- else -%}Back to Issues{%- endif -%}
+            </span>
+          </button>
+          <div class="asf-solution-breadcrumb">
+            <span class="asf-breadcrumb-body-part"></span>
+            {{- section.settings.breadcrumb_separator -}}
+            <span class="asf-breadcrumb-problem"></span>
+          </div>
+          {%- liquid
+            assign current_body_part_id_for_solutions = ''
+            assign solution_card_prefix_bs = section.settings.solution_card_title_prefix_bs
+            assign solution_card_prefix_en = section.settings.solution_card_title_prefix_en
+            for block_item in section.blocks
+              if block_item.type == 'body_part'
+                assign current_body_part_id_for_solutions = block_item.id
+              elsif block_item.type == 'problem' and current_body_part_id_for_solutions != ''
+                assign solution_html = '<div class="asf-solution-card" data-solution-for-problem-id="' | append: block_item.id | append: '" data-solution-for-body-part-id="' | append: current_body_part_id_for_solutions | append: '">'
+                assign solution_html = solution_html | append: '<div class="asf-solution-header">'
+                assign solution_html = solution_html | append: '<div class="asf-droplet-animation" aria-hidden="true"><div class="asf-droplet"></div><div class="asf-droplet"></div><div class="asf-droplet"></div></div>'
+                assign solution_html = solution_html | append: '<h3 class="asf-solution-card-title">'
+                if request.locale.iso_code == 'bs' and block_item.settings.name_bs != blank
+                  assign solution_html = solution_html | append: solution_card_prefix_bs | append: block_item.settings.name_bs
+                else
+                  assign solution_html = solution_html | append: solution_card_prefix_en | append: block_item.settings.name_en
+                endif
+                assign solution_html = solution_html | append: '</h3></div>'
+                assign solution_html = solution_html | append: '<div class="asf-solution-content">'
+                assign solution_html = solution_html | append: '<div class="asf-solution-text"><h4>'
+                if request.locale.iso_code == 'bs'
+                  assign solution_html = solution_html | append: 'Naše rješenje'
+                else
+                  assign solution_html = solution_html | append: 'Our Solution'
+                endif
+                assign solution_html = solution_html | append: '</h4>'
+                if request.locale.iso_code == 'bs' and block_item.settings.solution_bs != empty
+                  assign solution_html = solution_html | append: block_item.settings.solution_bs
+                else
+                  assign solution_html = solution_html | append: block_item.settings.solution_en
+                endif
+                assign solution_html = solution_html | append: '</div>'
+                if block_item.settings.usage_en != empty or block_item.settings.usage_bs != empty
+                  assign solution_html = solution_html | append: '<div class="asf-solution-usage"><h4>'
+                  if request.locale.iso_code == 'bs'
+                    assign solution_html = solution_html | append: 'Kako koristiti'
+                  else
+                    assign solution_html = solution_html | append: 'How to Use'
+                  endif
+                  assign solution_html = solution_html | append: '</h4>'
+                  if request.locale.iso_code == 'bs' and block_item.settings.usage_bs != empty
+                    assign solution_html = solution_html | append: block_item.settings.usage_bs
+                  else
+                    assign solution_html = solution_html | append: block_item.settings.usage_en
+                  endif
+                  assign solution_html = solution_html | append: '</div>'
+                endif
+                assign timeline_7_day_text = ''
+                if request.locale.iso_code == 'bs' and block_item.settings.timeline_7_day_bs != blank and block_item.settings.timeline_7_day_bs != '<p></p>'
+                  assign timeline_7_day_text = block_item.settings.timeline_7_day_bs
+                elsif block_item.settings.timeline_7_day_en != blank and block_item.settings.timeline_7_day_en != '<p></p>'
+                  assign timeline_7_day_text = block_item.settings.timeline_7_day_en
+                endif
+                assign timeline_14_day_text = ''
+                if request.locale.iso_code == 'bs' and block_item.settings.timeline_14_day_bs != blank and block_item.settings.timeline_14_day_bs != '<p></p>'
+                  assign timeline_14_day_text = block_item.settings.timeline_14_day_bs
+                elsif block_item.settings.timeline_14_day_en != blank and block_item.settings.timeline_14_day_en != '<p></p>'
+                  assign timeline_14_day_text = block_item.settings.timeline_14_day_en
+                endif
+                assign timeline_30_day_text = ''
+                if request.locale.iso_code == 'bs' and block_item.settings.timeline_30_day_bs != blank and block_item.settings.timeline_30_day_bs != '<p></p>'
+                  assign timeline_30_day_text = block_item.settings.timeline_30_day_bs
+                elsif block_item.settings.timeline_30_day_en != blank and block_item.settings.timeline_30_day_en != '<p></p>'
+                  assign timeline_30_day_text = block_item.settings.timeline_30_day_en
+                endif
+                if timeline_7_day_text != blank or timeline_14_day_text != blank or timeline_30_day_text != blank
+                  assign solution_html = solution_html | append: '<div class="asf-solution-timeline"><h4>'
+                  if request.locale.iso_code == 'bs'
+                    assign solution_html = solution_html | append: 'Očekivani Rezultati'
+                  else
+                    assign solution_html = solution_html | append: 'Expected Results Timeline'
+                  endif
+                  assign solution_html = solution_html | append: '</h4><div class="asf-timeline-track">'
+                  if timeline_7_day_text != blank
+                    assign solution_html = solution_html | append: '<div class="asf-timeline-milestone"><div class="asf-timeline-marker">7 '
+                    if request.locale.iso_code == 'bs'
+                      assign solution_html = solution_html | append: 'Dana'
+                    else
+                      assign solution_html = solution_html | append: 'Days'
+                    endif
+                    assign solution_html = solution_html | append: '</div><div class="asf-timeline-content">' | append: timeline_7_day_text | append: '</div></div>'
+                  endif
+                  if timeline_14_day_text != blank
+                    assign solution_html = solution_html | append: '<div class="asf-timeline-milestone"><div class="asf-timeline-marker">14 '
+                    if request.locale.iso_code == 'bs'
+                      assign solution_html = solution_html | append: 'Dana'
+                    else
+                      assign solution_html = solution_html | append: 'Days'
+                    endif
+                    assign solution_html = solution_html | append: '</div><div class="asf-timeline-content">' | append: timeline_14_day_text | append: '</div></div>'
+                  endif
+                  if timeline_30_day_text != blank
+                    assign solution_html = solution_html | append: '<div class="asf-timeline-milestone"><div class="asf-timeline-marker">30 '
+                    if request.locale.iso_code == 'bs'
+                      assign solution_html = solution_html | append: 'Dana'
+                    else
+                      assign solution_html = solution_html | append: 'Days'
+                    endif
+                    assign solution_html = solution_html | append: '</div><div class="asf-timeline-content">' | append: timeline_30_day_text | append: '</div></div>'
+                  endif
+                  assign solution_html = solution_html | append: '</div></div>'
+                endif
+                assign current_testimonial_en = block_item.settings.testimonial_en
+                assign current_testimonial_bs = block_item.settings.testimonial_bs
+                assign current_testimonial_author = block_item.settings.testimonial_author
+                assign display_testimonial = ''
+                if request.locale.iso_code == 'bs' and current_testimonial_bs != blank
+                  assign display_testimonial = current_testimonial_bs
+                elsif current_testimonial_en != blank
+                  assign display_testimonial = current_testimonial_en
+                endif
+                if display_testimonial != blank and current_testimonial_author != blank
+                  assign solution_html = solution_html | append: '<div class="asf-solution-testimonial"><div class="asf-testimonial-quote">'
+                  assign solution_html = solution_html | append: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path></svg>'
+                  assign solution_html = solution_html | append: display_testimonial
+                  assign solution_html = solution_html | append: '</div><div class="asf-testimonial-author">— ' | append: current_testimonial_author | append: '</div></div>'
+                endif
+                assign solution_html = solution_html | append: '</div>'
+                assign cta_text_bs = 'NAŠE RJEŠENJE'
+                assign cta_text_en = 'Shop Argan Oil'
+                assign cta_text = cta_text_en
+                if request.locale.iso_code == 'bs'
+                  assign cta_text = cta_text_bs
+                endif
+                if section.settings.final_cta_url != blank
+                  assign product_page_url = section.settings.final_cta_url
+                elsif section.settings.product_handle != blank and all_products[section.settings.product_handle] != blank
+                  assign product_page_url = all_products[section.settings.product_handle].url
+                else
+                  assign product_page_url = '#'
+                endif
+                assign solution_html = solution_html | append: '<div class="asf-solution-cta"><a href="' | append: product_page_url | append: '" class="asf-button asf-cta-button">'
+                assign solution_html = solution_html | append: cta_text
+                assign solution_html = solution_html | append: '</a></div></div>'
+                echo solution_html
+              endif
+            endfor
+          -%}
+          <button
+            type="button"
+            class="asf-button asf-restart-button"
+            aria-label="{%- if request.locale.iso_code == 'bs' -%}Počni od početka{%- else -%}Start over from the beginning{%- endif -%}"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M3 2v6h6"></path><path d="M3 8C5.33 5.46 8.11 4 12 4c6.67 0 12 5.33 12 12s-5.33 12-12 12c-6.67 0-12-5.33-12-12"></path>
+            </svg>
+            <span>
+              {%- if request.locale.iso_code == 'bs' -%}Počni ispočetka{%- else -%}Start Over{%- endif -%}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .argan-solution-finder {
+    font-family: var(--asf-font-body-text-family);
+    color: var(--asf-text-color);
+    position: relative;
+    box-sizing: border-box;
+    background-color: var(--asf-bg-color);
+  }
+  {%- if section.settings.full_width_background -%}
+  .argan-solution-finder {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    width: 100%;
+  }
+  .asf-inner-content-limiter {
+    max-width: var(--asf-content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+  {%- else -%}
+  .argan-solution-finder {
+    border-radius: var(--asf-border-radius);
+    box-shadow: 0 15px 40px var(--asf-shadow-color);
+    padding: 40px 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    max-width: var(--asf-content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .asf-inner-content-limiter {
+    box-sizing: border-box;
+  }
+  {%- endif -%}
+  .asf-teaser-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: var(--asf-teaser-min-height-mobile);
+    padding: 20px 0;
+    box-sizing: border-box;
+  }
+  .asf-teaser-title {
+    font-family: var(--asf-font-title-family);
+    font-weight: var(--asf-font-title-weight);
+    font-style: var(--asf-font-title-style);
+    font-size: {{ section.settings.font_teaser_animated_size_mobile }}px;
+    color: var(--asf-text-color);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  span.asf-teaser-line-1 {
+    display: block;
+    margin-bottom: 8px;
+  }
+  .asf-animated-problem-text-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    position: relative;
+    min-width: 220px;
+    white-space: nowrap;
+    overflow: visible;
+    border-bottom: 2px solid var(--asf-primary-color);
+    padding-bottom: 2px;
+    height: 1.5em;
+  }
+  .asf-animated-problem-text {
+    font-family: var(--asf-font-teaser-animated-family);
+    font-weight: var(--asf-font-teaser-animated-weight);
+    font-style: var(--asf-font-teaser_animated-style);
+    color: var(--asf-primary-color);
+    display: inline;
+    vertical-align: baseline;
+    white-space: nowrap;
+  }
+  .asf-typewriter-cursor {
+    display: inline-block;
+    background-color: var(--asf-primary-color);
+    width: 2px;
+    height: 1em;
+    animation: asfBlinkCursor 0.7s steps(1) infinite;
+    margin-left: 1px;
+    vertical-align: baseline;
+    position: relative;
+    bottom: -0.15em;
+  }
+  @keyframes asfBlinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .asf-start-button {
+    margin-top: 25px;
+    padding: 14px 30px;
+    font-size: {{ section.settings.font_item_name_size_mobile | times: 0.95 }}px;
+    background-color: var(--asf-primary-color);
+    color: var(--asf-light-color);
+  }
+    .asf-start-button:hover, .asf-start-button:focus-visible {
+    background-color: var(--asf-secondary-color);
+    transform: translateY(-2px);
+  }
+  .asf-main-header {
+    padding: 0;
+  }
+  .asf-header { text-align: center; margin-bottom: 40px; }
+  .asf-title {
+    font-family: var(--asf-font-title-family);
+    font-weight: var(--asf-font-title-weight);
+    font-style: var(--asf-font-title-style);
+    font-size: {{ section.settings.font_title_size_mobile }}px;
+    color: var(--asf-primary-color);
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+  }
+  .asf-title::after {
+    content: ""; position: absolute; bottom: -10px; left: 50%;
+    transform: translateX(-50%); width: 80px; height: 3px;
+    background-color: var(--asf-primary-color); border-radius: 3px;
+  }
+  .asf-subtitle {
+    font-family: var(--asf-font-subtitle-family);
+    font-weight: var(--asf-font-subtitle-weight);
+    font-style: var(--asf-font-subtitle-style);
+    font-size: {{ section.settings.font_subtitle_size_mobile }}px;
+    max-width: 700px; margin: 25px auto 0;
+    color: var(--asf-secondary-color); line-height: 1.6;
+  }
+  .asf-progress-bar {
+    display: flex; justify-content: center; align-items: flex-start;
+    margin-bottom: 30px; position: relative; padding: 0 10px;
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s, height 0.3s ease-in-out, margin-bottom 0.3s ease-in-out;
+  }
+  .asf-progress-bar.hidden {
+    opacity: 0;
+    visibility: hidden;
+    height: 0 !important;
+    margin-bottom: 0 !important;
+    overflow: hidden;
+    transition-delay: 0s, 0.3s, 0s, 0s;
+  }
+  .asf-progress-step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; flex-shrink: 0; }
+  .asf-progress-marker {
+    width: {{ section.settings.progress_marker_size }}px;
+    height: {{ section.settings.progress_marker_size }}px;
+    font-size: {{ section.settings.progress_marker_font_size }}px;
+    border-radius: 50%; background-color: var(--asf-light-color);
+    border: 2px solid var(--asf-secondary-color); color: var(--asf-secondary-color);
+    display: flex; justify-content: center; align-items: center; font-weight: bold;
+    margin-bottom: 6px; transition: all var(--asf-transition-speed) ease;
+  }
+  .asf-progress-step[data-step].active .asf-progress-marker {
+    background-color: var(--asf-primary-color); border-color: var(--asf-primary-color);
+    color: var(--asf-light-color); transform: scale(1.1);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--asf-primary-color) 30%, transparent);
+  }
+  .asf-progress-step[data-step].completed .asf-progress-marker {
+    background-color: var(--asf-accent-color); border-color: var(--asf-accent-color);
+    color: var(--asf-light-color);
+  }
+  .asf-progress-label {
+    font-family: var(--asf-font-progress-label-family);
+    font-weight: var(--asf-font-progress-label-weight);
+    font-style: var(--asf-font-progress-label-style);
+    font-size: {{ section.settings.progress_label_font_size }}px;
+    color: var(--asf-secondary-color); text-align: center;
+  }
+  .asf-progress-step[data-step].active .asf-progress-label { color: var(--asf-primary-color); }
+  .asf-progress-connector {
+    flex-grow: 1; height: 2px; background-color: var(--asf-secondary-color);
+    max-width: 80px; margin: 0 5px; position: relative;
+    transition: background-color var(--asf-transition-speed) ease;
+    top: calc({{ section.settings.progress_marker_size | divided_by: 2 }}px - 1px);
+  }
+  .asf-progress-connector.active { background-color: var(--asf-primary-color); }
+  .asf-content-wrapper {
+    position: relative;
+    transition: height var(--asf-transition-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
+    overflow: hidden;
+  }
+  .asf-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity calc(var(--asf-transition-speed) * 0.8) ease-out,
+                transform calc(var(--asf-transition-speed) * 0.8) ease-out;
+    will-change: transform, opacity;
+    padding: 0 0 20px 0;
+  }
+  .asf-view.asf-teaser-view {
+    padding: 20px 0;
+  }
+  .asf-view.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    position: relative;
+    transition-delay: calc(var(--asf-transition-speed) * 0.2);
+  }
+  .asf-view.leaving {
+    opacity: 0;
+    transform: translateY(-20px);
+    visibility: hidden;
+    position: absolute;
+    transition-delay: 0s;
+  }
+  .asf-measure-me {
+    position: relative !important;
+    visibility: hidden !important;
+    opacity: 1 !important;
+    transform: none !important;
+    display: block !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+    z-index: -100 !important;
+  }
+  .asf-view.asf-teaser-view.asf-measure-me {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 20px 0 !important;
+  }
+  .asf-body-parts-container.asf-layout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+  }
+  .asf-body-parts-container.asf-layout-horizontal {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--asf-accent-color) var(--asf-bg-color, #f0f0f0);
+  }
+  .asf-body-parts-container.asf-layout-horizontal::-webkit-scrollbar {
+    height: 8px;
+  }
+  .asf-body-parts-container.asf-layout-horizontal::-webkit-scrollbar-thumb {
+    background-color: var(--asf-accent-color);
+    border-radius: 4px;
+  }
+  .asf-body-parts-container.asf-layout-horizontal::-webkit-scrollbar-track {
+    background-color: var(--asf-bg-color, #f0f0f0);
+  }
+  .asf-body-parts-container.asf-layout-horizontal .asf-body-part-item {
+    flex: 0 0 150px;
+  }
+  .asf-body-part-item {
+    background-color: var(--asf-light-color); border-radius: var(--asf-border-radius); padding: 20px 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform var(--asf-transition-speed) ease, box-shadow var(--asf-transition-speed) ease, border-color var(--asf-transition-speed) ease;
+    box-shadow: 0 4px 12px var(--asf-shadow-color); text-align: center;
+    border: 2px solid transparent;
+  }
+  .asf-body-part-item:hover, .asf-body-part-item:focus-visible {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--asf-shadow-color) 130%, transparent);
+    border-color: var(--asf-primary-color);
+    outline: none;
+  }
+  .asf-body-part-icon { width: 50px; height: 50px; margin-bottom: 12px; color: var(--asf-primary-color); }
+  .asf-body-part-icon svg, .asf-body-part-icon img { width: 100%; height: 100%; object-fit: contain; }
+  .asf-body-part-icon svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;}
+  .asf-body-part-name {
+    font-family: var(--asf-font-item-names-family);
+    font-weight: var(--asf-font-item-names-weight);
+    font-style: var(--asf-font-item-names-style);
+    font-size: {{ section.settings.font_item_name_size_mobile }}px;
+    color: var(--asf-secondary-color);
+  }
+  .asf-body-part-item:hover .asf-body-part-name, .asf-body-part-item:focus-visible .asf-body-part-name { color: var(--asf-primary-color); }
+  .asf-back-button {
+    background: none; border: none; display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.9rem; font-weight: 600; color: var(--asf-secondary-color); cursor: pointer;
+    padding: 8px 0; margin-bottom: 20px; transition: color var(--asf-transition-speed) ease;
+    font-family: var(--asf-font-body-text-family);
+  }
+  .asf-back-button:hover span, .asf-back-button:focus-visible span { color: var(--asf-primary-color); }
+  .asf-back-button:hover svg, .asf-back-button:focus-visible svg { stroke: var(--asf-primary-color); }
+  .asf-back-button svg { width: 16px; height: 16px; stroke-width: 2.5; transition: stroke var(--asf-transition-speed) ease;}
+  .asf-current-selection-title {
+    font-family: var(--asf-font-item-names-family);
+    font-size: clamp(1.2rem, 4vw, 1.6rem); color: var(--asf-secondary-color);
+    margin-bottom: 25px; border-bottom: 2px solid var(--asf-accent-color); padding-bottom: 12px;
+  }
+  .asf-current-selection-title .asf-selected-body-part-placeholder { color: var(--asf-primary-color); font-weight: 700; }
+  .asf-problems-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .asf-problem-item {
+    display: none;
+    background-color: var(--asf-light-color); border-radius: var(--asf-border-radius); padding: 20px;
+    cursor: pointer; box-shadow: 0 4px 12px var(--asf-shadow-color);
+    transition: transform var(--asf-transition-speed) ease, box-shadow var(--asf-transition-speed) ease, border-left-color var(--asf-transition-speed) ease;
+    border-left: 4px solid transparent; position: relative;
+  }
+  .asf-problem-item.visible { display: block; animation: asfProblemFadeIn var(--asf-transition-speed) ease-in-out forwards; }
+  @keyframes asfProblemFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .asf-problem-item:hover, .asf-problem-item:focus-visible {
+    transform: translateX(6px); box-shadow: 0 6px 18px color-mix(in srgb, var(--asf-shadow-color) 130%, transparent);
+    border-left-color: var(--asf-primary-color); outline: none;
+  }
+  .asf-problem-name {
+    font-family: var(--asf-font-item-names-family);
+    font-weight: var(--asf-font-item-names-weight);
+    font-style: var(--asf-font-item-names-style);
+    font-size: {{ section.settings.font_item_name_size_mobile }}px;
+    margin-bottom: 8px; color: var(--asf-secondary-color);
+  }
+  .asf-problem-item:hover .asf-problem-name, .asf-problem-item:focus-visible .asf-problem-name { color: var(--asf-primary-color); }
+  .asf-problem-description {
+    font-family: var(--asf-font-body-text-family);
+    font-weight: var(--asf-font-body-text-weight);
+    font-style: var(--asf-font-body-text-style);
+    font-size: {{ section.settings.font_body_text_size_mobile }}px;
+    color: var(--asf-text-color); line-height: 1.5; font-style: italic;
+  }
+  .asf-problem-arrow {
+    position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+    font-size: 1.4rem; color: var(--asf-accent-color); opacity: 0;
+    transition: opacity var(--asf-transition-speed) ease, transform var(--asf-transition-speed) ease;
+  }
+  .asf-problem-item:hover .asf-problem-arrow, .asf-problem-item:focus-visible .asf-problem-arrow { opacity: 1; transform: translateY(-50%) translateX(3px); }
+  .asf-solution-breadcrumb {
+    font-family: var(--asf-font-body-text-family);
+    font-size: {{ section.settings.font_body_text_size_mobile }}px;
+    color: var(--asf-secondary-color); margin-bottom: 20px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--asf-accent-color); font-weight: 500;
+  }
+  .asf-breadcrumb-body-part { font-weight: 700; color: var(--asf-primary-color); }
+  .asf-breadcrumb-problem { font-weight: 700; color: var(--asf-accent-color); }
+  .asf-solution-card {
+    display: none;
+    background-color: var(--asf-light-color); border-radius: var(--asf-border-radius);
+    box-shadow: 0 10px 25px var(--asf-shadow-color); padding: 25px;
+    margin-bottom: 25px; opacity: 0; transform: translateY(15px);
+    transition: opacity var(--asf-transition-speed) ease-in-out, transform var(--asf-transition-speed) ease-in-out;
+    position: relative; overflow: hidden; will-change: opacity, transform;
+  }
+  .asf-solution-card.active { display: block; opacity: 1; transform: translateY(0); }
+  .asf-solution-header { display: flex; align-items: center; margin-bottom: 20px; position: relative; }
+  .asf-droplet-animation { position: absolute; top: -10px; left: -10px; width: 70px; height: 70px; opacity: 0.25; pointer-events: none; }
+  .asf-droplet {
+    position: absolute; background: var(--asf-primary-color);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    animation: asfDropAnimation 3.5s infinite ease-in-out;
+  }
+  .asf-droplet:nth-child(1) { width: 20px; height: 20px; left: 10px; top: 0px; animation-delay: 0s; }
+  .asf-droplet:nth-child(2) { width: 15px; height: 15px; left: 35px; top: 10px; animation-delay: 0.6s; }
+  .asf-droplet:nth-child(3) { width: 12px; height: 12px; left: 20px; top: 25px; animation-delay: 1.2s; }
+  @keyframes asfDropAnimation {
+    0% { transform: rotate(-45deg) translateY(0px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { transform: rotate(-45deg) translateY(40px); opacity: 1; }
+    100% { transform: rotate(-45deg) translateY(50px); opacity: 0; }
+  }
+  .asf-solution-card-title {
+    font-family: var(--asf-font-item-names-family);
+    font-weight: var(--asf-font-item-names-weight);
+    font-style: var(--asf-font-item-names-style);
+    font-size: {{ section.settings.font_item_name_size_mobile }}px;
+    color: var(--asf-primary-color); margin-left: 40px; position: relative;
+  }
+  .asf-solution-card-title::before {
+    content: ""; position: absolute; left: -45px; top: 50%; transform: translateY(-50%);
+    width: 35px; height: 35px; background-color: color-mix(in srgb, var(--asf-primary-color) 15%, transparent);
+    border-radius: 50%;
+  }
+  .asf-solution-content { display: grid; gap: 20px; font-family: var(--asf-font-body-text-family); font-size: {{ section.settings.font_body_text_size_mobile }}px; }
+  .asf-solution-text, .asf-solution-usage, .asf-solution-testimonial, .asf-solution-timeline { padding: 15px; border-radius: calc(var(--asf-border-radius) - 6px); line-height: 1.6; }
+  .asf-solution-text { background: color-mix(in srgb, var(--asf-primary-color) 10%, transparent); border-left: 4px solid var(--asf-primary-color); }
+  .asf-solution-usage { background: color-mix(in srgb, var(--asf-accent-color) 10%, transparent); border-left: 4px solid var(--asf-accent-color); }
+  .asf-solution-text h4, .asf-solution-usage h4, .asf-solution-timeline h4 {
+    font-family: var(--asf-font-item-names-family);
+    font-weight: var(--asf-font-item-names-weight);
+    font-style: var(--asf-font-item-names-style);
+    font-size: {{ section.settings.font_item_name_size_mobile | default: 15 | times: 1.1 }}px;
+    margin-bottom: 12px;
+  }
+  .asf-solution-text h4 { color: var(--asf-primary-color); }
+  .asf-solution-usage h4 { color: var(--asf-accent-color); }
+  .asf-solution-timeline h4 { color: var(--asf-secondary-color); margin-bottom: 20px; text-align:center; border-bottom: 1px solid color-mix(in srgb, var(--asf-secondary-color) 30%, transparent); padding-bottom: 10px; }
+  .asf-solution-text p, .asf-solution-usage p { margin-bottom: 0.5em;}
+  .asf-solution-text *:last-child, .asf-solution-usage *:last-child { margin-bottom: 0;}
+  .asf-solution-text ul, .asf-solution-usage ul, .asf-solution-text ol, .asf-solution-usage ol { padding-left: 20px; margin-top: 0.5em;}
+  .asf-solution-usage ul, .asf-solution-usage ol { list-style-position: inside; }
+  .asf-solution-testimonial { background: color-mix(in srgb, var(--asf-secondary-color) 5%, transparent); border-top: 2px dashed var(--asf-secondary-color); }
+  .asf-testimonial-quote { font-style: italic; color: var(--asf-text-color); margin-bottom: 10px; position: relative; padding-left: 30px; }
+  .asf-testimonial-quote svg { position: absolute; top: 0; left: 0; width: 20px; height: 20px; color: var(--asf-primary-color); opacity: 0.6; }
+  .asf-testimonial-author { font-size: 0.9em; font-weight: 600; color: var(--asf-secondary-color); text-align: right; }
+  .asf-solution-timeline {
+    background: color-mix(in srgb, var(--asf-secondary-color) 8%, transparent);
+    border-left: 4px solid var(--asf-secondary-color);
+    margin-top: 10px;
+    padding: 15px;
+  }
+  .asf-timeline-track {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+  }
+  .asf-timeline-milestone {
+    padding-left: 35px;
+    position: relative;
+    border-left: 3px solid var(--asf-accent-color);
+    margin-left: 15px;
+    padding-bottom: 15px;
+    padding-top: 2px;
+  }
+  .asf-timeline-milestone:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+  .asf-timeline-marker {
+    position: absolute;
+    left: -1px;
+    transform: translateX(-50%);
+    top: 0px;
+    background-color: var(--asf-accent-color);
+    color: var(--asf-light-color);
+    border-radius: 15px;
+    width: auto;
+    min-width: 55px;
+    padding: 3px 10px;
+    height: auto;
+    line-height: 1.4;
+    font-size: {{ section.settings.font_body_text_size_mobile | default: 14 | times: 0.8 }}px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1;
+  }
+    .asf-timeline-milestone:last-child .asf-timeline-marker {
+      background-color: var(--asf-primary-color);
+    }
+  .asf-timeline-content {
+    font-size: {{ section.settings.font_body_text_size_mobile }}px;
+    padding-top: 5px;
+  }
+  .asf-timeline-content p { margin-bottom: 0.3em; }
+    .asf-timeline-content *:last-child { margin-bottom: 0;}
+  .asf-button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 12px 25px; border-radius: 30px; font-weight: 600; text-decoration: none;
+    transition: all var(--asf-transition-speed) ease; cursor: pointer; border: none;
+    font-family: var(--asf-font-item-names-family);
+  }
+  .asf-cta-button {
+    background-color: var(--asf-primary-color); color: var(--asf-light-color);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--asf-primary-color) 40%, transparent);
+  }
+  .asf-cta-button:hover, .asf-cta-button:focus-visible {
+    background-color: var(--asf-secondary-color); transform: translateY(-3px);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--asf-secondary-color) 40%, transparent); outline:none;
+  }
+  .asf-solution-cta { margin-top: 25px; text-align: center; }
+  .asf-restart-button {
+    background-color: transparent; color: var(--asf-secondary-color);
+    border: 2px solid var(--asf-secondary-color); margin: 25px auto 0; display: block;
+  }
+  .asf-restart-button:hover, .asf-restart-button:focus-visible {
+    background-color: var(--asf-secondary-color); color: var(--asf-light-color);
+    border-color: var(--asf-secondary-color); outline: none;
+  }
+  .asf-restart-button svg { width: 18px; height: 18px; }
+  @media (min-width: 768px) {
+    .asf-teaser-view {
+      min-height: var(--asf-teaser-min-height-desktop);
+    }
+    .asf-title { font-size: {{ section.settings.font_title_size_desktop }}px; }
+    .asf-subtitle { font-size: {{ section.settings.font_subtitle_size_desktop }}px; }
+    .asf-teaser-title { font-size: {{ section.settings.font_teaser_animated_size_desktop }}px; }
+    .asf-start-button { font-size: {{ section.settings.font_item_name_size_desktop }}px; }
+    .asf-body-part-name { font-size: {{ section.settings.font_item_name_size_desktop }}px; }
+    .asf-problem-name { font-size: {{ section.settings.font_item_name_size_desktop }}px; }
+    .asf-problem-description { font-size: {{ section.settings.font_body_text_size_desktop }}px; }
+    .asf-solution-breadcrumb { font-size: {{ section.settings.font_body_text_size_desktop }}px; }
+    .asf-solution-card-title { font-size: {{ section.settings.font_item_name_size_desktop }}px; }
+    .asf-solution-content { font-size: {{ section.settings.font_body_text_size_desktop }}px; }
+    .asf-solution-text h4, .asf-solution-usage h4, .asf-solution-timeline h4 { font-size: {{ section.settings.font_item_name_size_desktop | default: 17 | times: 1.1 }}px; }
+    .asf-timeline-content { font-size: {{ section.settings.font_body_text_size_desktop }}px; }
+    .asf-timeline-marker { font-size: {{ section.settings.font_body_text_size_desktop | default: 15 | times: 0.85 }}px; width:auto; min-width:65px; height:auto; line-height:1.5; padding: 4px 10px; }
+    .asf-progress-marker {
+      width: {{ section.settings.progress_marker_size | times: 1.15 }}px;
+      height: {{ section.settings.progress_marker_size | times: 1.15 }}px;
+      font-size: {{ section.settings.progress_marker_font_size | times: 1.1 }}px;
+    }
+    .asf-progress-label { font-size: {{ section.settings.progress_label_font_size | times: 1.1 }}px; display: block; }
+    .asf-progress-connector { top: calc({{ section.settings.progress_marker_size | times: 1.15 | divided_by: 2 }}px - 1px); }
+    {%- if section.settings.full_width_background -%}
+    .argan-solution-finder {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+    .asf-inner-content-limiter {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    {%- else -%}
+    .argan-solution-finder {
+      padding: 50px 20px;
+    }
+    {%- endif -%}
+    .asf-teaser-content { min-height: var(--asf-teaser-min-height-desktop); }
+    .asf-animated-problem-text-container { min-width: 300px; height: 1.6em;}
+    .asf-solution-timeline {
+      padding: 20px;
+    }
+    .asf-timeline-track {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-top: 3px solid var(--asf-accent-color);
+      margin-top: 30px;
+      padding-top: 30px;
+      gap: 20px;
+    }
+    .asf-timeline-milestone {
+      padding-left: 0;
+      border-left: none;
+      margin-left: 0;
+      flex: 1;
+      padding-right: 10px;
+      padding-left: 10px;
+      padding-bottom: 0;
+      text-align: center;
+    }
+    .asf-timeline-milestone:last-child {
+      padding-right: 0;
+    }
+    .asf-timeline-marker {
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      top: -48px;
+    }
+    .asf-timeline-content {
+      padding-top: 0px;
+    }
+  }
+  @media (max-width: 767px) {
+    {%- if section.settings.full_width_background -%}
+    .asf-inner-content-limiter {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+    {%- else -%}
+    .argan-solution-finder {
+      padding: 30px 15px;
+    }
+    {%- endif -%}
+    .asf-title { font-size: {{ section.settings.font_title_size_mobile }}px; }
+    .asf-title::after { width: 60px; }
+    .asf-subtitle { font-size: {{ section.settings.font_subtitle_size_mobile }}px; }
+    .asf-teaser-title { font-size: {{ section.settings.font_teaser_animated_size_mobile }}px; }
+    .asf-animated-problem-text-container { min-width: 180px; height: 1.5em;}
+    .asf-start-button { font-size: {{ section.settings.font_item_name_size_mobile | times: 0.95 }}px; padding: 12px 30px; }
+    .asf-progress-label { display: none; }
+    .asf-progress-connector { top: calc({{ section.settings.progress_marker_size | divided_by: 2 }}px - 1px); max-width: 50px; margin: 0 2px; }
+    .asf-body-parts-container.asf-layout-horizontal,
+    .asf-body-parts-container.asf-layout-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        overflow-x: visible;
+    }
+    .asf-body-parts-container .asf-body-part-item {
+        flex-basis: auto;
+        padding: 15px 8px;
+    }
+    .asf-body-parts-container .asf-body-part-icon {
+        width: 40px; height: 40px; margin-bottom: 8px;
+    }
+    .asf-body-parts-container .asf-body-part-name {
+        font-size: {{ section.settings.font_item_name_size_mobile }}px;
+    }
+    .asf-problems-grid { grid-template-columns: 1fr; gap: 12px; }
+    .asf-problem-item { padding: 15px; }
+    .asf-problem-name { font-size: {{ section.settings.font_item_name_size_mobile }}px; }
+    .asf-problem-description { font-size: {{ section.settings.font_body_text_size_mobile }}px; }
+    .asf-problem-arrow { right: 10px; font-size: 1.2rem; }
+    .asf-solution-card { padding: 20px; }
+    .asf-solution-card-title { margin-left: 0; text-align:center; font-size: {{ section.settings.font_item_name_size_mobile }}px; }
+    .asf-solution-card-title::before { display: none; }
+    .asf-droplet-animation { opacity: 0.15; width: 50px; height: 50px; }
+    .asf-solution-content { font-size: {{ section.settings.font_body_text_size_mobile }}px; }
+    .asf-solution-text h4, .asf-solution-usage h4, .asf-solution-timeline h4 { font-size: {{ section.settings.font_item_name_size_mobile | default: 15 | times: 1.05 }}px; }
+    .asf-solution-timeline h4 { margin-bottom: 15px; }
+    .asf-timeline-track { gap: 20px; }
+    .asf-timeline-milestone { margin-left: 18px; padding-left: 28px; padding-top: 2px; padding-bottom: 12px;}
+    .asf-timeline-marker { left: 0px; transform: translateX(-50%); top: -2px; padding: 2px 8px; line-height: 1.3;}
+    .asf-timeline-content { font-size: {{ section.settings.font_body_text_size_mobile }}px; padding-top: 3px; }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const section = document.querySelector('.argan-solution-finder[data-section-id="{{ section.id }}"]');
+  if (!section) return;
+  const views = Array.from(section.querySelectorAll('.asf-view'));
+  const teaserView = section.querySelector('.asf-teaser-view');
+  const mainHeaderDiv = section.querySelector('.asf-main-header');
+  const mainContentDiv = section.querySelector('.asf-main-content');
+  const startButton = section.querySelector('.asf-start-button');
+  const animatedProblemTextEl = section.querySelector('.asf-animated-problem-text');
+  const typewriterCursor = section.querySelector('.asf-typewriter-cursor');
+  const progressBar = section.querySelector('.asf-progress-bar');
+  const bodyPartItems = section.querySelectorAll('.asf-body-part-item');
+  const problemItems = section.querySelectorAll('.asf-problem-item');
+  const solutionCards = section.querySelectorAll('.asf-solution-card');
+  const backButtons = section.querySelectorAll('.asf-back-button');
+  const restartButton = section.querySelector('.asf-restart-button');
+  const progressSteps = section.querySelectorAll('.asf-progress-step[data-step]');
+  const contentWrapper = section.querySelector('.asf-content-wrapper');
+  const step2TitleElement = section.querySelector('[data-js-step2-title]');
+  const breadcrumbBodyPartEl = section.querySelector('.asf-breadcrumb-body-part');
+  const breadcrumbProblemEl = section.querySelector('.asf-breadcrumb-problem');
+  let currentInternalStep = 0;
+  let selectedBodyPartId = null;
+  let selectedBodyPartName = '';
+  let selectedProblemId = null;
+  let selectedProblemName = '';
+  let resizeTimeout;
+  let typewriterInterval;
+  let currentProblemTextIndex = 0;
+  const typingSpeed = 80;
+  const eraseSpeed = 40;
+  const pauseBetweenAnimations = 1800;
+  let animatedProblemPhrases = getAnimatedProblems();
+  const isMobile = () => window.innerWidth < 768;
+  const viewHeights = {
+    teaser: {
+      mobile: parseFloat(section.style.getPropertyValue('--asf-teaser-min-height-mobile')) || 280,
+      desktop: parseFloat(section.style.getPropertyValue('--asf-teaser-min-height-desktop')) || 320
+    },
+    step1: {
+      mobile: parseFloat("{{ section.settings.step1_view_height_mobile | default: 0 }}") || 0,
+      desktop: parseFloat("{{ section.settings.step1_view_height_desktop | default: 0 }}") || 0
+    },
+    step2: {
+      mobile: parseFloat("{{ section.settings.step2_view_height_mobile | default: 0 }}") || 0,
+      desktop: parseFloat("{{ section.settings.step2_view_height_desktop | default: 0 }}") || 0
+    },
+    step3: {
+      mobile: parseFloat("{{ section.settings.step3_view_height_mobile | default: 0 }}") || 0,
+      desktop: parseFloat("{{ section.settings.step3_view_height_desktop | default: 0 }}") || 0
+    }
+  };
+  function applyTeaserHeight() {
+    if (teaserView) {
+      const height = isMobile() ? viewHeights.teaser.mobile : viewHeights.teaser.desktop;
+      teaserView.style.minHeight = height + 'px';
+    }
+  }
+  function getAnimatedProblems() {
+    const locale = document.documentElement.lang || 'en';
+    const problemsStringEn = {{ section.settings.teaser_animated_problems_en | escape | json }};
+    const problemsStringBs = {{ section.settings.teaser_animated_problems_bs | escape | json }};
+    const problemsString = locale.startsWith('bs') && problemsStringBs && problemsStringBs.length > 0 ? problemsStringBs : problemsStringEn;
+    if (typeof problemsString === 'string') {
+      return problemsString.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    }
+    return [];
+  }
+  function typeWriter(text, el, charIndex, callback) {
+    if (!el) return;
+    if (charIndex < text.length) {
+      el.textContent += text.charAt(charIndex);
+      if(typewriterCursor) typewriterCursor.style.display = 'inline-block';
+      typewriterInterval = setTimeout(() => typeWriter(text, el, charIndex + 1, callback), typingSpeed);
+    } else {
+      if(typewriterCursor) typewriterCursor.style.display = 'inline-block';
+      typewriterInterval = setTimeout(callback, pauseBetweenAnimations);
+    }
+  }
+  function eraseText(el, callback) {
+    if (!el || !el.textContent) {
+      if (callback) callback();
+      return;
+    }
+    let text = el.textContent;
+    if (text.length > 0) {
+      if(typewriterCursor) typewriterCursor.style.display = 'inline-block';
+      el.textContent = text.substring(0, text.length - 1);
+      typewriterInterval = setTimeout(() => eraseText(el, callback), eraseSpeed);
+    } else {
+      if(typewriterCursor) typewriterCursor.style.display = 'inline-block';
+      if (callback) callback();
+    }
+  }
+  function cycleProblemText() {
+    clearTimeout(typewriterInterval);
+    if (!animatedProblemPhrases || animatedProblemPhrases.length === 0 || !animatedProblemTextEl) {
+        if(animatedProblemTextEl) animatedProblemTextEl.textContent = '...';
+        if(typewriterCursor) typewriterCursor.style.display = 'none';
+        return;
+    }
+    eraseText(animatedProblemTextEl, () => {
+      currentProblemTextIndex = (currentProblemTextIndex + 1) % animatedProblemPhrases.length;
+      animatedProblemTextEl.textContent = '';
+      typeWriter(animatedProblemPhrases[currentProblemTextIndex], animatedProblemTextEl, 0, cycleProblemText);
+    });
+  }
+  function startTeaserAnimation() {
+    if (!animatedProblemTextEl) return;
+    animatedProblemPhrases = getAnimatedProblems();
+    stopTeaserAnimation();
+    currentProblemTextIndex = 0;
+    if (animatedProblemPhrases && animatedProblemPhrases.length > 0) {
+      animatedProblemTextEl.textContent = '';
+      typeWriter(animatedProblemPhrases[currentProblemTextIndex], animatedProblemTextEl, 0, cycleProblemText);
+    } else {
+        const fallbackText = (document.documentElement.lang || 'en').startsWith('bs') ? 'vaše brige' : 'your concerns';
+        animatedProblemTextEl.textContent = fallbackText;
+        if(typewriterCursor) typewriterCursor.style.display = 'none';
+    }
+  }
+  function stopTeaserAnimation() {
+    clearTimeout(typewriterInterval);
+  }
+  function getViewHeightSetting(step) {
+    const mode = isMobile() ? 'mobile' : 'desktop';
+    switch(step) {
+      case 0: return viewHeights.teaser[mode];
+      case 1: return viewHeights.step1[mode];
+      case 2: return viewHeights.step2[mode];
+      case 3: return viewHeights.step3[mode];
+      default: return 0;
+    }
+  }
+  function updateView(targetDisplayStep) {
+    let targetView = views.find(v => parseInt(v.dataset.viewStep) === targetDisplayStep);
+    views.forEach(view => {
+        if (view.classList.contains('active') && view !== targetView) {
+            view.classList.add('leaving');
+            view.classList.remove('active');
+        }
+    });
+    setTimeout(() => {
+      let newHeight = 0;
+      const customHeightSetting = getViewHeightSetting(targetDisplayStep);
+      if (mainHeaderDiv) {
+          mainHeaderDiv.style.display = (targetDisplayStep > 0) ? 'block' : 'none';
+      }
+      if (progressBar) {
+          progressBar.classList.toggle('hidden', targetDisplayStep === 0);
+      }
+      if (targetDisplayStep === 0) {
+          startTeaserAnimation();
+      } else {
+          stopTeaserAnimation();
+      }
+      if (targetView && contentWrapper) {
+          targetView.classList.add('asf-measure-me');
+          let tempVisibleItemsToRevertStyle = [];
+          if (customHeightSetting === 0) {
+              if (targetDisplayStep === 2 && selectedBodyPartId) {
+                  problemItems.forEach(probItem => {
+                      if (probItem.dataset.parentBodyPartId === selectedBodyPartId) {
+                          probItem.style.display = 'block';
+                          tempVisibleItemsToRevertStyle.push(probItem);
+                      }
+                  });
+              } else if (targetDisplayStep === 3 && selectedProblemId && selectedBodyPartId) {
+                  const card = Array.from(solutionCards).find(c => c.dataset.solutionForProblemId === selectedProblemId && c.dataset.solutionForBodyPartId === selectedBodyPartId);
+                  if (card) {
+                      card.style.display = 'block';
+                      tempVisibleItemsToRevertStyle.push(card);
+                  }
+              }
+              void targetView.offsetHeight;
+              newHeight = targetView.scrollHeight;
+              tempVisibleItemsToRevertStyle.forEach(item => item.style.display = '');
+          } else {
+              newHeight = customHeightSetting;
+          }
+          targetView.classList.remove('asf-measure-me');
+          if (newHeight < 50 && !(customHeightSetting > 0 && customHeightSetting < 50)) {
+              newHeight = 200;
+          }
+          contentWrapper.style.height = `${newHeight}px`;
+      }
+      setTimeout(() => {
+          views.forEach(view => {
+              if (view === targetView) {
+                  view.classList.remove('leaving');
+                  view.classList.add('active');
+              } else if (!view.classList.contains('leaving')) {
+                  view.classList.remove('active');
+              }
+          });
+          const transitionDuration = parseFloat(getComputedStyle(section).getPropertyValue('--asf-transition-speed').replace('s', '')) * 1000;
+          setTimeout(() => {
+              views.forEach(v => v.classList.remove('leaving'));
+          }, transitionDuration + 50);
+      }, 50);
+      currentInternalStep = targetDisplayStep;
+      if (targetDisplayStep > 0) {
+          updateProgress(targetDisplayStep);
+      }
+      const headerElement = document.querySelector('.shopify-section-header') || document.querySelector('header.site-header');
+      const headerOffset = headerElement ? headerElement.offsetHeight : 60;
+      let targetScrollPos = section.offsetTop - headerOffset - 20;
+      const sectionRect = section.getBoundingClientRect();
+      if (targetDisplayStep > 0 && (sectionRect.top < headerOffset || sectionRect.bottom > window.innerHeight * 0.9)) {
+          window.scrollTo({ top: targetScrollPos, behavior: 'smooth' });
+      }
+    }, 20);
+  }
+  function updateProgress(displayStep) {
+    progressSteps.forEach(stepEl => {
+      const stepNum = parseInt(stepEl.dataset.step);
+      stepEl.classList.remove('active', 'completed');
+      if (stepNum < displayStep) {
+        stepEl.classList.add('completed');
+      } else if (stepNum === displayStep) {
+        stepEl.classList.add('active');
+      }
+    });
+    const progressConnectors = section.querySelectorAll('.asf-progress-connector');
+    progressConnectors.forEach((connector, index) => {
+      connector.classList.toggle('active', index < displayStep - 1);
+    });
+  }
+  function updateStep2Title(bodyPartName) {
+    if (!step2TitleElement) return;
+    const locale = document.documentElement.lang || 'en';
+    const templateEn = {{ section.settings.step2_title_template_en | json }};
+    const templateBs = {{ section.settings.step2_title_template_bs | json }};
+    let template = locale.startsWith('bs') && templateBs ? templateBs : templateEn;
+    template = template.replace('__BODY_PART_NAME_PLACEHOLDER__', `<span class="asf-selected-body-part-placeholder">${bodyPartName}</span>`);
+    step2TitleElement.innerHTML = template;
+  }
+  if(startButton) {
+    startButton.addEventListener('click', () => {
+      updateView(1);
+    });
+  }
+  bodyPartItems.forEach(item => {
+    const clickOrEnterHandler = () => {
+      selectedBodyPartId = item.dataset.bodyPartId;
+      selectedBodyPartName = item.querySelector('.asf-body-part-name').textContent.trim();
+      updateStep2Title(selectedBodyPartName);
+      if (breadcrumbBodyPartEl) breadcrumbBodyPartEl.textContent = selectedBodyPartName;
+      problemItems.forEach(probItem => probItem.classList.remove('visible'));
+      updateView(2);
+      setTimeout(() => {
+        let visibleItemCount = 0;
+        problemItems.forEach(probItem => {
+            if (probItem.dataset.parentBodyPartId === selectedBodyPartId) {
+                setTimeout(() => probItem.classList.add('visible'), visibleItemCount * 50);
+                visibleItemCount++;
+            }
+        });
+      }, parseFloat(getComputedStyle(section).getPropertyValue('--asf-transition-speed').replace('s',''))*1000 * 0.2 + 100);
+    };
+    item.addEventListener('click', clickOrEnterHandler);
+    item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clickOrEnterHandler(); }});
+  });
+  problemItems.forEach(item => {
+    const clickOrEnterHandler = () => {
+      selectedProblemId = item.dataset.problemId;
+      selectedProblemName = item.querySelector('.asf-problem-name').textContent.trim();
+      if (breadcrumbProblemEl) breadcrumbProblemEl.textContent = selectedProblemName;
+      solutionCards.forEach(card => card.classList.remove('active'));
+      updateView(3);
+      setTimeout(() => {
+        const cardToActivate = Array.from(solutionCards).find(card =>
+            card.dataset.solutionForProblemId === selectedProblemId &&
+            card.dataset.solutionForBodyPartId === selectedBodyPartId
+        );
+        if (cardToActivate) {
+            cardToActivate.classList.add('active');
+            const droplets = cardToActivate.querySelectorAll('.asf-droplet');
+            droplets.forEach(d => {
+                d.style.animation = 'none';
+                d.offsetHeight;
+                d.style.animation = '';
+            });
+        }
+      }, parseFloat(getComputedStyle(section).getPropertyValue('--asf-transition-speed').replace('s',''))*1000 * 0.2 + 100);
+    };
+    item.addEventListener('click', clickOrEnterHandler);
+    item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clickOrEnterHandler(); }});
+  });
+  backButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetViewStep = parseInt(button.dataset.targetStep);
+      updateView(targetViewStep);
+    });
+  });
+  if (restartButton) {
+    restartButton.addEventListener('click', () => {
+      updateView(0);
+    });
+  }
+  function initialize() {
+    applyTeaserHeight();
+    updateView(0);
+  }
+  initialize();
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      applyTeaserHeight();
+      const activeViewInstance = views.find(v => v.classList.contains('active') && !v.classList.contains('leaving'));
+      const currentStep = activeViewInstance ? parseInt(activeViewInstance.dataset.viewStep) : 0;
+      if (currentStep === 0 && contentWrapper && teaserView) {
+          const teaserMinHeight = parseFloat(getComputedStyle(teaserView).minHeight);
+          contentWrapper.style.height = `${teaserMinHeight}px`;
+      } else if (currentStep !== 0 && contentWrapper && activeViewInstance) {
+          const customHeight = getViewHeightSetting(currentStep);
+          let newHeight = 0;
+          const originalTransition = contentWrapper.style.transition;
+          contentWrapper.style.transition = 'none';
+          activeViewInstance.classList.add('asf-measure-me');
+          let tempVisibleItems = [];
+          if (customHeight === 0) {
+              if (currentStep === 2 && selectedBodyPartId) {
+                  problemItems.forEach(probItem => {
+                      if (probItem.dataset.parentBodyPartId === selectedBodyPartId) {
+                          probItem.style.display = 'block';
+                          tempVisibleItems.push(probItem);
+                      }
+                  });
+              } else if (currentStep === 3 && selectedProblemId && selectedBodyPartId) {
+                  const card = Array.from(solutionCards).find(c => c.dataset.solutionForProblemId === selectedProblemId && c.dataset.solutionForBodyPartId === selectedBodyPartId);
+                  if (card) {
+                      card.style.display = 'block';
+                      tempVisibleItems.push(card);
+                  }
+              }
+              void activeViewInstance.offsetHeight;
+              newHeight = activeViewInstance.scrollHeight;
+              tempVisibleItems.forEach(item => item.style.display = '');
+              if (newHeight < 50 && !(customHeight > 0 && customHeight < 50)) newHeight = 200;
+          } else {
+              newHeight = customHeight;
+          }
+          activeViewInstance.classList.remove('asf-measure-me');
+          contentWrapper.style.height = `${newHeight}px`;
+          requestAnimationFrame(() => {
+              contentWrapper.style.transition = originalTransition || `height ${getComputedStyle(section).getPropertyValue('--asf-transition-speed')} cubic-bezier(0.645, 0.045, 0.355, 1)`;
+          });
+      }
+    }, 150);
+  });
+  document.addEventListener('shopify:section:load', function(event) {
+    if (event.target.matches('.argan-solution-finder[data-section-id="{{ section.id }}"]')) {
+      animatedProblemPhrases = getAnimatedProblems();
+      applyTeaserHeight();
+      const activeViewInstance = views.find(v => v.classList.contains('active'));
+      if (activeViewInstance) {
+        const currentStep = parseInt(activeViewInstance.dataset.viewStep);
+        const customHeight = getViewHeightSetting(currentStep);
+        let newHeight = 0;
+        if (customHeight > 0) {
+            newHeight = customHeight;
+        } else {
+            activeViewInstance.classList.add('asf-measure-me');
+            let tempVisibleItems = [];
+            if (currentStep === 2 && selectedBodyPartId) {
+                 problemItems.forEach(probItem => { if (probItem.dataset.parentBodyPartId === selectedBodyPartId) { probItem.style.display = 'block'; tempVisibleItems.push(probItem); }});
+            } else if (currentStep === 3 && selectedProblemId && selectedBodyPartId) {
+                 const card = Array.from(solutionCards).find(c => c.dataset.solutionForProblemId === selectedProblemId && c.dataset.solutionForBodyPartId === selectedBodyPartId);
+                 if (card) { card.style.display = 'block'; tempVisibleItems.push(card); }
+            }
+            newHeight = activeViewInstance.scrollHeight;
+            tempVisibleItems.forEach(item => item.style.display = '');
+            activeViewInstance.classList.remove('asf-measure-me');
+            if (newHeight < 50 && currentStep !==0 && !(customHeight > 0 && customHeight < 50)) newHeight = 200;
+        }
+        if (currentStep === 0 && teaserView) {
+            contentWrapper.style.height = getComputedStyle(teaserView).minHeight;
+              if (!teaserView.classList.contains('active')) {
+                initialize();
+              } else {
+                startTeaserAnimation();
+              }
+        } else if (newHeight > 0) {
+            contentWrapper.style.height = `${newHeight}px`;
+        } else if (!activeViewInstance.classList.contains('active')) {
+            initialize();
+        }
+      } else {
+        initialize();
+      }
+    }
+  });
+  document.addEventListener('shopify:section:unload', function(event) {
+    if (event.target.matches('.argan-solution-finder[data-section-id="{{ section.id }}"]')) {
+      stopTeaserAnimation();
+      clearTimeout(resizeTimeout);
+    }
+  });
+});
+</script>

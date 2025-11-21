@@ -1,0 +1,551 @@
+{% comment %}
+  AZOURANE Premium Footer - Newsletter, links, social
+  Mobile: Accordion navigation
+  Desktop: Multi-column layout
+{% endcomment %}
+
+<footer class="az-footer" data-section-id="{{ section.id }}">
+  <div class="az-footer__newsletter">
+    <div class="az-container">
+      <div class="az-footer__newsletter-content">
+        <h2 class="az-footer__newsletter-title">{{ section.settings.newsletter_title }}</h2>
+        <p class="az-footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+        
+        <form class="az-footer__form" action="/contact#contact_form" method="post">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          
+          <div class="az-footer__form-group">
+            <input type="email" 
+                   name="contact[email]" 
+                   placeholder="{{ section.settings.email_placeholder }}"
+                   required
+                   class="az-footer__input">
+            <button type="submit" class="az-footer__submit">
+              {{ section.settings.submit_text }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="az-footer__main">
+    <div class="az-container">
+      <div class="az-footer__grid">
+        <!-- Logo Column -->
+        <div class="az-footer__brand">
+          <a href="/" class="az-footer__logo">
+            {% if section.settings.logo %}
+              <img src="{{ section.settings.logo | image_url: width: 200 }}"
+                   alt="{{ shop.name }}"
+                   width="150" height="50" loading="lazy">
+            {% else %}
+              <span>{{ shop.name }}</span>
+            {% endif %}
+          </a>
+          
+          <p class="az-footer__tagline">{{ section.settings.tagline }}</p>
+          
+          <div class="az-footer__social">
+            {% for block in section.blocks %}
+              {% if block.type == 'social' %}
+                <a href="{{ block.settings.url }}" 
+                   class="az-footer__social-link"
+                   aria-label="{{ block.settings.platform }}">
+                  {{ block.settings.icon }}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        
+        <!-- Menu Columns -->
+        {% for block in section.blocks %}
+          {% if block.type == 'menu' %}
+            <nav class="az-footer__nav" data-accordion-mobile>
+              <h3 class="az-footer__nav-title" data-accordion-trigger>
+                {{ block.settings.title }}
+                <svg class="az-footer__nav-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </h3>
+              
+              <ul class="az-footer__nav-list" data-accordion-content>
+                {% assign menu = linklists[block.settings.menu] %}
+                {% for link in menu.links %}
+                  <li class="az-footer__nav-item">
+                    <a href="{{ link.url }}" class="az-footer__nav-link">
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </nav>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+  <div class="az-footer__bottom">
+    <div class="az-container">
+      <div class="az-footer__bottom-content">
+        <p class="az-footer__copyright">
+          © {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright_text }}
+        </p>
+        
+        <div class="az-footer__payments">
+          {% for block in section.blocks %}
+            {% if block.type == 'payment' %}
+              <img src="{{ block.settings.icon | image_url: width: 100 }}"
+                   alt="{{ block.settings.name }}"
+                   width="50" height="30" loading="lazy"
+                   class="az-footer__payment-icon">
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+:root {
+  --footer-bg: {{ section.settings.background_color }};
+  --footer-text: {{ section.settings.text_color }};
+  --footer-accent: {{ section.settings.accent_color }};
+}
+
+.az-footer {
+  background: var(--footer-bg, #000);
+  color: var(--footer-text, #fff);
+}
+
+/* Newsletter */
+.az-footer__newsletter {
+  padding: var(--spacing-3xl) 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.az-footer__newsletter-content {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.az-footer__newsletter-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.az-footer__newsletter-text {
+  font-size: var(--font-size-base);
+  opacity: 0.8;
+  margin: 0 0 var(--spacing-xl);
+}
+
+.az-footer__form-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.az-footer__input {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-xl);
+  color: var(--footer-text);
+  font-size: var(--font-size-base);
+}
+
+.az-footer__input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.az-footer__input:focus {
+  outline: none;
+  border-color: var(--footer-accent);
+  background: rgba(255,255,255,0.15);
+}
+
+.az-footer__submit {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--footer-accent, #fff);
+  color: var(--footer-bg, #000);
+  border: none;
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.az-footer__submit:hover {
+  transform: scale(1.05);
+}
+
+/* Main Footer */
+.az-footer__main {
+  padding: var(--spacing-3xl) 0;
+}
+
+.az-footer__grid {
+  display: grid;
+  grid-template-columns: 2fr repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-2xl);
+}
+
+.az-footer__brand {
+  max-width: 300px;
+}
+
+.az-footer__logo {
+  display: inline-block;
+  margin-bottom: var(--spacing-md);
+  color: var(--footer-text);
+  text-decoration: none;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.az-footer__tagline {
+  font-size: var(--font-size-base);
+  opacity: 0.8;
+  margin: 0 0 var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.az-footer__social {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.az-footer__social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.az-footer__social-link:hover {
+  background: var(--footer-accent);
+  transform: scale(1.1);
+}
+
+/* Navigation */
+.az-footer__nav-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.az-footer__nav-icon {
+  display: none;
+}
+
+.az-footer__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.az-footer__nav-item {
+  margin-bottom: var(--spacing-sm);
+}
+
+.az-footer__nav-link {
+  color: var(--footer-text);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.az-footer__nav-link:hover {
+  opacity: 1;
+}
+
+/* Bottom */
+.az-footer__bottom {
+  padding: var(--spacing-lg) 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.az-footer__bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+}
+
+.az-footer__copyright {
+  font-size: var(--font-size-sm);
+  opacity: 0.6;
+  margin: 0;
+}
+
+.az-footer__payments {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.az-footer__payment-icon {
+  height: 24px;
+  width: auto;
+  opacity: 0.7;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .az-footer__form-group {
+    flex-direction: column;
+  }
+  
+  .az-footer__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+  
+  .az-footer__nav {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: var(--spacing-lg);
+  }
+  
+  .az-footer__nav-title {
+    cursor: pointer;
+    padding: var(--spacing-sm) 0;
+  }
+  
+  .az-footer__nav-icon {
+    display: block;
+    transition: transform 0.2s ease;
+  }
+  
+  .az-footer__nav.active .az-footer__nav-icon {
+    transform: rotate(180deg);
+  }
+  
+  .az-footer__nav-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .az-footer__nav.active .az-footer__nav-list {
+    max-height: 500px;
+  }
+  
+  .az-footer__bottom-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>
+
+<script>
+// Mobile accordion
+(function() {
+  if (window.innerWidth > 768) return;
+  
+  const accordions = document.querySelectorAll('[data-accordion-mobile]');
+  
+  accordions.forEach(accordion => {
+    const trigger = accordion.querySelector('[data-accordion-trigger]');
+    
+    trigger.addEventListener('click', () => {
+      accordion.classList.toggle('active');
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "AZ Premium Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Join Our Community"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Get exclusive offers and skincare tips delivered to your inbox"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email Placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Submit Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "header",
+      "content": "Branding"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Pure Moroccan beauty, delivered to your door"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "All rights reserved"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Social Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "platform",
+          "label": "Platform Name",
+          "default": "Instagram"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icon SVG",
+          "default": "<svg width='20' height='20' viewBox='0 0 20 20' fill='currentColor'><rect x='2' y='2' width='16' height='16' rx='5'/></svg>"
+        }
+      ]
+    },
+    {
+      "type": "payment",
+      "name": "Payment Method",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Payment Name",
+          "default": "Visa"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Payment Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AZ Premium Footer",
+      "blocks": [
+        {
+          "type": "menu",
+          "settings": {
+            "title": "Shop"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "title": "About"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "title": "Help"
+          }
+        },
+        {
+          "type": "social",
+          "settings": {
+            "platform": "Instagram"
+          }
+        },
+        {
+          "type": "social",
+          "settings": {
+            "platform": "Facebook"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
