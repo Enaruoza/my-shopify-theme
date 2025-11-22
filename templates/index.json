@@ -532,6 +532,7 @@
             "buy_buttons_CYDJcb": {
               "type": "buy-buttons",
               "name": "t:names.product_buy_buttons",
+              "disabled": true,
               "settings": {
                 "stacking": false,
                 "show_pickup_availability": true,
@@ -558,6 +559,7 @@
                 },
                 "accelerated-checkout": {
                   "type": "accelerated-checkout",
+                  "disabled": true,
                   "static": true,
                   "settings": {},
                   "blocks": {}
@@ -607,8 +609,8 @@
         "target_date": "2025-11-30T23:59:59",
         "color_bg": "#ffffff",
         "color_text": "#121212",
-        "color_number": "#ECA72C",
-        "color_label_bg": "#F48F91",
+        "color_number": "#eca72c",
+        "color_label_bg": "#f48f91",
         "color_label_text": "#ffffff",
         "padding_top": 0,
         "padding_bottom": 28
