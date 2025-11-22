@@ -68,10 +68,13 @@
         {%- if block_settings.gift_card_form and product.gift_card? -%}
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section, block: block -%}
         {%- endif -%}
+{{ 'component-fusion-atc.css' | asset_url | stylesheet_tag }}
+
         <div
           class="product-form-buttons spacing-style{% if block_settings.stacking %} product-form-buttons--stacked{% endif %}"
           style="{% render 'spacing-style', settings: block_settings %}"
           ref="productFormButtons"
+          data-fusion-atc="true"
         >
           {%- liquid
             assign has_quantity_rules = false
@@ -129,20 +132,70 @@
             </span>
           {%- endunless -%}
 
-          {% content_for 'block',
-            type: 'add-to-cart',
-            id: 'add-to-cart',
-            can_add_to_cart: can_add_to_cart,
-            add_to_cart_text: add_to_cart_text
-          %}
+          <div class="product-form-buttons__atc-container">
+            {% content_for 'block',
+              type: 'add-to-cart',
+              id: 'add-to-cart',
+              can_add_to_cart: can_add_to_cart,
+              add_to_cart_text: add_to_cart_text
+            %}
 
-          {% content_for 'block',
-            type: 'accelerated-checkout',
-            id: 'accelerated-checkout',
-            can_add_to_cart: can_add_to_cart,
-            form_obj: form
-          %}
+            {% content_for 'block',
+              type: 'accelerated-checkout',
+              id: 'accelerated-checkout',
+              can_add_to_cart: can_add_to_cart,
+              form_obj: form
+            %}
+          </div>
         </div>
+        
+        <script>
+          (function() {
+            const container = document.currentScript.previousElementSibling;
+            if (!container) return;
+
+            // Listen for successful cart add events
+            document.addEventListener('cart-add', function(event) {
+                // Verify this event belongs to this product form
+                const form = container.closest('form');
+                if (!form) return;
+                
+                // Check if the added item matches the current variant (optional, but good for safety)
+                const variantIdInput = form.querySelector('input[name="id"]');
+                if (variantIdInput && event.detail.productId && 
+                    // Simple check: if event has productId, we assume it's this product context
+                    // A stricter check would match variant IDs if available in event detail
+                    true) {
+                    
+                    // Trigger Fusion
+                    container.classList.add('fused');
+                    
+                    // Add pulse effect to quantity selector
+                    const quantity = container.querySelector('.quantity');
+                    if(quantity) {
+                        quantity.classList.add('pulsing');
+                        setTimeout(() => quantity.classList.remove('pulsing'), 300);
+                    }
+                }
+            });
+
+            // Optional: Reset on variant change if desired, or keep fused?
+            // User said "now they've added to cart... if they want more, they can just change the number"
+            // So keeping it fused is the desired behavior for that session/variant.
+            
+            // Add pulse on quantity change for dopamine hit
+            container.addEventListener('change', function(e) {
+                if (e.target.matches('[name="quantity"]')) {
+                     const quantity = container.querySelector('.quantity');
+                     if(quantity) {
+                        quantity.classList.remove('pulsing');
+                        void quantity.offsetWidth; // trigger reflow
+                        quantity.classList.add('pulsing');
+                     }
+                }
+            });
+          })();
+        </script>
       {%- endform -%}
     </product-form-component>
   {%- else -%}
