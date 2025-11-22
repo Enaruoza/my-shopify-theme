@@ -147,6 +147,12 @@ class HeaderComponent extends Component {
         this.dataset.scrollDirection = 'down';
       }
 
+      if (scrollTop > 100) {
+        this.setAttribute('data-scrolled', '');
+      } else {
+        this.removeAttribute('data-scrolled');
+      }
+
       this.#lastScrollTop = scrollTop;
       return;
     }

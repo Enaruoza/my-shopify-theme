@@ -282,6 +282,22 @@
     --transparent-header-offset-boolean: 0; /* stylelint-disable-line declaration-property-value-disallowed-list */
   }
 
+  /* Shrink Effect */
+  header-component[data-scrolled] .header__row--top {
+    padding-block: 5px !important;
+    transition: padding 0.3s ease;
+  }
+  
+  header-component[data-scrolled] .header__heading-logo {
+    max-width: 120px !important; /* Adjust as needed */
+    transition: max-width 0.3s ease;
+  }
+  
+  /* Ensure smooth transition back */
+  .header__row--top, .header__heading-logo {
+    transition: all 0.3s ease;
+  }
+
   body:has(> #header-group > header) {
     --header-height: 60px;
   }
