@@ -409,7 +409,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>New arrivals</h2>",
+                "text": "<h2>NOVI PROIZVODI</h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -596,6 +596,137 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 20,
         "padding-block-end": 0
+      }
+    },
+    "azr_routine_tabs_fNgmzx": {
+      "type": "azr_routine_tabs",
+      "blocks": {
+        "step_qKML3C": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Lice",
+            "concern_tags": "",
+            "product": "amaan",
+            "benefit_text": "Blagi tečni čistač koji uklanja SPF, znoj i nečistoće bez zatezanja kože.",
+            "ingredients": "Aloe vera, Glicerin, Vitamin C"
+          }
+        },
+        "step_4FgJ9a": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Lice",
+            "concern_tags": "suha koža, osjetljiva koža, bore i linije",
+            "product": "afoulki",
+            "benefit_text": "Hidratantna krema s arganovim i uljem kaktusa koja jača kožnu barijeru i vraća punoću.",
+            "ingredients": "Arganovo ulje, Ulje sjemenki kaktusa, Shea maslac"
+          }
+        },
+        "step_nHhmex": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Lice",
+            "concern_tags": "suha koža, bore i linije, tragovi akni",
+            "product": "100-arganovo-ulje",
+            "benefit_text": "Čisto marokansko arganovo ulje za dodatnu njegu suhe, umorne ili zrelije kože.",
+            "ingredients": "100% hladno prešano arganovo ulje"
+          }
+        },
+        "step_EBwH8q": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "suha koža, osjetljiva koža",
+            "product": "tayri",
+            "benefit_text": "Nježan sapun s kozjim mlijekom koji umiruje crvenilo i ne ostavlja osjećaj zatezanja.",
+            "ingredients": "Kozje mlijeko, Maslinovo ulje, Laneno ulje"
+          }
+        },
+        "step_yGMTLb": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "gruba koža",
+            "product": "sanouj",
+            "benefit_text": "Sapun s crnim kimom za temeljito, ali blago pročišćavanje i osjećaj svježine.",
+            "ingredients": "Ulje crnog kima, Suncokretovo ulje, Maslinovo ulje"
+          }
+        },
+        "step_A4JhDw": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "mrlje",
+            "product": "sanouj",
+            "benefit_text": "Medni sapun s aker fassijem koji ostavlja kožu ruku mekšom i vizuelno blistavijom.",
+            "ingredients": "Med, Aker Fassi, Maslinovo ulje"
+          }
+        },
+        "step_LmgEWt": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "gruba koža, mrlje",
+            "product": "tifawin",
+            "benefit_text": "Eksfolirajući sapun s česticama smokve koji zaglađuje hrapavu kožu i vraća joj mekoću.",
+            "ingredients": "Ulje sjemenki kaktusa, Maslinovo ulje, Palmino ulje"
+          }
+        },
+        "step_rJbjmw": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Ruke",
+            "concern_tags": "",
+            "product": "tifawin",
+            "benefit_text": "Nekoliko kapi arganovog ulja nakon pranja zaključava vlagu i štiti kožnu barijeru ruku.",
+            "ingredients": "100% hladno prešano arganovo ulje"
+          }
+        },
+        "step_NybrCX": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Kosa",
+            "concern_tags": "suha kosa, oštećeni vrhovi, kovrčava kosa",
+            "product": "tawenza",
+            "benefit_text": "Poslije šampona, maska sa shea maslacem i arganom dubinski hrani vlas i olakšava raščešljavanje.",
+            "ingredients": "Shea maslac, Arganovo ulje, Ekstrakt bijelog sljeza"
+          }
+        },
+        "step_cxRPJm": {
+          "type": "step",
+          "settings": {
+            "tab_name": "Kosa",
+            "concern_tags": "suha kosa, oštećeni vrhovi, bez sjaja",
+            "product": "100-arganovo-ulje",
+            "benefit_text": "Kap ili dvije na vrhove daju sjaj, smanjuju elektricitet i štite kosu od isušivanja.",
+            "ingredients": "100% hladno prešano arganovo ulje"
+          }
+        }
+      },
+      "block_order": [
+        "step_qKML3C",
+        "step_4FgJ9a",
+        "step_nHhmex",
+        "step_EBwH8q",
+        "step_yGMTLb",
+        "step_A4JhDw",
+        "step_LmgEWt",
+        "step_rJbjmw",
+        "step_NybrCX",
+        "step_cxRPJm"
+      ],
+      "name": "AZR Ritual Builder + Filt",
+      "settings": {
+        "eyebrow": "TVOJA NOVA RUTINA",
+        "title": "Izgradi svoj ritual njege",
+        "description": "Odaberi dio tijela i svoj glavni problem – mi ti predlažemo jednostavan, ali naučno utemeljen ritual njege. Proizvodi su formulirani da rade zajedno, a ne nasumično.",
+        "color_bg": "#fcfbf9",
+        "color_text": "#1c1d1d",
+        "color_accent": "#64bae2",
+        "color_border": "#e6e6e6",
+        "color_tag_bg": "#f0ebe6",
+        "color_tag_text": "#5c4a3d",
+        "container_width": 1200,
+        "padding_y": 60
       }
     },
     "countdown_timer_J3dprW": {
@@ -1895,137 +2026,6 @@
         "product_popup_text": "#111827"
       }
     },
-    "azr_routine_tabs_fNgmzx": {
-      "type": "azr_routine_tabs",
-      "blocks": {
-        "step_qKML3C": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Lice",
-            "concern_tags": "",
-            "product": "amaan",
-            "benefit_text": "Blagi tečni čistač koji uklanja SPF, znoj i nečistoće bez zatezanja kože.",
-            "ingredients": "Aloe vera, Glicerin, Vitamin C"
-          }
-        },
-        "step_4FgJ9a": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Lice",
-            "concern_tags": "suha koža, osjetljiva koža, bore i linije",
-            "product": "afoulki",
-            "benefit_text": "Hidratantna krema s arganovim i uljem kaktusa koja jača kožnu barijeru i vraća punoću.",
-            "ingredients": "Arganovo ulje, Ulje sjemenki kaktusa, Shea maslac"
-          }
-        },
-        "step_nHhmex": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Lice",
-            "concern_tags": "suha koža, bore i linije, tragovi akni",
-            "product": "100-arganovo-ulje",
-            "benefit_text": "Čisto marokansko arganovo ulje za dodatnu njegu suhe, umorne ili zrelije kože.",
-            "ingredients": "100% hladno prešano arganovo ulje"
-          }
-        },
-        "step_EBwH8q": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Ruke",
-            "concern_tags": "suha koža, osjetljiva koža",
-            "product": "tayri",
-            "benefit_text": "Nježan sapun s kozjim mlijekom koji umiruje crvenilo i ne ostavlja osjećaj zatezanja.",
-            "ingredients": "Kozje mlijeko, Maslinovo ulje, Laneno ulje"
-          }
-        },
-        "step_yGMTLb": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Ruke",
-            "concern_tags": "gruba koža",
-            "product": "sanouj",
-            "benefit_text": "Sapun s crnim kimom za temeljito, ali blago pročišćavanje i osjećaj svježine.",
-            "ingredients": "Ulje crnog kima, Suncokretovo ulje, Maslinovo ulje"
-          }
-        },
-        "step_A4JhDw": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Ruke",
-            "concern_tags": "mrlje",
-            "product": "sanouj",
-            "benefit_text": "Medni sapun s aker fassijem koji ostavlja kožu ruku mekšom i vizuelno blistavijom.",
-            "ingredients": "Med, Aker Fassi, Maslinovo ulje"
-          }
-        },
-        "step_LmgEWt": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Ruke",
-            "concern_tags": "gruba koža, mrlje",
-            "product": "tifawin",
-            "benefit_text": "Eksfolirajući sapun s česticama smokve koji zaglađuje hrapavu kožu i vraća joj mekoću.",
-            "ingredients": "Ulje sjemenki kaktusa, Maslinovo ulje, Palmino ulje"
-          }
-        },
-        "step_rJbjmw": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Ruke",
-            "concern_tags": "",
-            "product": "tifawin",
-            "benefit_text": "Nekoliko kapi arganovog ulja nakon pranja zaključava vlagu i štiti kožnu barijeru ruku.",
-            "ingredients": "100% hladno prešano arganovo ulje"
-          }
-        },
-        "step_NybrCX": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Kosa",
-            "concern_tags": "suha kosa, oštećeni vrhovi, kovrčava kosa",
-            "product": "tawenza",
-            "benefit_text": "Poslije šampona, maska sa shea maslacem i arganom dubinski hrani vlas i olakšava raščešljavanje.",
-            "ingredients": "Shea maslac, Arganovo ulje, Ekstrakt bijelog sljeza"
-          }
-        },
-        "step_cxRPJm": {
-          "type": "step",
-          "settings": {
-            "tab_name": "Kosa",
-            "concern_tags": "suha kosa, oštećeni vrhovi, bez sjaja",
-            "product": "100-arganovo-ulje",
-            "benefit_text": "Kap ili dvije na vrhove daju sjaj, smanjuju elektricitet i štite kosu od isušivanja.",
-            "ingredients": "100% hladno prešano arganovo ulje"
-          }
-        }
-      },
-      "block_order": [
-        "step_qKML3C",
-        "step_4FgJ9a",
-        "step_nHhmex",
-        "step_EBwH8q",
-        "step_yGMTLb",
-        "step_A4JhDw",
-        "step_LmgEWt",
-        "step_rJbjmw",
-        "step_NybrCX",
-        "step_cxRPJm"
-      ],
-      "name": "AZR Ritual Builder + Filt",
-      "settings": {
-        "eyebrow": "TVOJA NOVA RUTINA",
-        "title": "Izgradi svoj ritual njege",
-        "description": "Odaberi dio tijela i svoj glavni problem – mi ti predlažemo jednostavan, ali naučno utemeljen ritual njege. Proizvodi su formulirani da rade zajedno, a ne nasumično.",
-        "color_bg": "#fcfbf9",
-        "color_text": "#1c1d1d",
-        "color_accent": "#a67c52",
-        "color_border": "#e6e6e6",
-        "color_tag_bg": "#f0ebe6",
-        "color_tag_text": "#5c4a3d",
-        "container_width": 1200,
-        "padding_y": 60
-      }
-    },
     "azr_routine_tabs_NCkQpX": {
       "type": "azr_routine_tabs",
       "blocks": {
@@ -2748,6 +2748,7 @@
     "hero_X6gzdQ",
     "az_usp_bar_jxhhGb",
     "product_list_KDDjy4",
+    "azr_routine_tabs_fNgmzx",
     "countdown_timer_J3dprW",
     "product_list_dCcPd9",
     "divider_eVPqxR",
@@ -2762,7 +2763,6 @@
     "testimonials_CQzbrj",
     "az_bundles_RwFBeD",
     "az_reviews_carousel_wq8pzB",
-    "azr_routine_tabs_fNgmzx",
     "azr_routine_tabs_NCkQpX",
     "section_PiVBQD",
     "media_with_content_aYVRzm",
