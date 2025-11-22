@@ -604,7 +604,7 @@
       "settings": {
         "heading": "DO 30% POPUSTA.",
         "subheading": "<p>DO KRAJA NOVEMBRA.</p>",
-        "button_label": "IDEMO",
+        "button_label": "NARUČI ODMAH",
         "button_link": "shopify://collections/all",
         "target_date": "2025-11-30T23:59:59",
         "color_bg": "#ffffff",
@@ -612,6 +612,7 @@
         "color_number": "#eca72c",
         "color_label_bg": "#f48f91",
         "color_label_text": "#ffffff",
+        "number_texture": "shopify://shop_images/Gemini_Generated_Image_iqgf95iqgf95iqgf_Firefly_Upscaler_2x_scale_246c03cd-a702-4f6d-bd5f-f5e55f18fc58.png",
         "padding_top": 0,
         "padding_bottom": 28
       }
