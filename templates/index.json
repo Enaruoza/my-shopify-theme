@@ -613,7 +613,7 @@
         "color_label_bg": "#f48f91",
         "color_label_text": "#ffffff",
         "number_texture": "shopify://shop_images/Gemini_Generated_Image_iqgf95iqgf95iqgf_Firefly_Upscaler_2x_scale_246c03cd-a702-4f6d-bd5f-f5e55f18fc58.png",
-        "padding_top": 0,
+        "padding_top": 16,
         "padding_bottom": 28
       }
     },
