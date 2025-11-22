@@ -1,19 +1,80 @@
-{% comment %}
-  Trust Badges Snippet
-  Used under Add to Cart buttons and in Trust Badges section.
-{% endcomment %}
-
-<div class="trust-badges-snippet flex flex-wrap gap-4 justify-center md:justify-start mt-4 mb-4">
-  <div class="flex items-center gap-2 text-sm text-gray-700">
-    <span class="text-xl">🌿</span>
-    <span>100% Prirodno</span>
-  </div>
-  <div class="flex items-center gap-2 text-sm text-gray-700">
-    <span class="text-xl">🐰</span>
-    <span>Bez Okrutnosti</span>
-  </div>
-  <div class="flex items-center gap-2 text-sm text-gray-700">
-    <span class="text-xl">🚚</span>
-    <span>Brza Dostava</span>
+<div class="trust-badges">
+  <p class="trust-badges__text">
+    <span class="trust-badges__lock-icon">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+    </span>
+    Guaranteed Safe Checkout
+  </p>
+  <div class="trust-badges__icons">
+    <!-- Visa -->
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-visa">
+      <title id="pi-visa">Visa</title>
+      <path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"></path>
+      <path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"></path>
+      <path d="M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9h-2.2l-.4 1.4c-.3.1-.4.1-.9.1-1.2 0-1.2-.1-1.2-.2 0-.1.1-.2.2-.5l2.1-5.6c.2-.9.6-1.3 1.7-1.3h1.6c.4 0 .8.1 1.1.3.2.3.4.7.6 1.2l1.6 5c0 .2 0 .3-.3.3-.6 0-1.5 0-2.1.3zM24.6 9.1c-.2-.4-.6-.6-1-.6-2.4 0-4.2 1.8-4.2 4.1 0 2.3 1.8 4.1 4.2 4.1 1 0 1.9-.4 2.4-1.2l.1.5c.2.4.5.7.9.6h1.3c.2 0 .3-.1.3-.3V9.5c0-.2-.1-.3-.3-.3h-1.4c-.5-.1-.9.2-1.1.6l-1.2-1.7zm-1.4 6.5c-1.5 0-2.6-1.2-2.6-2.6 0-1.5 1.1-2.6 2.6-2.6 1.5 0 2.6 1.2 2.6 2.6 0 1.5-1.1 2.6-2.6 2.6zm-5.8-5h-1.6c-.4 0-.8.1-1.1.3-.2.3-.4.7-.6 1.2l-1.6 5c0 .2 0 .3.3.3.6 0 1.5 0 2.1-.3l.2-.5h1.7c.1 0 .1 0 .2.1l.2.9h2.2l.4-1.4c.3-.1.4-.1.9-.1 1.2 0 1.2-.1 1.2-.2 0-.1-.1-.2-.2-.5l-2.1-5.6c-.2-.9-.6-1.3-1.7-1.3zm-2.3 4.5c-.3-1.5-.3-2.2-.6-3H14c.4 1 .7 1.5 1 3h-1.9zm-5.5-4.5H8.2c-.5 0-.9.2-1.1.6l-1.2-1.7c-.2-.4-.6-.6-1-.6-2.4 0-4.2 1.8-4.2 4.1 0 2.3 1.8 4.1 4.2 4.1 1 0 1.9-.4 2.4-1.2l.1.5c.2.4.5.7.9.6h1.3c.2 0 .3-.1.3-.3V9.5c0-.2-.1-.3-.3-.3zm1.4 5.1c0 1.5-1.1 2.6-2.6 2.6-1.5 0-2.6-1.2-2.6-2.6 0-1.5 1.1-2.6 2.6-2.6 1.5 0 2.6 1.2 2.6 2.6z" fill="#142688"></path>
+    </svg>
+    <!-- Mastercard -->
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-master">
+      <title id="pi-master">Mastercard</title>
+      <path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"></path>
+      <path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"></path>
+      <circle fill="#EB001B" cx="15" cy="12" r="7"></circle>
+      <circle fill="#F79E1B" cx="23" cy="12" r="7"></circle>
+      <path fill="#FF5F00" d="M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z"></path>
+    </svg>
+    <!-- Amex -->
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-amex">
+      <title id="pi-amex">American Express</title>
+      <path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"></path>
+      <path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"></path>
+      <path fill="#006FCF" d="M22.01 16.08h-2.02l-1.06-2.46h-2.69l-1.06 2.46h-2.02l3.23-7.37h2.4l3.22 7.37zM17.1 12.1h1.57l-.78-1.89-.79 1.89zm13.85 3.98h-6.22V8.71h5.98v1.56h-3.85v1.26h3.61v1.53h-3.61v1.47h3.85l.24 1.55zm-8.3-7.37h2.1l1.37 3.26 1.36-3.26h2.1l-2.37 5.38v1.99h-2.1v-1.99l-2.46-5.38zm-14.5 2.76h-1.99v-1.26h1.99v1.26zm2.12-1.53l-.86-1.23h3.1v7.37h-2.1v-4.7l-.88 1.26-1.13-1.61v5.05h-2.1V8.71h2.98l1.12 1.61-.13-1.61z"></path>
+    </svg>
+    <!-- PayPal -->
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-paypal">
+      <title id="pi-paypal">PayPal</title>
+      <path opacity=".07" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"></path>
+      <path fill="#fff" d="M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32"></path>
+      <path fill="#003087" d="M23.9 8.3c.2-1 0-1.7-.6-2.3-.6-.7-1.7-1-3.1-1h-4.1c-.3 0-.5.2-.6.5L14 15.6c0 .2.1.4.3.4H17l.4-3.4 1.8-2.2 4.7-2.1z"></path>
+      <path fill="#3086C8" d="M23.9 8.3l-.2.2c-.5 2.8-2.2 3.8-4.6 3.8H18c-.3 0-.5.2-.6.5l-.6 3.9-.2 1c0 .2.1.4.3.4H19c.3 0 .5-.2.5-.5v-.1l.4-3.7c0-.2.2-.4.4-.4H21c2.5 0 4.6-1.1 5.4-4.7.5-2.3-.3-3.3-.9-3.9-.6-.6-1.6-.9-3.1-.9H23.9z"></path>
+      <path fill="#012169" d="M23.3 8.1c-.1-.1-.2-.1-.3-.1-.1 0-.2 0-.3-.1-.3-.1-.7-.1-1.1-.1h-3c-.1 0-.2 0-.2.1-.2.1-.3.2-.3.4l-.7 4.4v.1h2.7c2.5 0 4.3-1 4.8-3.4.3-1.4 0-2.5-1.6-3.2z"></path>
+    </svg>
   </div>
 </div>
+
+<style>
+  .trust-badges {
+    margin-top: 1rem;
+    text-align: center;
+    padding: 10px;
+    background: var(--color-secondary-background, #f9f9f9);
+    border-radius: 4px;
+  }
+  
+  .trust-badges__text {
+    font-size: 0.8rem;
+    color: var(--color-foreground);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .trust-badges__icons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .payment-icon {
+    width: 38px;
+    height: 24px;
+  }
+</style>
