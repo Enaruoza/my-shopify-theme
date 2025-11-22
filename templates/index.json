@@ -579,8 +579,8 @@
       },
       "name": "Infinite Product Conveyor",
       "settings": {
-        "collection": "sve-proizvode",
-        "max_products": 12,
+        "collection": "novi-proizvodi",
+        "max_products": 10,
         "layout_type": "carousel",
         "carousel_on_mobile": true,
         "columns": 4,
