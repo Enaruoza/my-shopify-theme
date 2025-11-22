@@ -4,6 +4,34 @@
   "settings": [
     {
       "type": "header",
+      "content": "Display Mode"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_popup",
+      "label": "Enable Popup Mode",
+      "default": false,
+      "info": "If enabled, this section will float over content."
+    },
+    {
+      "type": "select",
+      "id": "popup_position",
+      "label": "Popup Position",
+      "options": [
+        { "value": "bottom-right", "label": "Bottom Right" },
+        { "value": "bottom-left", "label": "Bottom Left" },
+        { "value": "center", "label": "Center Screen" }
+      ],
+      "default": "bottom-right"
+    },
+    {
+      "type": "text",
+      "id": "minimized_text",
+      "label": "Floating Bubble Text",
+      "default": "30% OFF"
+    },
+    {
+      "type": "header",
       "content": "Content"
     },
     {
@@ -126,11 +154,108 @@
     }
   }
 
+  /* Base Styles */
   .countdown-timer-section {
     background-color: {{ section.settings.color_bg }};
     color: {{ section.settings.color_text }};
     text-align: center;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   }
+
+  /* Popup Mode Styles */
+  {% if section.settings.enable_popup %}
+    .countdown-timer-section {
+      position: fixed;
+      z-index: 50;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      padding: 30px !important;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    /* Positioning */
+    {% case section.settings.popup_position %}
+      {% when 'bottom-right' %}
+        .countdown-timer-section { bottom: 30px; right: 30px; }
+      {% when 'bottom-left' %}
+        .countdown-timer-section { bottom: 30px; left: 30px; }
+      {% when 'center' %}
+        .countdown-timer-section { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    {% endcase %}
+
+    /* Minimized State */
+    .countdown-timer-section.is-minimized {
+      width: auto;
+      max-width: none;
+      padding: 15px 25px !important;
+      border-radius: 50px;
+      cursor: pointer;
+      transform: none; /* Reset center transform if needed, handled by JS/CSS specific */
+    }
+    
+    {% if section.settings.popup_position == 'center' %}
+      .countdown-timer-section.is-minimized {
+        top: auto;
+        left: auto;
+        bottom: 30px;
+        right: 30px; /* Dock to corner when minimized */
+        transform: none;
+      }
+    {% endif %}
+
+    .countdown-content-wrapper {
+      transition: opacity 0.3s ease;
+    }
+    
+    .countdown-timer-section.is-minimized .countdown-content-wrapper {
+      display: none;
+      opacity: 0;
+    }
+
+    .countdown-minimized-trigger {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: {{ section.settings.color_number }};
+    }
+
+    .countdown-timer-section.is-minimized .countdown-minimized-trigger {
+      display: flex;
+    }
+
+    .countdown-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+      z-index: 10;
+    }
+
+    .countdown-control-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.05);
+      transition: background 0.2s;
+      color: {{ section.settings.color_text }};
+    }
+    .countdown-control-btn:hover { background: rgba(0,0,0,0.1); }
+    .countdown-control-btn svg { width: 12px; height: 12px; }
+  {% else %}
+    .countdown-controls, .countdown-minimized-trigger { display: none; }
+  {% endif %}
 
   .countdown-header {
     margin-bottom: 2rem;
@@ -142,12 +267,11 @@
     margin: 0 0 1rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #1a3b3b; /* Dark green from image */
+    color: #1a3b3b;
     position: relative;
     display: inline-block;
   }
   
-  /* Simple underline effect to mimic the scribble */
   .countdown-heading::after {
     content: '';
     display: block;
@@ -203,10 +327,9 @@
     font-weight: 700;
     line-height: 1;
     color: {{ section.settings.color_number }};
-    font-family: 'Stencil', 'Impact', sans-serif; /* Try to match the bold stencil look */
+    font-family: 'Stencil', 'Impact', sans-serif;
     margin-bottom: 0.5rem;
     
-    /* Texture Effect */
     {% if section.settings.number_texture != blank %}
       background-image: url('{{ section.settings.number_texture | image_url: width: 800 }}');
       background-size: cover;
@@ -216,7 +339,6 @@
       -webkit-text-fill-color: transparent;
       color: transparent;
     {% else %}
-      /* Fallback Gradient if no image is selected but user wants depth */
       background-image: linear-gradient(135deg, {{ section.settings.color_number }} 0%, {{ section.settings.color_number | color_darken: 20 }} 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -224,6 +346,15 @@
       color: transparent;
     {% endif %}
   }
+
+  /* Popup Mode Adjustments */
+  {% if section.settings.enable_popup %}
+    .countdown-number { font-size: 3.5rem; }
+    .countdown-colon { font-size: 2.5rem; }
+    .countdown-heading { font-size: 1.8rem; }
+    .countdown-grid { gap: 0.8rem; }
+    .countdown-item { min-width: 50px; }
+  {% endif %}
 
   .countdown-colon {
     font-size: 4rem;
@@ -259,44 +390,78 @@
         font-size: 2rem;
         margin-top: 0.5rem;
     }
+    
+    {% if section.settings.enable_popup %}
+      .countdown-timer-section {
+        width: 95%;
+        left: 2.5%;
+        right: 2.5%;
+        bottom: 20px;
+      }
+      .countdown-timer-section.is-minimized {
+        width: auto;
+        left: auto;
+        right: 20px;
+        bottom: 20px;
+      }
+    {% endif %}
   }
 </style>
 
-<div class="countdown-timer-section section-{{ section.id }}-padding">
-  <div class="page-width">
-    <div class="countdown-header">
-      {% if section.settings.heading != blank %}
-        <h2 class="countdown-heading">{{ section.settings.heading }}</h2>
-      {% endif %}
-      {% if section.settings.subheading != blank %}
-        <div class="countdown-subheading">{{ section.settings.subheading }}</div>
-      {% endif %}
-      {% if section.settings.button_label != blank %}
-        <a href="{{ section.settings.button_link }}" class="countdown-button">
-          {{ section.settings.button_label }} >
-        </a>
-      {% endif %}
+<div id="Countdown-{{ section.id }}" class="countdown-timer-section section-{{ section.id }}-padding" data-target="{{ section.settings.target_date }}">
+  
+  {% if section.settings.enable_popup %}
+    <div class="countdown-controls">
+      <button class="countdown-control-btn countdown-minimize-btn" aria-label="Minimize">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 7H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="countdown-control-btn countdown-close-btn" aria-label="Close">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6667 2.33334L2.33334 11.6667M2.33334 2.33334L11.6667 11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
+    
+    <div class="countdown-minimized-trigger">
+      <span>{{ section.settings.minimized_text }}</span>
+      <span class="countdown-label" data-minimized-timer>00:00:00</span>
+    </div>
+  {% endif %}
 
-    <div class="countdown-grid" id="Countdown-{{ section.id }}" data-target="{{ section.settings.target_date }}">
-      <div class="countdown-item">
-        <span class="countdown-number" data-days>00</span>
-        <span class="countdown-label">Days</span>
+  <div class="countdown-content-wrapper">
+    <div class="page-width">
+      <div class="countdown-header">
+        {% if section.settings.heading != blank %}
+          <h2 class="countdown-heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <div class="countdown-subheading">{{ section.settings.subheading }}</div>
+        {% endif %}
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link }}" class="countdown-button">
+            {{ section.settings.button_label }} >
+          </a>
+        {% endif %}
       </div>
-      <div class="countdown-colon">:</div>
-      <div class="countdown-item">
-        <span class="countdown-number" data-hours>00</span>
-        <span class="countdown-label">Hours</span>
-      </div>
-      <div class="countdown-colon">:</div>
-      <div class="countdown-item">
-        <span class="countdown-number" data-minutes>00</span>
-        <span class="countdown-label">Minutes</span>
-      </div>
-      <div class="countdown-colon">:</div>
-      <div class="countdown-item">
-        <span class="countdown-number" data-seconds>00</span>
-        <span class="countdown-label">Seconds</span>
+
+      <div class="countdown-grid">
+        <div class="countdown-item">
+          <span class="countdown-number" data-days>00</span>
+          <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-item">
+          <span class="countdown-number" data-hours>00</span>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-item">
+          <span class="countdown-number" data-minutes>00</span>
+          <span class="countdown-label">Minutes</span>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-item">
+          <span class="countdown-number" data-seconds>00</span>
+          <span class="countdown-label">Seconds</span>
+        </div>
       </div>
     </div>
   </div>
@@ -314,7 +479,8 @@
       days: container.querySelector('[data-days]'),
       hours: container.querySelector('[data-hours]'),
       minutes: container.querySelector('[data-minutes]'),
-      seconds: container.querySelector('[data-seconds]')
+      seconds: container.querySelector('[data-seconds]'),
+      minimizedTimer: container.querySelector('[data-minimized-timer]')
     };
 
     function updateTimer() {
@@ -322,10 +488,10 @@
       const distance = targetDate - now;
 
       if (distance < 0) {
-        els.days.textContent = "00";
-        els.hours.textContent = "00";
-        els.minutes.textContent = "00";
-        els.seconds.textContent = "00";
+        if(els.days) els.days.textContent = "00";
+        if(els.hours) els.hours.textContent = "00";
+        if(els.minutes) els.minutes.textContent = "00";
+        if(els.seconds) els.seconds.textContent = "00";
         return;
       }
 
@@ -334,13 +500,61 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      els.days.textContent = days < 10 ? "0" + days : days;
-      els.hours.textContent = hours < 10 ? "0" + hours : hours;
-      els.minutes.textContent = minutes < 10 ? "0" + minutes : minutes;
-      els.seconds.textContent = seconds < 10 ? "0" + seconds : seconds;
+      const dStr = days < 10 ? "0" + days : days;
+      const hStr = hours < 10 ? "0" + hours : hours;
+      const mStr = minutes < 10 ? "0" + minutes : minutes;
+      const sStr = seconds < 10 ? "0" + seconds : seconds;
+
+      if(els.days) els.days.textContent = dStr;
+      if(els.hours) els.hours.textContent = hStr;
+      if(els.minutes) els.minutes.textContent = mStr;
+      if(els.seconds) els.seconds.textContent = sStr;
+      
+      if(els.minimizedTimer) {
+        els.minimizedTimer.textContent = `${dStr}:${hStr}:${mStr}:${sStr}`;
+      }
     }
 
     updateTimer();
     setInterval(updateTimer, 1000);
+
+    // Popup Logic
+    {% if section.settings.enable_popup %}
+      const closeBtn = container.querySelector('.countdown-close-btn');
+      const minimizeBtn = container.querySelector('.countdown-minimize-btn');
+      const minimizedTrigger = container.querySelector('.countdown-minimized-trigger');
+
+      // Check session storage
+      if (sessionStorage.getItem('countdownClosed') === 'true') {
+        container.style.display = 'none';
+      } else if (sessionStorage.getItem('countdownMinimized') === 'true') {
+        container.classList.add('is-minimized');
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          container.style.display = 'none';
+          sessionStorage.setItem('countdownClosed', 'true');
+        });
+      }
+
+      if (minimizeBtn) {
+        minimizeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          container.classList.add('is-minimized');
+          sessionStorage.setItem('countdownMinimized', 'true');
+        });
+      }
+
+      if (minimizedTrigger) {
+        container.addEventListener('click', (e) => {
+          if (container.classList.contains('is-minimized')) {
+             container.classList.remove('is-minimized');
+             sessionStorage.setItem('countdownMinimized', 'false');
+          }
+        });
+      }
+    {% endif %}
   });
 </script>

@@ -24,6 +24,15 @@
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
+    <script>
+      window.Theme = window.Theme || {};
+      window.Theme.translations = {
+        addToCart: {{ settings.text_add_to_cart | default: 'products.product.add_to_cart' | t | json }},
+        added: {{ settings.text_added_to_cart | default: 'Dodano' | json }},
+        soldOut: {{ settings.text_sold_out | default: 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }}
+      };
+    </script>
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
     {{ 'animations.css' | asset_url | stylesheet_tag }}

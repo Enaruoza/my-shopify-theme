@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const observerOptions = {
     root: null,
     rootMargin: '0px',
@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }, observerOptions);
 
   // Target sections and common elements
-  const elementsToAnimate = document.querySelectorAll('.shopify-section, .product-card, .collection-card, .article-card');
-  
+  const elementsToAnimate = document.querySelectorAll('.shopify-section, .product-card, .collection-card, .article-card, .reveal-text, .master-grid__item, .master-carousel__item');
+
   elementsToAnimate.forEach(el => {
     el.classList.add('reveal-on-scroll');
     observer.observe(el);

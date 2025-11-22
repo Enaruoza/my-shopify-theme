@@ -99,7 +99,7 @@
   @media (hover: hover) {
     .product-conveyor-{{ section.id }} .az-carousel-item:hover,
     .product-conveyor-{{ section.id }} .az-grid-item:hover {
-      transform: translateY(-4px);
+      /* transform: translateY(-4px); Removed to prevent z-index/arrow glitching */
     }
   }
 
@@ -272,21 +272,26 @@
     if (!container) return;
 
     const wrapper = container.querySelector('.az-carousel-wrapper');
-    if (!wrapper) return; // It's a grid layout
+    if (!wrapper) return;
 
     const track = wrapper.querySelector('[data-az-track]');
     const prevBtn = wrapper.querySelector('.az-nav-button--prev');
     const nextBtn = wrapper.querySelector('.az-nav-button--next');
     const progressBar = container.querySelector('[data-az-progress]');
     
-    // Auto-scroll settings
+    // Settings
     const isConveyor = {{ section.settings.layout_type | json }} === 'carousel';
-    const autoScrollSpeed = {{ section.settings.conveyor_speed | default: 1.0 }} * 3000; // Base 3s interval / speed
+    const autoScrollSpeed = {{ section.settings.conveyor_speed | default: 1.0 }} * 3000;
     let autoScrollInterval;
     let isPaused = false;
 
-    // --- Unified Carousel Logic (Native Scroll) ---
-    
+    // Helper: Get Item Width
+    const getItemWidth = () => {
+        const item = track.querySelector('.az-carousel-item');
+        return item ? item.offsetWidth + parseInt(getComputedStyle(track).columnGap || 0) : 0;
+    };
+
+    // Progress Bar
     const updateProgress = () => {
         if(!progressBar) return;
         const scrollPercent = track.scrollLeft / (track.scrollWidth - track.clientWidth);
@@ -296,16 +301,18 @@
     track.addEventListener('scroll', updateProgress, {passive: true});
 
     // Navigation
+    const scrollAmount = () => getItemWidth() || track.clientWidth / 2;
+
     if (nextBtn) {
         nextBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            track.scrollBy({ left: track.clientWidth / 2, behavior: 'smooth' });
+            track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
         });
     }
     if (prevBtn) {
         prevBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            track.scrollBy({ left: -(track.clientWidth / 2), behavior: 'smooth' });
+            track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
         });
     }
 
@@ -315,17 +322,21 @@
             if (autoScrollInterval) clearInterval(autoScrollInterval);
             autoScrollInterval = setInterval(() => {
                 if (!isPaused) {
-                    // Check if we reached the end
+                    const itemWidth = getItemWidth();
+                    // Check if we are near the end
                     if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
                         track.scrollTo({ left: 0, behavior: 'smooth' });
                     } else {
-                        track.scrollBy({ left: 300, behavior: 'smooth' });
+                        track.scrollBy({ left: itemWidth, behavior: 'smooth' });
                     }
                 }
-            }, 3000); // Fixed interval for smoothness, speed controls distance/frequency if needed
+            }, autoScrollSpeed);
         };
 
-        startAutoScroll();
+        // Only start if not on mobile or if configured
+        if (window.matchMedia('(min-width: 750px)').matches || {{ section.settings.carousel_on_mobile | json }}) {
+             startAutoScroll();
+        }
 
         // Pause on interaction
         const pauseEvents = ['pointerenter', 'touchstart', 'focusin'];
@@ -335,7 +346,7 @@
         resumeEvents.forEach(e => wrapper.addEventListener(e, () => isPaused = false, {passive: true}));
     }
     
-    // Mobile Arrow Visibility Fix
+    // Mobile Arrow Visibility
     if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
         document.querySelectorAll('.az-nav-button').forEach(btn => {
             btn.style.opacity = '1';

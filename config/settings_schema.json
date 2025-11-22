@@ -2284,5 +2284,38 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Text & Labels",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product Buttons"
+      },
+      {
+        "type": "text",
+        "id": "text_add_to_cart",
+        "label": "Add to Cart",
+        "default": "Add to cart"
+      },
+      {
+        "type": "text",
+        "id": "text_added_to_cart",
+        "label": "Added to Cart",
+        "default": "Dodano"
+      },
+      {
+        "type": "text",
+        "id": "text_sold_out",
+        "label": "Sold Out",
+        "default": "Sold out"
+      },
+      {
+        "type": "text",
+        "id": "text_sale",
+        "label": "Sale Badge",
+        "default": "Sale"
+      }
+    ]
   }
 ]
