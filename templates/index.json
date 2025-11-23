@@ -1422,6 +1422,17 @@
     "testimonials_CQzbrj": {
       "type": "testimonials",
       "blocks": {
+        "testimonial_rVHdHA": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "review_title": "ich kann es ihnen nur wärmsten empfehlen 👌🏾",
+            "review_text": "<p>Mit diesen Produkten die Original sind , Argan Öl direkt aus Marokko kommt , aus vertrauenswürdigen quellen mit Echtzeit Zertifikat werden Sie und jede Dame Herr sehr zufrieden sein, Hussam der Besitzer dieses kleine Laden ist ein Profi in seinem Geschäft, das Öl kommt direkt aus Marokko und ist nicht wie die andren Öle die man bei DM oder überall wo Argan drauf steht, Sie müssen aufpassen wo sie ihre Produkte kaufen, ihr Aussehen und gesunde Haut verlangt es von ihnen, Sie dürfen keine Fake Produkte kaufen, das ist ein doppelter Verlust, viel Geld verlieren ( denn diese Produkte sind nicht gerade billig) und das wichtigste ist ihre Haut die darunter leidet , das will niemand 😒<br/><br/>Also bei AZOURANE sind Sie wirklich richtig, und werden es nie bereuen, ich schreibe aus Erfahrung, habe es probiert und bin sehr zufrieden, ich kann es ihnen nur wärmsten empfehlen 👌🏾<br/><br/></p>",
+            "customer_name": "Zineb V.",
+            "product": "100-arganovo-ulje",
+            "product_reference": ""
+          }
+        },
         "testimonial_yTrpWm": {
           "type": "testimonial",
           "settings": {
@@ -1519,6 +1530,7 @@
         }
       },
       "block_order": [
+        "testimonial_rVHdHA",
         "testimonial_yTrpWm",
         "gallery_card_37hVej",
         "gallery_card_Gp9b9y",
