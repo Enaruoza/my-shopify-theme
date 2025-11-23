@@ -43,44 +43,43 @@
     letter-spacing: -0.02em;
   }
 
-  /* --- SURREAL CLOUD LAYOUT (Warm, Organic, Artsy) --- */
+  /* --- FLAT COLLAGE LAYOUT (Solid Colors, Cut-Outs) --- */
   .testimonial-section-{{ section.id }} {
-    /* Sun & Sky Gradient */
-    background: linear-gradient(180deg, #4FACFE 0%, #00F2FE 40%, #FAD961 100%);
+    /* Solid Sky Blue Background */
+    background-color: #7CD3EA;
     position: relative;
     overflow: hidden;
-    padding-bottom: 60px;
+    padding-bottom: 80px; /* Space for cloud divider */
   }
   
-  /* The Sun (Pseudo-element) */
+  /* The Sun (Solid Flat Circle) */
   .testimonial-section-{{ section.id }}::before {
     content: '';
     position: absolute;
-    top: 10%;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(255, 200, 55, 0.4) 0%, rgba(255, 200, 55, 0) 70%);
+    width: 400px;
+    height: 400px;
+    background-color: #FDB813; /* Solid Golden Yellow */
     border-radius: 50%;
     z-index: 0;
     pointer-events: none;
-    animation: sunPulse 8s ease-in-out infinite alternate;
+    /* No blur, no gradient */
   }
 
-  @keyframes sunPulse {
-    0% { transform: translateX(-50%) scale(1); opacity: 0.4; }
-    100% { transform: translateX(-50%) scale(1.1); opacity: 0.6; }
-  }
-
-  /* Cloud Overlay (Texture) */
+  /* Cloud Divider (Bottom) */
   .testimonial-section-{{ section.id }}::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    opacity: 0.4;
-    z-index: 0;
+    bottom: -2px; /* Overlap slightly to hide pixel gaps */
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFFFFF' fill-opacity='1' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
     pointer-events: none;
   }
 
@@ -92,19 +91,19 @@
   
   .testimonial-section-{{ section.id }} .section-header h2 {
     color: #fff;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.1); /* Hard shadow */
   }
 
   /* Scroll Container */
   .testimonial-section-{{ section.id }} .scroller-wrapper {
     position: relative;
-    z-index: 1;
+    z-index: 2; /* Above clouds */
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     display: flex;
     gap: 32px;
-    padding: 20px 5% 60px 5%; /* Bottom padding for shadows */
+    padding: 20px 5% 40px 5%;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -118,22 +117,19 @@
     display: none;
   }
 
-  /* --- CARD DESIGN ("Warm Paper") --- */
+  /* --- CARD DESIGN ("Cut-Out Paper") --- */
   .testimonial-section-{{ section.id }} .t-card {
     flex: 0 0 380px;
     scroll-snap-align: center;
     
-    /* Warm Paper Look */
-    background-color: #FFFBF0; /* Floral White / Cream */
-    background-image: linear-gradient(to bottom right, #FFFBF0, #FFF5E0);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    /* Solid Paper Look */
+    background-color: #FFFBF0; /* Cream */
+    border: none;
     
-    /* Soft, Organic Shadow */
-    box-shadow: 
-      0 10px 30px -5px rgba(166, 124, 0, 0.15),
-      0 20px 50px -10px rgba(50, 50, 93, 0.1);
+    /* Hard, Solid Shadow (Collage Style) */
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
     
-    border-radius: 20px; /* Soft organic corners */
+    border-radius: 16px; /* Slightly tighter corners */
     padding: 40px;
     position: relative;
     font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
@@ -142,28 +138,26 @@
     flex-direction: column;
     height: auto; 
     min-height: 320px;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+    transition: transform 0.2s ease;
   }
 
-  /* Hover Effect - Lift */
+  /* Hover Effect - Pop */
   .testimonial-section-{{ section.id }} .t-card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 
-      0 20px 40px -5px rgba(166, 124, 0, 0.2),
-      0 30px 60px -10px rgba(50, 50, 93, 0.15);
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
   }
 
-  /* Quote Icon - Artistic */
+  /* Quote Icon - Solid */
   .testimonial-section-{{ section.id }} .t-card::before {
     content: '“';
     position: absolute;
     top: 10px;
     right: 20px;
-    font-size: 120px;
+    font-size: 100px;
     line-height: 1;
-    font-family: serif; /* Serif for art vibe */
-    color: #FAD961; /* Sun color */
-    opacity: 0.3;
+    font-family: serif;
+    color: #FDB813; /* Match Sun */
+    opacity: 0.5;
     pointer-events: none;
   }
   
@@ -194,11 +188,11 @@
     /* Serif font for "Storybook" feel */
     font-family: 'Times New Roman', Times, serif; 
     font-style: italic;
-    font-size: {{ section.settings.body_font_size | plus: 2 }}px; /* Slightly larger for serif */
+    font-size: {{ section.settings.body_font_size | plus: 2 }}px;
     line-height: 1.6;
     flex-grow: 1;
     margin-bottom: 32px;
-    opacity: 0.9;
+    opacity: 1;
   }
 
   /* CUSTOMER FOOTER */
@@ -208,22 +202,22 @@
     gap: 16px;
     margin-top: auto;
     padding-top: 24px;
-    border-top: 1px solid rgba(0,0,0,0.06);
+    border-top: 2px solid rgba(0,0,0,0.05); /* Thicker solid line */
   }
 
   .testimonial-section-{{ section.id }} .t-avatar {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #FAD961, #F76B1C); /* Sun Gradient */
-    color: #fff;
+    background-color: #FDB813; /* Solid Yellow */
+    color: #2C3E50;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 20px;
     flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(247, 107, 28, 0.3);
+    /* No shadow on avatar for flat look */
   }
 
   .testimonial-section-{{ section.id }} .t-meta {
@@ -238,7 +232,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-family: {{ body_font.family }}, {{ body_font.fallback_families }}; /* Back to sans for name */
+    font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
   }
 
   /* Verified Badge */
@@ -256,11 +250,11 @@
   }
 
   .testimonial-section-{{ section.id }} .t-product {
-    color: #F76B1C; /* Warm Orange */
-    opacity: 0.8;
+    color: #E67E22; /* Darker Orange */
+    opacity: 1;
     text-decoration: none;
     margin-top: 4px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -283,19 +277,19 @@
     border-radius: 50%;
     border: none;
     background: #FFFBF0;
-    color: #F76B1C;
+    color: #2C3E50;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
   }
   
   .testimonial-section-{{ section.id }} .nav-btn:hover {
-    background: white;
-    transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(247, 107, 28, 0.2);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
+    background-color: #fff;
   }
   
   /* RESPONSIVE */
