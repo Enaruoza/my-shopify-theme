@@ -437,7 +437,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 100%;
     min-height: 220px;
   }
   .t-manual-gallery .t-filler-wrapper {
@@ -648,7 +648,7 @@
 
     // --- SMART GALLERY MIX LOGIC (Desktop) ---
     const stackCards = () => {
-      const SHORT_THRESHOLD = 180; 
+      const SHORT_THRESHOLD = 280; 
       const config = window['galleryConfig_{{ section.id }}'];
       const products = window['sectionProducts_{{ section.id }}'] || [];
       
