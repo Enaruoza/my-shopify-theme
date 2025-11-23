@@ -431,7 +431,59 @@
         will-change: height;
     }
   }
+  /* Manual Gallery Block Styles */
+  .t-manual-gallery {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 450px;
+  }
+  .t-manual-gallery .t-filler-wrapper {
+    height: 100%;
+  }
 </style>
+
+<script>
+    // Global Quick Add Function for Manual Blocks
+    window.quickAdd = function(e, variantId) {
+        e.preventDefault();
+        e.stopPropagation();
+        const btn = e.target;
+        const originalText = btn.innerText;
+        
+        btn.innerText = 'Adding...';
+        
+        const formData = {
+            'items': [{
+                'id': variantId,
+                'quantity': 1
+            }]
+        };
+        
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.dispatchEvent(new CustomEvent('cart:update', {
+                bubbles: true,
+                detail: { resource: data, sourceId: 'manual-gallery' }
+            }));
+            const cartDrawer = document.querySelector('cart-drawer-component');
+            if (cartDrawer && cartDrawer.open) cartDrawer.open();
+            
+            btn.innerText = 'Added!';
+            setTimeout(() => btn.innerText = originalText, 2000);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            btn.innerText = 'Error';
+        });
+    };
+</script>
 
 <div class="testimonial-section-{{ section.id }}">
   
@@ -474,65 +526,97 @@
 
   <div class="scroller-wrapper" id="Track-{{ section.id }}">
     {% for block in section.blocks %}
-      {%- assign product_image = "" -%}
-      {%- assign product_url = "" -%}
-      {%- assign variant_id = "" -%}
-      
-      {%- if block.settings.product != blank -%}
-        {%- if block.settings.product.featured_image != blank -%}
-            {%- assign product_image = block.settings.product.featured_image | image_url: width: 600 -%}
+      {%- if block.type == 'testimonial' -%}
+        {%- assign product_image = "" -%}
+        {%- assign product_url = "" -%}
+        {%- assign variant_id = "" -%}
+        
+        {%- if block.settings.product != blank -%}
+          {%- if block.settings.product.featured_image != blank -%}
+              {%- assign product_image = block.settings.product.featured_image | image_url: width: 600 -%}
+          {%- endif -%}
+          {%- assign product_url = block.settings.product.url -%}
+          {%- assign variant_id = block.settings.product.selected_or_first_available_variant.id -%}
         {%- endif -%}
-        {%- assign product_url = block.settings.product.url -%}
-        {%- assign variant_id = block.settings.product.selected_or_first_available_variant.id -%}
-      {%- endif -%}
 
-      <div class="t-card" {{ block.shopify_attributes }} 
-           data-length="{{ block.settings.review_text | strip_html | size }}" 
-           data-product-image="{{ product_image }}"
-           data-product-url="{{ product_url }}"
-           data-variant-id="{{ variant_id }}">
-        
-        {% if block.settings.rating > 0 %}
-          <div class="t-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
-            {% for i in (1..block.settings.rating) %}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        {% if block.settings.review_title != blank and block.settings.review_title != 'AUTO' %}
-          <h3 class="t-title">{{ block.settings.review_title | escape }}</h3>
-        {% endif %}
-        
-        {% if block.settings.review_text != blank %}
-          <div class="t-text">{{ block.settings.review_text }}</div>
-        {% endif %}
-
-        <div class="t-footer">
-          {%- assign name = block.settings.customer_name | default: 'Customer' -%}
-          {%- assign first_letter = name | slice: 0 | upcase -%}
+        <div class="t-card" {{ block.shopify_attributes }} 
+             data-type="review"
+             data-length="{{ block.settings.review_text | strip_html | size }}" 
+             data-product-image="{{ product_image }}"
+             data-product-url="{{ product_url }}"
+             data-variant-id="{{ variant_id }}">
           
-          <div class="t-avatar">{{ first_letter }}</div>
+          {% if block.settings.rating > 0 %}
+            <div class="t-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+              {% for i in (1..block.settings.rating) %}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              {% endfor %}
+            </div>
+          {% endif %}
 
-          <div class="t-meta">
-            <span class="t-name">
-              {{ name }}
-              <span class="verified-badge" title="Verified Customer">
-                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+          {% if block.settings.review_title != blank and block.settings.review_title != 'AUTO' %}
+            <h3 class="t-title">{{ block.settings.review_title | escape }}</h3>
+          {% endif %}
+          
+          {% if block.settings.review_text != blank %}
+            <div class="t-text">{{ block.settings.review_text }}</div>
+          {% endif %}
+
+          <div class="t-footer">
+            {%- assign name = block.settings.customer_name | default: 'Customer' -%}
+            {%- assign first_letter = name | slice: 0 | upcase -%}
+            
+            <div class="t-avatar">{{ first_letter }}</div>
+
+            <div class="t-meta">
+              <span class="t-name">
+                {{ name }}
+                <span class="verified-badge" title="Verified Customer">
+                  <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                </span>
               </span>
-            </span>
 
-            {%- if block.settings.product -%}
-              <a href="{{ block.settings.product.url }}" class="t-product">Verified buyer of {{ block.settings.product.title }}</a>
-            {%- elsif block.settings.product_reference != blank and block.settings.product_reference != 'AUTO' -%}
-               <span class="t-product">Verified buyer of {{ block.settings.product_reference }}</span>
-            {%- else -%}
-               <span class="t-product" style="opacity: 0.5; font-size: 12px;">Verified Review</span>
-            {%- endif -%}
+              {%- if block.settings.product -%}
+                <a href="{{ block.settings.product.url }}" class="t-product">Verified buyer of {{ block.settings.product.title }}</a>
+              {%- elsif block.settings.product_reference != blank and block.settings.product_reference != 'AUTO' -%}
+                 <span class="t-product">Verified buyer of {{ block.settings.product_reference }}</span>
+              {%- else -%}
+                 <span class="t-product" style="opacity: 0.5; font-size: 12px;">Verified Review</span>
+              {%- endif -%}
+            </div>
           </div>
-        </div>
 
-      </div>
+        </div>
+      
+      {%- elsif block.type == 'gallery_card' -%}
+        {%- assign g_image = block.settings.image -%}
+        {%- if g_image == blank and block.settings.product != blank -%}
+            {%- assign g_image = block.settings.product.featured_image -%}
+        {%- endif -%}
+        
+        {%- assign g_link = block.settings.link -%}
+        {%- if g_link == blank and block.settings.product != blank -%}
+            {%- assign g_link = block.settings.product.url -%}
+        {%- endif -%}
+
+        <div class="t-manual-gallery" {{ block.shopify_attributes }} data-type="manual_gallery">
+            <div class="t-filler-wrapper">
+                {%- if g_link != blank -%}
+                    <a href="{{ g_link }}" class="t-filler-item" style="background-image: url('{{ g_image | image_url: width: 600 }}');">
+                {%- else -%}
+                    <div class="t-filler-item" style="background-image: url('{{ g_image | image_url: width: 600 }}');">
+                {%- endif -%}
+                
+                {%- if block.settings.product != blank -%}
+                    <button class="t-filler-atc" onclick="quickAdd(event, {{ block.settings.product.selected_or_first_available_variant.id }})">
+                        Quick Add +
+                    </button>
+                {%- endif -%}
+
+                {%- if g_link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+            </div>
+        </div>
+      {%- endif -%}
     {% endfor %}
   </div>
 
@@ -566,7 +650,8 @@
       const products = window['sectionProducts_{{ section.id }}'] || [];
       
       // Get current cards (fresh from DOM)
-      const cards = Array.from(track.querySelectorAll('.t-card'));
+      // Get current cards (fresh from DOM) - Select both Reviews and Manual Gallery Blocks
+      const cards = Array.from(track.querySelectorAll('.t-card, .t-manual-gallery'));
       if (cards.length === 0) return;
 
       const newContent = document.createDocumentFragment();
@@ -586,29 +671,48 @@
           nextInjection = Math.max(2, nextInjection + Math.floor(Math.random() * 3) - 1);
 
           for (let i = 0; i < cards.length; i++) {
-            // Check if this card is a MANUAL gallery block (if we had them in DOM)
-            // For now, we assume all .t-card are reviews. 
-            // Future: If we render manual blocks as .t-card.gallery-block, we'd handle them here.
+            const card = cards[i];
             
-            mixedStream.push({ type: 'review', node: cards[i] });
-            reviewCount++;
+            if (card.classList.contains('t-manual-gallery')) {
+                // MANUAL GALLERY BLOCK: Preserve as is
+                mixedStream.push({ type: 'manual_gallery', node: card });
+                // Do not increment reviewCount for gallery blocks
+            } else {
+                // REVIEW CARD
+                mixedStream.push({ type: 'review', node: card });
+                reviewCount++;
 
-            if (reviewCount >= nextInjection && productPool.length > 0) {
-                mixedStream.push({ type: 'gallery_col' }); 
-                reviewCount = 0;
-                nextInjection = Math.max(2, config.frequency + Math.floor(Math.random() * 3) - 1);
+                if (reviewCount >= nextInjection && productPool.length > 0) {
+                    mixedStream.push({ type: 'gallery_col' }); 
+                    reviewCount = 0;
+                    nextInjection = Math.max(2, config.frequency + Math.floor(Math.random() * 3) - 1);
+                }
             }
           }
       } else {
-          // Just reviews if disabled
-          cards.forEach(card => mixedStream.push({ type: 'review', node: card }));
+          // Just reviews + manual blocks if disabled
+          cards.forEach(card => {
+             if (card.classList.contains('t-manual-gallery')) {
+                 mixedStream.push({ type: 'manual_gallery', node: card });
+             } else {
+                 mixedStream.push({ type: 'review', node: card });
+             }
+          });
       }
 
       // 2. Render the Stream
       for (let i = 0; i < mixedStream.length; i++) {
         const item = mixedStream[i];
 
-        if (item.type === 'gallery_col') {
+        if (item.type === 'manual_gallery') {
+            // --- RENDER MANUAL GALLERY BLOCK ---
+            // Wrap in stack to match layout structure
+            const stack = document.createElement('div');
+            stack.className = 't-stack';
+            stack.appendChild(item.node.cloneNode(true));
+            newContent.appendChild(stack);
+
+        } else if (item.type === 'gallery_col') {
             // --- RENDER FULL GALLERY COLUMN (Mosaic/Hero) ---
             // Only if we have products in the pool
             if (productPool.length === 0) continue;
