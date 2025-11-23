@@ -427,17 +427,33 @@
 
   <script>
     window['sectionProducts_{{ section.id }}'] = [
-      {%- for block in section.blocks -%}
-        {%- if block.settings.product != blank -%}
+      {%- if section.settings.gallery_products != blank -%}
+        {%- for product in section.settings.gallery_products -%}
           {
-            id: {{ block.settings.product.id }},
-            variantId: {{ block.settings.product.selected_or_first_available_variant.id }},
-            url: "{{ block.settings.product.url }}",
-            image: "{% if block.settings.product.featured_image %}{{ block.settings.product.featured_image | image_url: width: 600 }}{% endif %}"
+            id: {{ product.id }},
+            variantId: {{ product.selected_or_first_available_variant.id }},
+            url: "{{ product.url }}",
+            image: "{{ product.featured_image | image_url: width: 600 }}"
           }{% unless forloop.last %},{% endunless %}
-        {%- endif -%}
-      {%- endfor -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.product != blank -%}
+            {
+              id: {{ block.settings.product.id }},
+              variantId: {{ block.settings.product.selected_or_first_available_variant.id }},
+              url: "{{ block.settings.product.url }}",
+              image: "{% if block.settings.product.featured_image %}{{ block.settings.product.featured_image | image_url: width: 600 }}{% endif %}"
+            }{% unless forloop.last %},{% endunless %}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
     ];
+    
+    window['galleryConfig_{{ section.id }}'] = {
+        enabled: {{ section.settings.enable_gallery_mix | default: false }},
+        frequency: {{ section.settings.mix_frequency | default: 4 }}
+    };
   </script>
 
   <div class="scroller-wrapper" id="Track-{{ section.id }}">
@@ -530,53 +546,64 @@
     // --- SMART GALLERY MIX LOGIC (Desktop) ---
     const stackCards = () => {
       const SHORT_THRESHOLD = 180; 
+      const config = window['galleryConfig_{{ section.id }}'];
+      const products = window['sectionProducts_{{ section.id }}'] || [];
       
       // Get current cards (fresh from DOM)
       const cards = Array.from(track.querySelectorAll('.t-card'));
       if (cards.length === 0) return;
 
       const newContent = document.createDocumentFragment();
-      const products = window['sectionProducts_{{ section.id }}'] || [];
       
       // 1. Create a "Mixed Stream" of items
-      // We want to inject a product column roughly every 2-4 reviews
       let mixedStream = [];
-      let reviewCount = 0;
-      let nextInjection = Math.floor(Math.random() * 3) + 2; // Random 2, 3, or 4
+      
+      if (config.enabled && products.length > 0) {
+          let reviewCount = 0;
+          let nextInjection = config.frequency; 
+          
+          // Add some randomness to the first injection so it doesn't always look the same
+          nextInjection = Math.max(2, nextInjection + Math.floor(Math.random() * 3) - 1);
 
-      for (let i = 0; i < cards.length; i++) {
-        mixedStream.push({ type: 'review', node: cards[i] });
-        reviewCount++;
+          for (let i = 0; i < cards.length; i++) {
+            mixedStream.push({ type: 'review', node: cards[i] });
+            reviewCount++;
 
-        if (reviewCount >= nextInjection && products.length > 0) {
-            mixedStream.push({ type: 'product_col' });
-            reviewCount = 0;
-            nextInjection = Math.floor(Math.random() * 3) + 2; // Reset counter
-        }
-      }
-
-      // Ensure we have at least one product column if we have products
-      if (products.length > 0 && !mixedStream.some(x => x.type === 'product_col')) {
-         mixedStream.push({ type: 'product_col' });
+            if (reviewCount >= nextInjection) {
+                mixedStream.push({ type: 'gallery_col' }); // Distinct type for full column
+                reviewCount = 0;
+                // Reset injection counter with slight variance
+                nextInjection = Math.max(2, config.frequency + Math.floor(Math.random() * 3) - 1);
+            }
+          }
+          
+          // Ensure at least one gallery col if enabled and enough reviews
+          if (cards.length > 3 && !mixedStream.some(x => x.type === 'gallery_col')) {
+             mixedStream.push({ type: 'gallery_col' });
+          }
+      } else {
+          // Just reviews if disabled
+          cards.forEach(card => mixedStream.push({ type: 'review', node: card }));
       }
 
       // 2. Render the Stream
       for (let i = 0; i < mixedStream.length; i++) {
         const item = mixedStream[i];
 
-        if (item.type === 'product_col') {
-            // --- RENDER PRODUCT COLUMN ---
+        if (item.type === 'gallery_col') {
+            // --- RENDER FULL GALLERY COLUMN (Mosaic/Hero) ---
             const stack = document.createElement('div');
             stack.className = 't-stack';
             
             const fillerWrapper = document.createElement('div');
             fillerWrapper.className = 't-filler-wrapper';
 
-            // Randomly choose layout: 1 (Single), 2 (Split), 3 (Mosaic)
+            // Randomly choose layout: 1 (Hero), 2 (Split), 3 (Mosaic)
+            // Weighted towards Mosaics for "Gallery" feel
             const layoutRoll = Math.random();
             let count = 1;
-            if (layoutRoll > 0.6) count = 2; // 40% chance
-            if (layoutRoll > 0.9) count = 3; // 10% chance
+            if (layoutRoll > 0.3) count = 2; // 70% chance of >1
+            if (layoutRoll > 0.7) count = 3; // 30% chance of 3
 
             // Ensure we have enough products
             if (products.length < count) count = products.length;
@@ -627,7 +654,7 @@
                 }
 
                 if (!stacked) {
-                    // Orphan short review -> Stack with Single Product Filler
+                    // Orphan short review -> Stack with GAP FILLER (Simple)
                     const stack = document.createElement('div');
                     stack.className = 't-stack';
                     stack.appendChild(cardA.cloneNode(true));
@@ -635,7 +662,7 @@
                     const fillerWrapper = document.createElement('div');
                     fillerWrapper.className = 't-filler-wrapper';
                     
-                    // Single random product
+                    // Gap fillers are always single items
                     if (products.length > 0) {
                         const randomProd = products[Math.floor(Math.random() * products.length)];
                         fillerWrapper.appendChild(createFillerItem(randomProd));
@@ -841,6 +868,33 @@
 {
   "name": "Award-Winning Reviews",
   "settings": [
+    {
+      "type": "header",
+      "content": "Gallery Mix"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gallery_mix",
+      "label": "Enable Gallery Mix",
+      "default": true,
+      "info": "Injects product columns between reviews."
+    },
+    {
+      "type": "product_list",
+      "id": "gallery_products",
+      "label": "Gallery Products",
+      "info": "Select products to showcase. If empty, uses products linked to reviews."
+    },
+    {
+      "type": "range",
+      "id": "mix_frequency",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Mix Frequency",
+      "default": 4,
+      "info": "Show a gallery column after every X reviews."
+    },
     {
       "type": "header",
       "content": "Content"
