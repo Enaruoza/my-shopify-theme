@@ -208,6 +208,11 @@
     display: none;
   }
 
+  /* Hide Quick Add button if Buy Buttons block is present (prevent redundancy) */
+  :is(.product-card):has(.buy-buttons-block) .quick-add {
+    display: none !important;
+  }
+
   /* Hover effect for single variant product cards and product blocks */
 
   /* stylelint-disable selector-max-specificity */

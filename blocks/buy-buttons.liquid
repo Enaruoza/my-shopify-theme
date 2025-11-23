@@ -165,6 +165,47 @@
           (function() {
             const container = document.currentScript.previousElementSibling;
             if (!container) return;
+            
+            const quantityInput = container.querySelector('input[name="quantity"]');
+            const atcButton = container.querySelector('.add-to-cart-button');
+            const formButtons = container;
+
+            // Heat Map Logic
+            function updateHeatMap() {
+                if (!quantityInput || !atcButton) return;
+                const qty = parseInt(quantityInput.value) || 1;
+                
+                // Reset classes
+                atcButton.classList.remove('atc-intensity-1', 'atc-intensity-2', 'atc-intensity-3');
+                
+                if (qty >= 5) {
+                    atcButton.classList.add('atc-intensity-3');
+                } else if (qty >= 3) {
+                    atcButton.classList.add('atc-intensity-2');
+                } else if (qty >= 2) {
+                    atcButton.classList.add('atc-intensity-1');
+                }
+            }
+
+            // Listen for quantity changes
+            if (quantityInput) {
+                // Standard change event
+                quantityInput.addEventListener('change', updateHeatMap);
+                
+                // Listen for clicks on plus/minus buttons (delegation or direct if possible)
+                // Since quantity selector implementation varies, we'll observe the input value
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+                            updateHeatMap();
+                        }
+                    });
+                });
+                observer.observe(quantityInput, { attributes: true });
+                
+                // Also poll for value changes on click of container (catch-all for plus/minus)
+                container.addEventListener('click', () => setTimeout(updateHeatMap, 50));
+            }
 
             // Listen for successful cart add events
             document.addEventListener('cart-add', function(event) {
@@ -172,18 +213,18 @@
                 const form = container.closest('form');
                 if (!form) return;
                 
-                // Check if the added item matches the current variant (optional, but good for safety)
+                // Check if the added item matches the current variant
                 const variantIdInput = form.querySelector('input[name="id"]');
-                if (variantIdInput && event.detail.productId && 
-                    // Simple check: if event has productId, we assume it's this product context
-                    // A stricter check would match variant IDs if available in event detail
-                    true) {
+                // Simple check: if event has productId, we assume it's this product context
+                if (event.detail.productId) {
                     
                     // Trigger Fusion
-                    container.classList.add('fused');
+                    formButtons.classList.add('fused');
+                    atcButton.classList.add('atc-success-pulse');
+                    setTimeout(() => atcButton.classList.remove('atc-success-pulse'), 400);
                     
                     // Add pulse effect to quantity selector
-                    const quantity = container.querySelector('.quantity');
+                    const quantity = container.querySelector('.quantity-selector');
                     if(quantity) {
                         quantity.classList.add('pulsing');
                         setTimeout(() => quantity.classList.remove('pulsing'), 300);
@@ -194,25 +235,24 @@
                     if (cartDrawer) {
                         cartDrawer.open();
                     } else {
-                        // Fallback for standard themes or if component name differs
                         document.documentElement.classList.add('cart-open');
                     }
                 }
             });
 
-            // Optional: Reset on variant change if desired, or keep fused?
-            // User said "now they've added to cart... if they want more, they can just change the number"
-            // So keeping it fused is the desired behavior for that session/variant.
-            
+            // Initial check
+            updateHeatMap();
+
             // Add pulse on quantity change for dopamine hit
             container.addEventListener('change', function(e) {
                 if (e.target.matches('[name="quantity"]')) {
-                     const quantity = container.querySelector('.quantity');
+                     const quantity = container.querySelector('.quantity-selector');
                      if(quantity) {
                         quantity.classList.remove('pulsing');
                         void quantity.offsetWidth; // trigger reflow
                         quantity.classList.add('pulsing');
                      }
+                     updateHeatMap();
                 }
             });
           })();

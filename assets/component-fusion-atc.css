@@ -1,80 +1,103 @@
-/* Fusion ATC Animation Styles */
+/* Mobile Layout Fixes */
+@media screen and (max-width: 749px) {
+    .product-form-buttons {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+        align-items: stretch;
+    }
 
-/* Initial State: Standard Layout */
-.product-form-buttons {
-    transition: gap 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    .product-form-buttons .quantity-selector {
+        width: 80px !important;
+        /* Fixed width for quantity */
+        flex: 0 0 80px !important;
+        margin: 0 !important;
+    }
+
+    .product-form-buttons .product-form-buttons__atc-container {
+        flex: 1 !important;
+        width: auto !important;
+    }
+
+    .product-form-buttons button {
+        width: 100% !important;
+        padding-inline: 10px !important;
+        /* Prevent text overflow */
+    }
 }
 
-/* Fused State: The Container */
-.product-form-buttons.fused {
-    gap: 0 !important;
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--button-radius, 4px);
-    /* Match button radius */
-    background: var(--color-background);
-    /* Or a specific background */
-    box-shadow: 0 0 0 1px var(--color-border);
-    /* Optional border */
+/* Gamification: Heat Map Colors */
+/* Base transition */
+.add-to-cart-button {
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Hide the Add to Cart button when fused */
-.product-form-buttons.fused .product-form-buttons__atc-container {
-    width: 0;
-    opacity: 0;
-    padding: 0;
-    margin: 0;
-    pointer-events: none;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* Intensity Levels */
+.atc-intensity-1 {
+    background-color: #FF7F50 !important;
+    /* Coral */
+    border-color: #FF7F50 !important;
+    color: white !important;
 }
 
-/* Expand the Quantity Selector when fused */
+.atc-intensity-2 {
+    background-color: #FF4500 !important;
+    /* Orange Red */
+    border-color: #FF4500 !important;
+    color: white !important;
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.4);
+}
+
+.atc-intensity-3 {
+    background-color: #DC143C !important;
+    /* Crimson */
+    border-color: #DC143C !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+    animation: pulse-hot 1.5s infinite;
+}
+
+@keyframes pulse-hot {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 20, 60, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 20, 60, 0);
+    }
+}
+
+/* Fusion Animation */
 .product-form-buttons.fused .quantity-selector {
-    width: 100%;
-    max-width: 100%;
-    flex: 1 0 100%;
-    margin: 0 !important;
-    border: none;
-    background: transparent;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    background: #f0f0f0;
 }
 
-/* Style the inner quantity selector for the fused state */
-.product-form-buttons.fused .quantity {
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 var(--padding-md);
-    /* Add some internal padding */
-    background: var(--color-secondary-background, #f4f4f4);
-    /* Highlight background */
-    border-radius: var(--button-radius, 4px);
+.product-form-buttons.fused .add-to-cart-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    /* Visual connection */
+    position: relative;
 }
 
-.product-form-buttons.fused .quantity__input {
-    font-weight: bold;
-    color: var(--color-foreground);
-    font-size: 1.1em;
+/* Success Particle Effect (Simple CSS implementation) */
+.atc-success-pulse {
+    animation: success-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.product-form-buttons.fused .quantity__button {
-    width: 44px;
-    /* Larger touch targets */
-    color: var(--color-foreground);
-}
-
-.product-form-buttons.fused .quantity__button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Animation: Pulse on Quantity Change */
-@keyframes fusion-pulse {
+@keyframes success-pop {
     0% {
         transform: scale(1);
     }
 
     50% {
-        transform: scale(1.05);
+        transform: scale(1.1);
     }
 
     100% {
@@ -82,25 +105,21 @@
     }
 }
 
-.product-form-buttons.fused .quantity.pulsing {
-    animation: fusion-pulse 0.3s ease-in-out;
-    color: var(--color-primary);
-    /* Flash primary color */
+/* Quantity Pulse */
+.quantity-selector.pulsing {
+    animation: qty-bump 0.2s ease;
 }
 
-/* Animation: Fusion Entry */
-@keyframes fusion-enter {
+@keyframes qty-bump {
     0% {
-        opacity: 0;
-        transform: translateY(10px);
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
     }
 
     100% {
-        opacity: 1;
-        transform: translateY(0);
+        transform: scale(1);
     }
-}
-
-.product-form-buttons.fused .quantity-selector {
-    animation: fusion-enter 0.5s forwards;
 }
