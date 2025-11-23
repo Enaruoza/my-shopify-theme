@@ -448,6 +448,11 @@
     height: 100%;
     min-height: 0; /* Fix: Allow it to shrink when stacked */
   }
+  
+  /* Allow filler item to shrink in a stack */
+  .t-stack .t-filler-item {
+    min-height: 0;
+  }
 </style>
 
 <script>
@@ -783,9 +788,9 @@
                         // Two reviews: Both must be short
                         if (lenA < THRESHOLD_PAIR_REVIEW && lenB < THRESHOLD_PAIR_REVIEW) canStack = true;
                     } else if ((isReviewA && isGalleryB) || (isGalleryA && isReviewB)) {
-                        // Mixed: The review can be longer
-                        const reviewLen = isReviewA ? lenA : lenB;
-                        if (reviewLen < THRESHOLD_MIXED) canStack = true;
+                        // Mixed: ALWAYS STACK Gallery with Review
+                        // This prevents "awkward columns" by ensuring images always pair up
+                        canStack = true;
                     } else if (isGalleryA && isGalleryB) {
                         // Two gallery cards: Always stack
                         canStack = true; 
