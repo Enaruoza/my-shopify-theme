@@ -1435,6 +1435,7 @@
         },
         "gallery_card_37hVej": {
           "type": "gallery_card",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/qweqweqwe.png",
             "product": "",
@@ -1443,6 +1444,7 @@
         },
         "gallery_card_Gp9b9y": {
           "type": "gallery_card",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Gemini_Generated_Image_eyp0kdeyp0kdeyp0_0fe7410d-a4c0-4bb8-8aa0-ce68ec004410.png",
             "product": "100-arganovo-ulje",
