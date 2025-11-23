@@ -132,8 +132,9 @@
     margin: 0; /* Reset margins */
   }
   
-  /* Override min-height and flex for stacked cards */
-  .testimonial-section-{{ section.id }} .t-stack .t-card {
+  /* Override min-height and flex for stacked cards AND manual gallery */
+  .testimonial-section-{{ section.id }} .t-stack .t-card,
+  .testimonial-section-{{ section.id }} .t-stack .t-manual-gallery {
     min-height: 0;
     flex: 1; /* Share space equally */
   }
