@@ -167,13 +167,17 @@
   {% if section.settings.enable_popup %}
     .countdown-timer-section {
       position: fixed;
-      z-index: 50;
+      z-index: 9999; /* Fix: Ensure it's on top of everything */
       width: 90%;
       max-width: 500px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-      border-radius: 16px;
+      /* Glassmorphism & Apple-like Aesthetic */
+      background: rgba(255, 255, 255, 0.95); /* Fallback / High opacity base */
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.1);
+      border-radius: 24px;
       padding: 30px !important;
-      border: 1px solid rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.5);
     }
 
     /* Positioning */
@@ -190,10 +194,13 @@
     .countdown-timer-section.is-minimized {
       width: auto;
       max-width: none;
-      padding: 15px 25px !important;
-      border-radius: 50px;
+      padding: 12px 20px !important;
+      border-radius: 16px;
       cursor: pointer;
-      transform: none; /* Reset center transform if needed, handled by JS/CSS specific */
+      transform: none;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      border: 1px solid rgba(255,255,255,0.6);
     }
     
     {% if section.settings.popup_position == 'center' %}
@@ -218,22 +225,54 @@
     .countdown-minimized-trigger {
       display: none;
       align-items: center;
-      gap: 10px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: {{ section.settings.color_number }};
+      gap: 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: {{ section.settings.color_text }};
     }
 
     .countdown-timer-section.is-minimized .countdown-minimized-trigger {
       display: flex;
     }
 
+    /* Minimized Timer Grid */
+    .min-timer-grid {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .min-timer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+    }
+    .min-timer-val {
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: {{ section.settings.color_number }};
+    }
+    .min-timer-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+    .min-timer-sep {
+      color: {{ section.settings.color_number }};
+      opacity: 0.5;
+      font-weight: 700;
+      margin-top: -8px; 
+    }
+
     .countdown-controls {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 12px;
+      right: 12px;
       display: flex;
-      gap: 5px;
+      gap: 6px;
       z-index: 10;
     }
 
@@ -241,18 +280,18 @@
       background: none;
       border: none;
       cursor: pointer;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      background: rgba(0,0,0,0.05);
-      transition: background 0.2s;
+      background: rgba(0,0,0,0.04);
+      transition: all 0.2s;
       color: {{ section.settings.color_text }};
     }
-    .countdown-control-btn:hover { background: rgba(0,0,0,0.1); }
-    .countdown-control-btn svg { width: 12px; height: 12px; }
+    .countdown-control-btn:hover { background: rgba(0,0,0,0.08); transform: scale(1.05); }
+    .countdown-control-btn svg { width: 10px; height: 10px; }
   {% else %}
     .countdown-controls, .countdown-minimized-trigger { display: none; }
   {% endif %}
@@ -262,56 +301,49 @@
   }
 
   .countdown-heading {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 0 0 1rem;
-    letter-spacing: 0.05em;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: #1a3b3b;
+    color: {{ section.settings.color_text }};
     position: relative;
     display: inline-block;
   }
   
-  .countdown-heading::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background-color: {{ section.settings.color_label_bg }};
-    position: absolute;
-    bottom: 5px;
-    right: 0;
-    border-radius: 2px;
-    transform: rotate(-2deg);
-    opacity: 0.6;
-  }
+  /* Removed the underline for cleaner look */
+  .countdown-heading::after { display: none; }
 
   .countdown-subheading {
-    font-size: 1.1rem;
-    color: #666;
-    margin-bottom: 2rem;
+    font-size: 1rem;
+    color: {{ section.settings.color_text }};
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
   }
 
   .countdown-button {
     display: inline-block;
-    background-color: #1a3b3b;
-    color: #fff;
-    padding: 12px 30px;
+    background-color: {{ section.settings.color_text }};
+    color: {{ section.settings.color_bg }};
+    padding: 14px 32px;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 50px; /* Pill shape */
     font-weight: 600;
-    margin-bottom: 3rem;
-    transition: opacity 0.3s;
+    margin-bottom: 2.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   .countdown-button:hover {
-    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
   }
 
   .countdown-grid {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1rem;
     flex-wrap: wrap;
   }
 
@@ -319,16 +351,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 80px;
+    min-width: 70px;
   }
 
   .countdown-number {
-    font-size: 6rem;
+    font-size: 4.5rem;
     font-weight: 700;
     line-height: 1;
     color: {{ section.settings.color_number }};
-    font-family: 'Stencil', 'Impact', sans-serif;
-    margin-bottom: 0.5rem;
+    /* Switched to system font for cleaner Apple look */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin-bottom: 0.2rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
     
     {% if section.settings.number_texture != blank %}
       background-image: url('{{ section.settings.number_texture | image_url: width: 800 }}');
@@ -339,70 +374,62 @@
       -webkit-text-fill-color: transparent;
       color: transparent;
     {% else %}
-      background-image: linear-gradient(135deg, {{ section.settings.color_number }} 0%, {{ section.settings.color_number | color_darken: 20 }} 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
+      /* Solid color or subtle gradient */
+      background: none;
+      -webkit-text-fill-color: initial;
+      color: {{ section.settings.color_number }};
     {% endif %}
   }
 
   /* Popup Mode Adjustments */
   {% if section.settings.enable_popup %}
-    .countdown-number { font-size: 3.5rem; }
-    .countdown-colon { font-size: 2.5rem; }
-    .countdown-heading { font-size: 1.8rem; }
-    .countdown-grid { gap: 0.8rem; }
-    .countdown-item { min-width: 50px; }
+    .countdown-number { font-size: 3rem; }
+    .countdown-colon { font-size: 2rem; margin-top: 0.2rem; }
+    .countdown-heading { font-size: 1.6rem; }
+    .countdown-grid { gap: 0.5rem; }
+    .countdown-item { min-width: 45px; }
   {% endif %}
 
   .countdown-colon {
-    font-size: 4rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 300;
     color: {{ section.settings.color_number }};
     align-self: flex-start;
-    margin-top: 1rem;
-    opacity: 0.5;
+    margin-top: 0.5rem;
+    opacity: 0.4;
   }
 
   .countdown-label {
-    background-color: {{ section.settings.color_label_bg }};
-    color: {{ section.settings.color_label_text }};
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 700;
+    background-color: transparent; /* Removed block bg */
+    color: {{ section.settings.color_text }};
+    opacity: 0.6;
+    padding: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
   
   @media screen and (max-width: 749px) {
-    .countdown-number {
-      font-size: 3rem;
-    }
-    .countdown-grid {
-      gap: 0.5rem;
-    }
-    .countdown-item {
-      min-width: 50px;
-    }
-    .countdown-colon {
-        font-size: 2rem;
-        margin-top: 0.5rem;
-    }
+    .countdown-number { font-size: 2.5rem; }
+    .countdown-grid { gap: 0.3rem; }
+    .countdown-item { min-width: 40px; }
+    .countdown-colon { font-size: 1.5rem; margin-top: 0.2rem; }
     
     {% if section.settings.enable_popup %}
       .countdown-timer-section {
-        width: 95%;
-        left: 2.5%;
-        right: 2.5%;
+        width: 92%;
+        left: 4%;
+        right: 4%;
         bottom: 20px;
+        padding: 24px !important;
       }
       .countdown-timer-section.is-minimized {
         width: auto;
         left: auto;
         right: 20px;
         bottom: 20px;
+        padding: 10px 16px !important;
       }
     {% endif %}
   }
@@ -422,7 +449,27 @@
     
     <div class="countdown-minimized-trigger">
       <span>{{ section.settings.minimized_text }}</span>
-      <span class="countdown-label" data-minimized-timer>00:00:00</span>
+      <div class="min-timer-grid">
+        <div class="min-timer-item">
+          <span class="min-timer-val" data-min-days>00</span>
+          <span class="min-timer-label">DANA</span>
+        </div>
+        <div class="min-timer-sep">:</div>
+        <div class="min-timer-item">
+          <span class="min-timer-val" data-min-hours>00</span>
+          <span class="min-timer-label">SATI</span>
+        </div>
+        <div class="min-timer-sep">:</div>
+        <div class="min-timer-item">
+          <span class="min-timer-val" data-min-minutes>00</span>
+          <span class="min-timer-label">MIN</span>
+        </div>
+        <div class="min-timer-sep">:</div>
+        <div class="min-timer-item">
+          <span class="min-timer-val" data-min-seconds>00</span>
+          <span class="min-timer-label">SEK</span>
+        </div>
+      </div>
     </div>
   {% endif %}
 
@@ -445,22 +492,22 @@
       <div class="countdown-grid">
         <div class="countdown-item">
           <span class="countdown-number" data-days>00</span>
-          <span class="countdown-label">Days</span>
+          <span class="countdown-label">DANA</span>
         </div>
         <div class="countdown-colon">:</div>
         <div class="countdown-item">
           <span class="countdown-number" data-hours>00</span>
-          <span class="countdown-label">Hours</span>
+          <span class="countdown-label">SATI</span>
         </div>
         <div class="countdown-colon">:</div>
         <div class="countdown-item">
           <span class="countdown-number" data-minutes>00</span>
-          <span class="countdown-label">Minutes</span>
+          <span class="countdown-label">MIN</span>
         </div>
         <div class="countdown-colon">:</div>
         <div class="countdown-item">
           <span class="countdown-number" data-seconds>00</span>
-          <span class="countdown-label">Seconds</span>
+          <span class="countdown-label">SEK</span>
         </div>
       </div>
     </div>
@@ -480,7 +527,10 @@
       hours: container.querySelector('[data-hours]'),
       minutes: container.querySelector('[data-minutes]'),
       seconds: container.querySelector('[data-seconds]'),
-      minimizedTimer: container.querySelector('[data-minimized-timer]')
+      minDays: container.querySelector('[data-min-days]'),
+      minHours: container.querySelector('[data-min-hours]'),
+      minMinutes: container.querySelector('[data-min-minutes]'),
+      minSeconds: container.querySelector('[data-min-seconds]')
     };
 
     function updateTimer() {
@@ -488,10 +538,13 @@
       const distance = targetDate - now;
 
       if (distance < 0) {
-        if(els.days) els.days.textContent = "00";
-        if(els.hours) els.hours.textContent = "00";
-        if(els.minutes) els.minutes.textContent = "00";
-        if(els.seconds) els.seconds.textContent = "00";
+        // Zero out everything
+        ['days', 'hours', 'minutes', 'seconds'].forEach(unit => {
+          if(els[unit]) els[unit].textContent = "00";
+        });
+        ['minDays', 'minHours', 'minMinutes', 'minSeconds'].forEach(unit => {
+          if(els[unit]) els[unit].textContent = "00";
+        });
         return;
       }
 
@@ -510,9 +563,10 @@
       if(els.minutes) els.minutes.textContent = mStr;
       if(els.seconds) els.seconds.textContent = sStr;
       
-      if(els.minimizedTimer) {
-        els.minimizedTimer.textContent = `${dStr}:${hStr}:${mStr}:${sStr}`;
-      }
+      if(els.minDays) els.minDays.textContent = dStr;
+      if(els.minHours) els.minHours.textContent = hStr;
+      if(els.minMinutes) els.minMinutes.textContent = mStr;
+      if(els.minSeconds) els.minSeconds.textContent = sStr;
     }
 
     updateTimer();
