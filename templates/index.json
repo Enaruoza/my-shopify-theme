@@ -1433,6 +1433,14 @@
             "product_reference": ""
           }
         },
+        "gallery_card_37hVej": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/qweqweqwe.png",
+            "product": "",
+            "link": ""
+          }
+        },
         "gallery_card_Gp9b9y": {
           "type": "gallery_card",
           "settings": {
@@ -1510,6 +1518,7 @@
       },
       "block_order": [
         "testimonial_yTrpWm",
+        "gallery_card_37hVej",
         "gallery_card_Gp9b9y",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
