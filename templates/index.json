@@ -544,28 +544,6 @@
         "padding-block-end": 0
       }
     },
-    "countdown_timer_J3dprW": {
-      "type": "countdown-timer",
-      "name": "Countdown Timer",
-      "settings": {
-        "enable_popup": true,
-        "popup_position": "center",
-        "minimized_text": "30% OFF",
-        "heading": "DO 30% POPUSTA.",
-        "subheading": "<p>DO KRAJA NOVEMBRA.</p>",
-        "button_label": "NARUČI ODMAH",
-        "button_link": "shopify://collections/all",
-        "target_date": "2025-11-30T23:59:59",
-        "color_bg": "#ffffff",
-        "color_text": "#121212",
-        "color_number": "#eca72c",
-        "color_label_bg": "#f48f91",
-        "color_label_text": "#ffffff",
-        "number_texture": "shopify://shop_images/Gemini_Generated_Image_iqgf95iqgf95iqgf_Firefly_Upscaler_2x_scale_246c03cd-a702-4f6d-bd5f-f5e55f18fc58.png",
-        "padding_top": 16,
-        "padding_bottom": 28
-      }
-    },
     "product_list_dCcPd9": {
       "type": "product-list",
       "blocks": {
@@ -773,6 +751,28 @@
         "alignment_horizontal": "center",
         "padding-block-start": 4,
         "padding-block-end": 3
+      }
+    },
+    "countdown_timer_J3dprW": {
+      "type": "countdown-timer",
+      "name": "Countdown Timer",
+      "settings": {
+        "enable_popup": true,
+        "popup_position": "center",
+        "minimized_text": "30% OFF",
+        "heading": "DO 30% POPUSTA.",
+        "subheading": "<p>DO KRAJA NOVEMBRA.</p>",
+        "button_label": "NARUČI ODMAH",
+        "button_link": "shopify://collections/all",
+        "target_date": "2025-11-30T23:59:59",
+        "color_bg": "#ffffff",
+        "color_text": "#121212",
+        "color_number": "#eca72c",
+        "color_label_bg": "#f48f91",
+        "color_label_text": "#ffffff",
+        "number_texture": "shopify://shop_images/Gemini_Generated_Image_iqgf95iqgf95iqgf_Firefly_Upscaler_2x_scale_246c03cd-a702-4f6d-bd5f-f5e55f18fc58.png",
+        "padding_top": 16,
+        "padding_bottom": 28
       }
     },
     "featured_product_mXJfBV": {
@@ -1995,9 +1995,9 @@
   "order": [
     "hero_X6gzdQ",
     "product_list_KDDjy4",
-    "countdown_timer_J3dprW",
     "product_list_dCcPd9",
     "divider_eVPqxR",
+    "countdown_timer_J3dprW",
     "featured_product_mXJfBV",
     "collection_list_cYTHn4",
     "media_with_content_zrepDz",
