@@ -1422,6 +1422,14 @@
     "testimonials_CQzbrj": {
       "type": "testimonials",
       "blocks": {
+        "gallery_card_aDyzzg": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/trio.png",
+            "product": "",
+            "link": ""
+          }
+        },
         "testimonial_yTrpWm": {
           "type": "testimonial",
           "settings": {
@@ -1501,6 +1509,7 @@
         }
       },
       "block_order": [
+        "gallery_card_aDyzzg",
         "testimonial_yTrpWm",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
