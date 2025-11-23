@@ -133,23 +133,77 @@
     margin: 0; /* Reset margins */
   }
 
-  /* Filler Card */
+  /* --- FILLER CARD (Swinging Product) --- */
+  .t-filler-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* "Ceiling" for the thread */
+  }
+
+  .t-thread {
+    width: 2px;
+    height: 20px; /* Length of string */
+    background-color: #2C3E50;
+    margin-bottom: -2px; /* Connect to card */
+    transform-origin: top center;
+    animation: swing 3s ease-in-out infinite alternate;
+  }
+
   .t-filler {
+    width: 100%;
     flex: 1;
     border-radius: 16px;
-    background-color: #FDB813; /* Fallback Sun Color */
+    background-color: #FDB813;
     background-size: cover;
     background-position: center;
     position: relative;
     overflow: hidden;
     min-height: 150px;
     box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
-    transition: transform 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    text-decoration: none;
+    
+    /* Swing Animation */
+    transform-origin: top center;
+    animation: swing 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes swing {
+    0% { transform: rotate(1deg); }
+    100% { transform: rotate(-1deg); }
   }
   
   .t-filler:hover {
-    transform: translate(-2px, -2px);
+    animation-play-state: paused;
     box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
+  }
+
+  /* Quick Add Button on Filler */
+  .t-filler-atc {
+    background: #fff;
+    color: #2C3E50;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+  }
+  
+  .t-filler-atc:hover {
+    transform: scale(1.05);
+    background: #2C3E50;
+    color: #fff;
   }
 
   /* --- CARD DESIGN ("Cut-Out Paper") --- */
@@ -174,6 +228,7 @@
     height: auto; 
     min-height: 320px;
     transition: transform 0.2s ease;
+    overflow: hidden; /* Prevent overflow */
   }
 
   /* Hover Effect - Pop */
@@ -225,9 +280,21 @@
     font-style: italic;
     font-size: {{ section.settings.body_font_size | plus: 2 }}px;
     line-height: 1.6;
-    flex-grow: 1;
+    flex: 1 1 auto; /* Allow growing/shrinking */
     margin-bottom: 32px;
     opacity: 1;
+    overflow-y: auto; /* Scroll if too long */
+    min-height: 0; /* Flex fix */
+    scrollbar-width: thin;
+    scrollbar-color: #FDB813 transparent;
+  }
+  
+  .testimonial-section-{{ section.id }} .t-text::-webkit-scrollbar {
+    width: 4px;
+  }
+  .testimonial-section-{{ section.id }} .t-text::-webkit-scrollbar-thumb {
+    background-color: #FDB813;
+    border-radius: 4px;
   }
 
   /* CUSTOMER FOOTER */
@@ -238,6 +305,7 @@
     margin-top: auto;
     padding-top: 24px;
     border-top: 2px solid rgba(0,0,0,0.05); /* Thicker solid line */
+    flex: 0 0 auto; /* Prevent shrinking */
   }
 
   .testimonial-section-{{ section.id }} .t-avatar {
@@ -357,10 +425,22 @@
   <div class="scroller-wrapper" id="Track-{{ section.id }}">
     {% for block in section.blocks %}
       {%- assign product_image = "" -%}
-      {%- if block.settings.product != blank and block.settings.product.featured_image != blank -%}
-        {%- assign product_image = block.settings.product.featured_image | image_url: width: 600 -%}
+      {%- assign product_url = "" -%}
+      {%- assign variant_id = "" -%}
+      
+      {%- if block.settings.product != blank -%}
+        {%- if block.settings.product.featured_image != blank -%}
+            {%- assign product_image = block.settings.product.featured_image | image_url: width: 600 -%}
+        {%- endif -%}
+        {%- assign product_url = block.settings.product.url -%}
+        {%- assign variant_id = block.settings.product.selected_or_first_available_variant.id -%}
       {%- endif -%}
-      <div class="t-card" {{ block.shopify_attributes }} data-length="{{ block.settings.review_text | strip_html | size }}" data-product-image="{{ product_image }}">
+
+      <div class="t-card" {{ block.shopify_attributes }} 
+           data-length="{{ block.settings.review_text | strip_html | size }}" 
+           data-product-image="{{ product_image }}"
+           data-product-url="{{ product_url }}"
+           data-variant-id="{{ variant_id }}">
         
         {% if block.settings.rating > 0 %}
           <div class="t-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
@@ -470,16 +550,86 @@
             stack.className = 't-stack';
             stack.appendChild(cardA.cloneNode(true));
             
-            const filler = document.createElement('div');
-            filler.className = 't-filler';
+            // Wrapper for swing animation
+            const fillerWrapper = document.createElement('div');
+            fillerWrapper.className = 't-filler-wrapper';
+            
+            // Thread
+            const thread = document.createElement('div');
+            thread.className = 't-thread';
+            fillerWrapper.appendChild(thread);
+
+            // The Card itself
             const imgUrl = cardA.getAttribute('data-product-image');
+            const prodUrl = cardA.getAttribute('data-product-url');
+            const variantId = cardA.getAttribute('data-variant-id');
+            
+            let filler;
+            if (prodUrl) {
+                filler = document.createElement('a');
+                filler.href = prodUrl;
+            } else {
+                filler = document.createElement('div');
+            }
+            
+            filler.className = 't-filler';
+            
             if (imgUrl) {
                 filler.style.backgroundImage = `url('${imgUrl}')`;
             } else {
-                // Fallback pattern if no image
                 filler.style.backgroundImage = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`;
             }
-            stack.appendChild(filler);
+
+            // Add to Cart Button
+            if (variantId) {
+                const atcBtn = document.createElement('button');
+                atcBtn.className = 't-filler-atc';
+                atcBtn.innerText = 'Quick Add +';
+                atcBtn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Add to cart logic
+                    const formData = {
+                        'items': [{
+                            'id': variantId,
+                            'quantity': 1
+                        }]
+                    };
+                    
+                    fetch(window.Shopify.routes.root + 'cart/add.js', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Refresh cart or open drawer (assuming theme has an event for this)
+                        // Dispatch generic event that most themes listen to
+                        document.documentElement.dispatchEvent(new CustomEvent('cart:refresh', {
+                            bubbles: true
+                        }));
+                        // Also try to open drawer if theme uses it
+                        const cartDrawer = document.querySelector('cart-drawer');
+                        if (cartDrawer) cartDrawer.open();
+                        
+                        atcBtn.innerText = 'Added!';
+                        setTimeout(() => atcBtn.innerText = 'Quick Add +', 2000);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        atcBtn.innerText = 'Error';
+                    });
+                };
+                filler.appendChild(atcBtn);
+            }
+
+            fillerWrapper.appendChild(filler);
+            stack.appendChild(fillerWrapper);
             newContent.appendChild(stack);
             
         } else {
