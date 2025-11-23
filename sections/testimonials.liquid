@@ -143,11 +143,24 @@
     border-radius: 16px;
   }
 
-  /* Grid for split view */
+  /* Grid for split view (2 items) */
   .t-filler-wrapper.split {
     display: grid;
     grid-template-rows: 1fr 1fr;
     gap: 12px;
+  }
+
+  /* Mosaic view (3 items) */
+  .t-filler-wrapper.mosaic-3 {
+    display: grid;
+    grid-template-rows: 1.2fr 0.8fr; /* Top slightly larger */
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  /* First item spans full width */
+  .t-filler-wrapper.mosaic-3 .t-filler-item:nth-child(1) {
+    grid-column: 1 / -1;
   }
 
   .t-filler-item {
@@ -514,9 +527,8 @@
     const originalHTML = track.innerHTML;
     let isStacked = false;
 
-    // --- SMART STACKING LOGIC (Desktop) ---
+    // --- SMART GALLERY MIX LOGIC (Desktop) ---
     const stackCards = () => {
-      // Threshold for "Short" review (approx chars)
       const SHORT_THRESHOLD = 180; 
       
       // Get current cards (fresh from DOM)
@@ -524,76 +536,125 @@
       if (cards.length === 0) return;
 
       const newContent = document.createDocumentFragment();
+      const products = window['sectionProducts_{{ section.id }}'] || [];
       
+      // 1. Create a "Mixed Stream" of items
+      // We want to inject a product column roughly every 2-4 reviews
+      let mixedStream = [];
+      let reviewCount = 0;
+      let nextInjection = Math.floor(Math.random() * 3) + 2; // Random 2, 3, or 4
+
       for (let i = 0; i < cards.length; i++) {
-        const cardA = cards[i];
-        const lenA = parseInt(cardA.getAttribute('data-length') || '999');
-        
-        // Check if "Short"
-        if (lenA < SHORT_THRESHOLD) {
-            // Check if next card is also "Short"
-            if (i + 1 < cards.length) {
-                const cardB = cards[i+1];
-                const lenB = parseInt(cardB.getAttribute('data-length') || '999');
-                
-                if (lenB < SHORT_THRESHOLD) {
-                    // Stack A + B
-                    const stack = document.createElement('div');
-                    stack.className = 't-stack';
-                    stack.appendChild(cardA.cloneNode(true));
-                    stack.appendChild(cardB.cloneNode(true));
-                    newContent.appendChild(stack);
-                    
-                    i++; // Skip next card
-                    continue;
-                }
-            }
-            
-            // If we are here, either it's the last card OR next card is Long
-            // Stack A + Filler
+        mixedStream.push({ type: 'review', node: cards[i] });
+        reviewCount++;
+
+        if (reviewCount >= nextInjection && products.length > 0) {
+            mixedStream.push({ type: 'product_col' });
+            reviewCount = 0;
+            nextInjection = Math.floor(Math.random() * 3) + 2; // Reset counter
+        }
+      }
+
+      // Ensure we have at least one product column if we have products
+      if (products.length > 0 && !mixedStream.some(x => x.type === 'product_col')) {
+         mixedStream.push({ type: 'product_col' });
+      }
+
+      // 2. Render the Stream
+      for (let i = 0; i < mixedStream.length; i++) {
+        const item = mixedStream[i];
+
+        if (item.type === 'product_col') {
+            // --- RENDER PRODUCT COLUMN ---
             const stack = document.createElement('div');
             stack.className = 't-stack';
-            stack.appendChild(cardA.cloneNode(true));
             
-            // Create Filler Wrapper
             const fillerWrapper = document.createElement('div');
             fillerWrapper.className = 't-filler-wrapper';
-            
-            // --- RANDOM COLLAGE LOGIC ---
-            const products = window['sectionProducts_{{ section.id }}'] || [];
-            
-            if (products.length > 0) {
-                // Decide layout: Single (70%) or Split (30%)
-                const isSplit = Math.random() > 0.7;
-                
-                if (isSplit && products.length >= 2) {
-                    fillerWrapper.classList.add('split');
-                    // Pick 2 unique random products
-                    const shuffled = [...products].sort(() => 0.5 - Math.random());
-                    const selected = shuffled.slice(0, 2);
-                    
-                    selected.forEach(prod => {
-                        fillerWrapper.appendChild(createFillerItem(prod));
-                    });
-                } else {
-                    // Single large item
-                    const randomProd = products[Math.floor(Math.random() * products.length)];
-                    fillerWrapper.appendChild(createFillerItem(randomProd));
-                }
-            } else {
-                // Fallback if no products found
-                const fallback = document.createElement('div');
-                fallback.className = 't-filler-item';
-                fallback.style.backgroundImage = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`;
-                fillerWrapper.appendChild(fallback);
-            }
+
+            // Randomly choose layout: 1 (Single), 2 (Split), 3 (Mosaic)
+            const layoutRoll = Math.random();
+            let count = 1;
+            if (layoutRoll > 0.6) count = 2; // 40% chance
+            if (layoutRoll > 0.9) count = 3; // 10% chance
+
+            // Ensure we have enough products
+            if (products.length < count) count = products.length;
+
+            if (count === 2) fillerWrapper.classList.add('split');
+            if (count === 3) fillerWrapper.classList.add('mosaic-3');
+
+            // Pick unique random products
+            const shuffled = [...products].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, count);
+
+            selected.forEach(prod => {
+                fillerWrapper.appendChild(createFillerItem(prod));
+            });
 
             stack.appendChild(fillerWrapper);
             newContent.appendChild(stack);
-            
+
         } else {
-            // Long card, leave as is
-            newContent.appendChild(cardA.cloneNode(true));
+            // --- RENDER REVIEW ---
+            const cardA = item.node;
+            const lenA = parseInt(cardA.getAttribute('data-length') || '999');
+
+            // Check if "Short"
+            if (lenA < SHORT_THRESHOLD) {
+                // Look ahead for another short review to stack
+                let stacked = false;
+                
+                // Check next item in stream
+                if (i + 1 < mixedStream.length) {
+                    const nextItem = mixedStream[i+1];
+                    if (nextItem.type === 'review') {
+                        const cardB = nextItem.node;
+                        const lenB = parseInt(cardB.getAttribute('data-length') || '999');
+
+                        if (lenB < SHORT_THRESHOLD) {
+                            // Stack A + B
+                            const stack = document.createElement('div');
+                            stack.className = 't-stack';
+                            stack.appendChild(cardA.cloneNode(true));
+                            stack.appendChild(cardB.cloneNode(true));
+                            newContent.appendChild(stack);
+                            
+                            i++; // Skip next item
+                            stacked = true;
+                        }
+                    }
+                }
+
+                if (!stacked) {
+                    // Orphan short review -> Stack with Single Product Filler
+                    const stack = document.createElement('div');
+                    stack.className = 't-stack';
+                    stack.appendChild(cardA.cloneNode(true));
+                    
+                    const fillerWrapper = document.createElement('div');
+                    fillerWrapper.className = 't-filler-wrapper';
+                    
+                    // Single random product
+                    if (products.length > 0) {
+                        const randomProd = products[Math.floor(Math.random() * products.length)];
+                        fillerWrapper.appendChild(createFillerItem(randomProd));
+                    } else {
+                         // Fallback
+                        const fallback = document.createElement('div');
+                        fallback.className = 't-filler-item';
+                        fallback.style.backgroundColor = '#FDB813';
+                        fillerWrapper.appendChild(fallback);
+                    }
+
+                    stack.appendChild(fillerWrapper);
+                    newContent.appendChild(stack);
+                }
+
+            } else {
+                // Long card -> Render as is
+                newContent.appendChild(cardA.cloneNode(true));
+            }
         }
       }
       
