@@ -769,8 +769,8 @@
                     const lenB = isReviewB ? parseInt(nextItem.node.getAttribute('data-length') || '999') : 0;
 
                     // Thresholds
-                    const THRESHOLD_PAIR_REVIEW = 220; // Strict for text+text
-                    const THRESHOLD_MIXED = 450;       // Lenient for text+image
+                    const THRESHOLD_PAIR_REVIEW = 300; // Strict for text+text
+                    const THRESHOLD_MIXED = 600;       // Lenient for text+image
 
                     let canStack = false;
 
