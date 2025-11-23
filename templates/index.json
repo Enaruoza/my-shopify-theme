@@ -1422,14 +1422,6 @@
     "testimonials_CQzbrj": {
       "type": "testimonials",
       "blocks": {
-        "gallery_card_Gp9b9y": {
-          "type": "gallery_card",
-          "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_eyp0kdeyp0kdeyp0_0fe7410d-a4c0-4bb8-8aa0-ce68ec004410.png",
-            "product": "100-arganovo-ulje",
-            "link": "shopify://products/100-arganovo-ulje"
-          }
-        },
         "testimonial_yTrpWm": {
           "type": "testimonial",
           "settings": {
@@ -1439,6 +1431,14 @@
             "customer_name": "Donny",
             "product": "100-arganovo-ulje",
             "product_reference": ""
+          }
+        },
+        "gallery_card_Gp9b9y": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_eyp0kdeyp0kdeyp0_0fe7410d-a4c0-4bb8-8aa0-ce68ec004410.png",
+            "product": "100-arganovo-ulje",
+            "link": "shopify://products/100-arganovo-ulje"
           }
         },
         "testimonial_MQhaBU": {
@@ -1509,8 +1509,8 @@
         }
       },
       "block_order": [
-        "gallery_card_Gp9b9y",
         "testimonial_yTrpWm",
+        "gallery_card_Gp9b9y",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
         "testimonial_QXhTRh",
