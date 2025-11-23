@@ -297,13 +297,16 @@
     .testimonial-section-{{ section.id }} .t-card {
       flex: 0 0 85vw; /* Peek effect */
       padding: 24px;
-      min-height: 280px;
+      min-height: auto; /* Let content dictate height */
     }
     .testimonial-section-{{ section.id }} h2 {
       font-size: calc({{ section.settings.heading_font_size }}px * 0.9);
     }
     .testimonial-section-{{ section.id }} .scroller-wrapper {
         padding-left: 24px; /* Align with left edge */
+        align-items: flex-start; /* Allow cards to have natural height */
+        transition: height 0.3s ease-out; /* Smooth resize */
+        will-change: height;
     }
   }
 </style>
@@ -380,13 +383,56 @@
     const track = document.getElementById('Track-{{ section.id }}');
     const prev = document.getElementById('Prev-{{ section.id }}');
     const next = document.getElementById('Next-{{ section.id }}');
+    const cards = track ? track.querySelectorAll('.t-card') : [];
     
     if(!track || !prev || !next) return;
 
+    // --- ADAPTIVE HEIGHT LOGIC (Mobile) ---
+    const updateHeight = () => {
+      if (window.innerWidth > 767) {
+        track.style.height = ''; // Reset on desktop
+        return;
+      }
+
+      // Find the card closest to the center
+      const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
+      let closestCard = null;
+      let minDiff = Infinity;
+
+      cards.forEach(card => {
+        const cardCenter = card.getBoundingClientRect().left + card.offsetWidth / 2;
+        const diff = Math.abs(trackCenter - cardCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestCard = card;
+        }
+      });
+
+      if (closestCard) {
+        // Add padding bottom to account for shadow/padding in wrapper
+        const newHeight = closestCard.offsetHeight + 60; 
+        track.style.height = `${newHeight}px`;
+      }
+    };
+
+    // Initial check
+    updateHeight();
+
+    // Update on scroll (throttled for performance)
+    let isScrolling;
+    track.addEventListener('scroll', () => {
+      window.cancelAnimationFrame(isScrolling);
+      isScrolling = window.requestAnimationFrame(updateHeight);
+    });
+
+    // Update on resize
+    window.addEventListener('resize', updateHeight);
+
+    // --- NAVIGATION LOGIC ---
     // Scroll Distance = width of card + gap
     const getScrollAmount = () => {
       const card = track.querySelector('.t-card');
-      return card ? card.offsetWidth + 24 : 300; 
+      return card ? card.offsetWidth + 32 : 300; 
     }
 
     next.addEventListener('click', () => {
