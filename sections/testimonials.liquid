@@ -129,13 +129,13 @@
   }
   
   .t-stack .t-card {
-    flex: 0 0 auto; /* Let content dictate height */
     margin: 0; /* Reset margins */
   }
   
-  /* Override min-height for stacked cards */
+  /* Override min-height and flex for stacked cards */
   .testimonial-section-{{ section.id }} .t-stack .t-card {
     min-height: 0;
+    flex: 1; /* Share space equally */
   }
 
   /* --- FILLER CARD (Static Collage) --- */
