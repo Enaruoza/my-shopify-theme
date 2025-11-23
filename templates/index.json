@@ -1511,6 +1511,14 @@
       ],
       "name": "Award-Winning Reviews",
       "settings": {
+        "enable_gallery_mix": true,
+        "gallery_products": [
+          "100-arganovo-ulje",
+          "afoulki",
+          "amaan",
+          "tawenza"
+        ],
+        "mix_frequency": 4,
         "heading": "ŠTA NAŠI KUPCI KAŽU?",
         "max_width": 1400,
         "background_color": "#f4e8ba",
