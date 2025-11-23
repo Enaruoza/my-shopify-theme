@@ -707,15 +707,7 @@
       for (let i = 0; i < mixedStream.length; i++) {
         const item = mixedStream[i];
 
-        // Helper to check if item is stackable
-        const isStackable = (it) => {
-            if (it.type === 'manual_gallery') return true;
-            if (it.type === 'review') {
-                const len = parseInt(it.node.getAttribute('data-length') || '999');
-                return len < SHORT_THRESHOLD;
-            }
-            return false;
-        };
+        // Helper removed, logic moved inline for smarter pairing
 
         if (item.type === 'gallery_col') {
             // --- RENDER FULL GALLERY COLUMN (Mosaic/Hero) ---
@@ -757,13 +749,44 @@
 
         } else {
             // --- RENDER REVIEW OR MANUAL GALLERY ---
-            // Check if this item is stackable
-            if (isStackable(item)) {
-                // Look ahead
-                let stacked = false;
-                if (i + 1 < mixedStream.length) {
-                    const nextItem = mixedStream[i+1];
-                    if (isStackable(nextItem)) {
+            // Smart Pairing Logic
+            let stacked = false;
+            
+            if (i + 1 < mixedStream.length) {
+                const nextItem = mixedStream[i+1];
+                
+                // Determine types and lengths
+                const isReviewA = item.type === 'review';
+                const isReviewB = nextItem.type === 'review';
+                const isGalleryA = item.type === 'manual_gallery';
+                const isGalleryB = nextItem.type === 'manual_gallery';
+                
+                // Skip if either is a full gallery column (shouldn't happen here but safe to check)
+                if (item.type === 'gallery_col' || nextItem.type === 'gallery_col') {
+                    // Do nothing, let it fall through to orphan render
+                } else {
+                    const lenA = isReviewA ? parseInt(item.node.getAttribute('data-length') || '999') : 0;
+                    const lenB = isReviewB ? parseInt(nextItem.node.getAttribute('data-length') || '999') : 0;
+
+                    // Thresholds
+                    const THRESHOLD_PAIR_REVIEW = 220; // Strict for text+text
+                    const THRESHOLD_MIXED = 450;       // Lenient for text+image
+
+                    let canStack = false;
+
+                    if (isReviewA && isReviewB) {
+                        // Two reviews: Both must be short
+                        if (lenA < THRESHOLD_PAIR_REVIEW && lenB < THRESHOLD_PAIR_REVIEW) canStack = true;
+                    } else if ((isReviewA && isGalleryB) || (isGalleryA && isReviewB)) {
+                        // Mixed: The review can be longer
+                        const reviewLen = isReviewA ? lenA : lenB;
+                        if (reviewLen < THRESHOLD_MIXED) canStack = true;
+                    } else if (isGalleryA && isGalleryB) {
+                        // Two gallery cards: Always stack
+                        canStack = true; 
+                    }
+
+                    if (canStack) {
                         // STACK THEM!
                         const stack = document.createElement('div');
                         stack.className = 't-stack';
@@ -775,23 +798,20 @@
                         stacked = true;
                     }
                 }
+            }
 
-                if (!stacked) {
-                    // Orphan stackable item -> Render as full card
-                    // If it's a manual gallery, wrap in stack to ensure consistency
-                    if (item.type === 'manual_gallery') {
-                        const stack = document.createElement('div');
-                        stack.className = 't-stack';
-                        stack.appendChild(item.node.cloneNode(true));
-                        newContent.appendChild(stack);
-                    } else {
-                        // Review
-                        newContent.appendChild(item.node.cloneNode(true));
-                    }
+            if (!stacked) {
+                // Orphan item
+                // If it's a manual gallery, wrap in stack to ensure consistency
+                if (item.type === 'manual_gallery') {
+                    const stack = document.createElement('div');
+                    stack.className = 't-stack';
+                    stack.appendChild(item.node.cloneNode(true));
+                    newContent.appendChild(stack);
+                } else {
+                    // Review -> Render as is (full height card)
+                    newContent.appendChild(item.node.cloneNode(true));
                 }
-            } else {
-                // Long card -> Render as is
-                newContent.appendChild(item.node.cloneNode(true));
             }
         }
       }
