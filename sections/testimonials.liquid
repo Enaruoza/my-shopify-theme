@@ -43,74 +43,99 @@
     letter-spacing: -0.02em;
   }
 
-  /* --- SCROLL CONTAINER (No JS Library required) --- */
+  /* --- MASONRY LAYOUT (The Wall of Love) --- */
   .testimonial-section-{{ section.id }} .scroller-wrapper {
     width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    /* Hide scrollbar but allow scrolling */
-    -ms-overflow-style: none; 
-    scrollbar-width: none;
-    cursor: grab;
-    scroll-behavior: smooth;
-    padding: 20px 5%; /* Padding for shadow clipping */
-    display: flex;
-    gap: var(--ts-gap);
-    scroll-snap-type: x mandatory;
-  }
-  
-  .testimonial-section-{{ section.id }} .scroller-wrapper::-webkit-scrollbar {
-    display: none;
+    column-count: 3;
+    column-gap: 30px;
+    padding: 40px 20px; /* Space for rotations */
+    overflow: visible; /* Allow pins to stick out */
+    display: block; /* Reset flex */
   }
 
-  .testimonial-section-{{ section.id }} .scroller-wrapper:active {
-    cursor: grabbing;
+  @media (max-width: 1024px) {
+    .testimonial-section-{{ section.id }} .scroller-wrapper {
+      column-count: 2;
+    }
   }
 
-  /* --- CARD DESIGN --- */
+  @media (max-width: 767px) {
+    .testimonial-section-{{ section.id }} .scroller-wrapper {
+      column-count: 1;
+    }
+  }
+
+  /* --- CARD DESIGN ("Pinned Notes") --- */
   .testimonial-section-{{ section.id }} .t-card {
-    flex: 0 0 auto;
-    width: var(--ts-card-width-desktop);
-    scroll-snap-align: center;
+    break-inside: avoid; /* Prevent split across columns */
+    margin-bottom: 40px; /* Space between vertical items */
+    width: 100%;
     background-color: {{ section.settings.card_background_color }};
-    border-radius: var(--ts-radius);
+    border-radius: 2px; /* Paper-like corners */
     padding: 32px;
     position: relative;
     font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
     
-    /* Premium Shadow (The "Apple" feel) */
+    /* Paper Shadow */
     box-shadow: 
-      0 4px 6px -1px rgba(0, 0, 0, 0.05), 
-      0 10px 15px -3px rgba(0, 0, 0, 0.05),
-      0 0 0 1px rgba(0,0,0,0.03); /* Subtle border */
+      0 1px 1px rgba(0,0,0,0.1), 
+      0 10px 20px -5px rgba(0,0,0,0.15),
+      0 0 1px rgba(0,0,0,0.1);
     
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     height: auto; 
-    min-height: 280px; /* Consistent height feel */
+    
+    /* Subtle Paper Texture */
+    background-image: linear-gradient(to bottom right, rgba(0,0,0,0.02) 0%, transparent 100%);
   }
 
-  /* Hover Lift */
+  /* Random Rotations for "Pinned" feel */
+  .testimonial-section-{{ section.id }} .t-card:nth-child(odd) { transform: rotate(-1.5deg); }
+  .testimonial-section-{{ section.id }} .t-card:nth-child(even) { transform: rotate(1deg); }
+  .testimonial-section-{{ section.id }} .t-card:nth-child(3n) { transform: rotate(2deg); }
+  .testimonial-section-{{ section.id }} .t-card:nth-child(5n) { transform: rotate(-2deg); }
+
+  /* Hover Lift & Straighten */
   .testimonial-section-{{ section.id }} .t-card:hover {
-    transform: translateY(-6px);
+    transform: scale(1.02) rotate(0deg) !important;
+    z-index: 10;
     box-shadow: 
-      0 20px 25px -5px rgba(0, 0, 0, 0.1), 
-      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      0 20px 40px -10px rgba(0,0,0,0.2), 
+      0 0 1px rgba(0,0,0,0.1);
   }
 
-  /* Quote Icon Background */
-  .testimonial-section-{{ section.id }} .t-card::before {
-    content: '“';
+  /* THE PIN */
+  .testimonial-section-{{ section.id }} .t-card::after {
+    content: '';
     position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 80px;
-    line-height: 1;
-    font-family: serif;
-    color: var(--ts-primary);
-    opacity: 0.06;
-    pointer-events: none;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #c92a2a);
+    box-shadow: 
+      1px 2px 4px rgba(0,0,0,0.3),
+      inset -1px -1px 2px rgba(0,0,0,0.2);
+    z-index: 5;
+  }
+  
+  /* Pin Shadow on paper */
+  .testimonial-section-{{ section.id }} .t-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 52%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.3);
+    filter: blur(1px);
+    z-index: 4;
   }
 
   /* RATING */
@@ -126,19 +151,20 @@
   /* TITLE & TEXT */
   .testimonial-section-{{ section.id }} .t-title {
     color: var(--ts-primary);
-    font-weight: 700;
+    font-weight: 800;
     font-size: {{ section.settings.title_font_size }}px;
     margin: 0 0 12px 0;
     line-height: 1.3;
+    /* Handwritten feel for title? Optional */
   }
 
   .testimonial-section-{{ section.id }} .t-text {
     color: {{ section.settings.heading_color | color_lighten: 20 }};
     font-size: {{ section.settings.body_font_size }}px;
-    line-height: 1.6;
+    line-height: 1.7;
     flex-grow: 1;
     margin-bottom: 24px;
-    opacity: 0.85;
+    opacity: 0.9;
   }
 
   /* CUSTOMER FOOTER */
@@ -148,7 +174,7 @@
     gap: 12px;
     margin-top: auto;
     padding-top: 20px;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px dashed rgba(0,0,0,0.1); /* Dashed line for notes */
   }
 
   .testimonial-section-{{ section.id }} .t-avatar {
@@ -203,47 +229,17 @@
     text-decoration: underline;
   }
 
-  /* NAVIGATION */
+  /* NAVIGATION HIDDEN (Masonry shows all) */
   .testimonial-section-{{ section.id }} .nav-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 20px;
+    display: none;
   }
   
-  .testimonial-section-{{ section.id }} .nav-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.1);
-    background: white;
-    color: var(--ts-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .testimonial-section-{{ section.id }} .nav-btn:hover {
-    background: var(--ts-primary);
-    color: white;
-    border-color: var(--ts-primary);
-  }
-  .testimonial-section-{{ section.id }} .nav-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-
   /* RESPONSIVE */
   @media (max-width: 767px) {
     .testimonial-section-{{ section.id }} .t-card {
-      width: var(--ts-card-width-mobile);
+      width: 100%;
       padding: 24px;
-      min-height: 240px;
-    }
-    .testimonial-section-{{ section.id }} h2 {
-      font-size: calc({{ section.settings.heading_font_size }}px * 0.8);
+      margin-bottom: 30px;
     }
   }
 </style>
