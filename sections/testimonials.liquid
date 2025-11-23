@@ -136,7 +136,20 @@
   .testimonial-section-{{ section.id }} .t-stack .t-card,
   .testimonial-section-{{ section.id }} .t-stack .t-manual-gallery {
     min-height: 0;
-    flex: 1; /* Share space equally */
+    /* Default to equal split for homogeneous stacks */
+    flex: 1; 
+  }
+
+  /* --- SMART STACK SIZING --- */
+  
+  /* Mixed Stack (Review + Gallery): Review takes natural height, Gallery fills rest */
+  .testimonial-section-{{ section.id }} .t-stack.t-stack-mixed .t-card {
+    flex: 0 1 auto; /* Natural height, but allow shrinking if needed */
+  }
+  
+  .testimonial-section-{{ section.id }} .t-stack.t-stack-mixed .t-manual-gallery {
+    flex: 1 0 auto; /* Fill remaining space */
+    min-height: 150px; /* Ensure image isn't crushed completely */
   }
 
   /* --- FILLER CARD (Static Collage) --- */
@@ -801,6 +814,16 @@
                         // STACK THEM!
                         const stack = document.createElement('div');
                         stack.className = 't-stack';
+                        
+                        // Add specific class for styling
+                        if (isReviewA && isReviewB) {
+                            stack.classList.add('t-stack-reviews');
+                        } else if (isGalleryA && isGalleryB) {
+                            stack.classList.add('t-stack-gallery');
+                        } else {
+                            stack.classList.add('t-stack-mixed');
+                        }
+
                         stack.appendChild(item.node.cloneNode(true));
                         stack.appendChild(nextItem.node.cloneNode(true));
                         newContent.appendChild(stack);
