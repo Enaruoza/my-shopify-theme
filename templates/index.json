@@ -479,7 +479,6 @@
             "buy_buttons_CYDJcb": {
               "type": "buy-buttons",
               "name": "t:names.product_buy_buttons",
-              "disabled": true,
               "settings": {
                 "stacking": false,
                 "show_pickup_availability": true,
@@ -500,7 +499,7 @@
                   "type": "add-to-cart",
                   "static": true,
                   "settings": {
-                    "style_class": "button-secondary"
+                    "style_class": "button"
                   },
                   "blocks": {}
                 },
@@ -550,7 +549,7 @@
       "name": "Countdown Timer",
       "settings": {
         "enable_popup": true,
-        "popup_position": "center",
+        "popup_position": "bottom-right",
         "minimized_text": "30% OFF",
         "heading": "DO 30% POPUSTA.",
         "subheading": "<p>DO KRAJA NOVEMBRA.</p>",
@@ -746,7 +745,7 @@
         "collection": "novi-proizvodi",
         "max_products": 6,
         "layout_type": "carousel",
-        "carousel_on_mobile": false,
+        "carousel_on_mobile": true,
         "columns": 4,
         "mobile_columns": "2",
         "mobile_card_size": "44cqw",
