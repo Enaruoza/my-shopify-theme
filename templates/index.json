@@ -1422,11 +1422,22 @@
     "testimonials_CQzbrj": {
       "type": "testimonials",
       "blocks": {
+        "testimonial_yTrpWm": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "review_title": "Wonderful products.",
+            "review_text": "<p>Wonderful products. And the highest quality<br/>of Argan oil I’ve ever bought.<br/>the packaging is really well made ! Great for gifts<br/><br/>I will make sure to come back also because the of amazing personality of the owner.</p>",
+            "customer_name": "Donny",
+            "product": "100-arganovo-ulje",
+            "product_reference": ""
+          }
+        },
         "testimonial_MQhaBU": {
           "type": "testimonial",
           "settings": {
             "rating": 5,
-            "review_title": "Sve pohvale za njih,",
+            "review_title": "Sve pohvale za njih",
             "review_text": "<p>jedina krema koju sam nasla da je skroz prirodna i divna na licu</p>",
             "customer_name": "Lejla S.",
             "product": "afoulki",
@@ -1437,8 +1448,8 @@
           "type": "testimonial",
           "settings": {
             "rating": 5,
-            "review_title": "Prezadovoljna,",
-            "review_text": "<p>I've been looking for a while for 100% natural skincare products in Sarajevo and I am so grateful to have found this natural line. I got their Prickly Pear & Argan Renewal Face Cream. It gives a lot of moisture and is still rich enough so my skin doesn't feel dry old day. I have a sensitive skin, so while many other product would cause allergy around my eyes or even redness in the face I didn't have this problem with Azourane skincare line. I highly recommend it and will be back to sample more stuff!<br/><br/></p>",
+            "review_title": "Prezadovoljna!",
+            "review_text": "<p>Prezadovoljna, arganovo  ulje je lagano, brzo se upija i ostavlja kožu svilenkastom. Topla preporuka za osoblje, dobra lokacija.</p>",
             "customer_name": "Buric",
             "product": "100-arganovo-ulje",
             "product_reference": ""
@@ -1449,7 +1460,7 @@
           "settings": {
             "rating": 5,
             "review_title": "I absolutely love Azourane skincare!",
-            "review_text": "<p>The quality exceeded my expectations. Shipping was fast and the packaging was beautiful. Highly recommended.</p>",
+            "review_text": "<p>I absolutely love Azourane skincare! I've been looking for a while for 100% natural skincare products in Sarajevo and I am so grateful to have found this natural line. I got their Prickly Pear & Argan Renewal Face Cream. It gives a lot of moisture and is still rich enough so my skin doesn't feel dry old day. I have a sensitive skin, so while many other product would cause allergy around my eyes or even redness in the face I didn't have this problem with Azourane skincare line. I highly recommend it and will be back to sample more stuff!</p>",
             "customer_name": "Vildana E.",
             "product": "afoulki",
             "product_reference": ""
@@ -1460,7 +1471,7 @@
           "settings": {
             "rating": 5,
             "review_title": "Imam jako osjetljivu kožu i...",
-            "review_text": "<p>Imam jako osjetljivu kožu i Amaan mi savršeno odgovara – temeljito čisti, ali bez isušivanja. Osjećaj je kao da lice umijem hladnom izvorskom vodom, svako jutro i svako veče.</p>",
+            "review_text": "<p>Imam jako osjetljivu kožu i Amaan mi savršeno odgovara, temeljito čisti, ali bez isušivanja. Osjećaj je kao da lice umijem hladnom izvorskom vodom, svako jutro i svako veče.</p>",
             "customer_name": "Sarah J.",
             "product": "amaan",
             "product_reference": ""
@@ -1490,6 +1501,7 @@
         }
       },
       "block_order": [
+        "testimonial_yTrpWm",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
         "testimonial_QXhTRh",
