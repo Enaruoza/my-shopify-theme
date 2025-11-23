@@ -437,8 +437,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 450px;
+    height: auto;
+    min-height: 220px;
   }
   .t-manual-gallery .t-filler-wrapper {
     height: 100%;
@@ -707,16 +707,19 @@
       for (let i = 0; i < mixedStream.length; i++) {
         const item = mixedStream[i];
 
-        if (item.type === 'manual_gallery') {
-            // --- RENDER MANUAL GALLERY BLOCK ---
-            // Wrap in stack to match layout structure
-            const stack = document.createElement('div');
-            stack.className = 't-stack';
-            stack.appendChild(item.node.cloneNode(true));
-            newContent.appendChild(stack);
+        // Helper to check if item is stackable
+        const isStackable = (it) => {
+            if (it.type === 'manual_gallery') return true;
+            if (it.type === 'review') {
+                const len = parseInt(it.node.getAttribute('data-length') || '999');
+                return len < SHORT_THRESHOLD;
+            }
+            return false;
+        };
 
-        } else if (item.type === 'gallery_col') {
+        if (item.type === 'gallery_col') {
             // --- RENDER FULL GALLERY COLUMN (Mosaic/Hero) ---
+            // ... (Existing gallery_col rendering logic) ...
             // Only if we have products in the pool
             if (productPool.length === 0) continue;
 
@@ -753,45 +756,42 @@
             newContent.appendChild(stack);
 
         } else {
-            // --- RENDER REVIEW ---
-            const cardA = item.node;
-            const lenA = parseInt(cardA.getAttribute('data-length') || '999');
-
-            // Check if "Short"
-            if (lenA < SHORT_THRESHOLD) {
-                // Look ahead for another short review to stack
+            // --- RENDER REVIEW OR MANUAL GALLERY ---
+            // Check if this item is stackable
+            if (isStackable(item)) {
+                // Look ahead
                 let stacked = false;
-                
-                // Check next item in stream
                 if (i + 1 < mixedStream.length) {
                     const nextItem = mixedStream[i+1];
-                    if (nextItem.type === 'review') {
-                        const cardB = nextItem.node;
-                        const lenB = parseInt(cardB.getAttribute('data-length') || '999');
-
-                        if (lenB < SHORT_THRESHOLD) {
-                            // STRICT STACKING: Review + Review ONLY
-                            const stack = document.createElement('div');
-                            stack.className = 't-stack';
-                            stack.appendChild(cardA.cloneNode(true));
-                            stack.appendChild(cardB.cloneNode(true));
-                            newContent.appendChild(stack);
-                            
-                            i++; // Skip next item
-                            stacked = true;
-                        }
+                    if (isStackable(nextItem)) {
+                        // STACK THEM!
+                        const stack = document.createElement('div');
+                        stack.className = 't-stack';
+                        stack.appendChild(item.node.cloneNode(true));
+                        stack.appendChild(nextItem.node.cloneNode(true));
+                        newContent.appendChild(stack);
+                        
+                        i++; // Skip next item
+                        stacked = true;
                     }
                 }
 
                 if (!stacked) {
-                    // Orphan short review -> NO FILLER. Render as full card.
-                    // This eliminates the "ugly strips".
-                    newContent.appendChild(cardA.cloneNode(true));
+                    // Orphan stackable item -> Render as full card
+                    // If it's a manual gallery, wrap in stack to ensure consistency
+                    if (item.type === 'manual_gallery') {
+                        const stack = document.createElement('div');
+                        stack.className = 't-stack';
+                        stack.appendChild(item.node.cloneNode(true));
+                        newContent.appendChild(stack);
+                    } else {
+                        // Review
+                        newContent.appendChild(item.node.cloneNode(true));
+                    }
                 }
-
             } else {
                 // Long card -> Render as is
-                newContent.appendChild(cardA.cloneNode(true));
+                newContent.appendChild(item.node.cloneNode(true));
             }
         }
       }
