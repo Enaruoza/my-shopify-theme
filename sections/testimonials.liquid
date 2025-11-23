@@ -133,54 +133,42 @@
     margin: 0; /* Reset margins */
   }
 
-  /* --- FILLER CARD (Swinging Product) --- */
+  /* --- FILLER CARD (Static Collage) --- */
   .t-filler-wrapper {
     flex: 1;
-    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    /* "Ceiling" for the thread */
-  }
-
-  .t-thread {
-    width: 2px;
-    height: 20px; /* Length of string */
-    background-color: #2C3E50;
-    margin-bottom: -2px; /* Connect to card */
-    transform-origin: top center;
-    animation: swing 3s ease-in-out infinite alternate;
-  }
-
-  .t-filler {
-    width: 100%;
-    flex: 1;
+    gap: 12px;
+    overflow: hidden;
     border-radius: 16px;
+  }
+
+  /* Grid for split view */
+  .t-filler-wrapper.split {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .t-filler-item {
+    width: 100%;
+    height: 100%;
     background-color: #FDB813;
     background-size: cover;
     background-position: center;
     position: relative;
     overflow: hidden;
-    min-height: 150px;
-    box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+    border-radius: 12px; /* Inner radius */
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); /* Subtle inner border */
     display: flex;
     align-items: flex-end;
-    padding: 20px;
+    padding: 16px;
     text-decoration: none;
-    
-    /* Swing Animation */
-    transform-origin: top center;
-    animation: swing 3s ease-in-out infinite alternate;
-  }
-
-  @keyframes swing {
-    0% { transform: rotate(1deg); }
-    100% { transform: rotate(-1deg); }
+    transition: transform 0.2s ease;
   }
   
-  .t-filler:hover {
-    animation-play-state: paused;
-    box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
+  .t-filler-item:hover {
+    transform: scale(1.02);
   }
 
   /* Quick Add Button on Filler */
@@ -188,22 +176,24 @@
     background: #fff;
     color: #2C3E50;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 30px;
-    font-weight: 800;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 13px;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
+    transition: all 0.2s;
     width: 100%;
     text-align: center;
     z-index: 2;
+    opacity: 0.9;
   }
   
   .t-filler-atc:hover {
-    transform: scale(1.05);
+    opacity: 1;
     background: #2C3E50;
     color: #fff;
+    transform: translateY(-2px);
   }
 
   /* --- CARD DESIGN ("Cut-Out Paper") --- */
@@ -422,6 +412,21 @@
     </div>
   {%- endif -%}
 
+  <script>
+    window.sectionProducts_{{ section.id }} = [
+      {%- for block in section.blocks -%}
+        {%- if block.settings.product != blank -%}
+          {
+            id: {{ block.settings.product.id }},
+            variantId: {{ block.settings.product.selected_or_first_available_variant.id }},
+            url: "{{ block.settings.product.url }}",
+            image: "{% if block.settings.product.featured_image %}{{ block.settings.product.featured_image | image_url: width: 600 }}{% endif %}"
+          }{% unless forloop.last %},{% endunless %}
+        {%- endif -%}
+      {%- endfor -%}
+    ];
+  </script>
+
   <div class="scroller-wrapper" id="Track-{{ section.id }}">
     {% for block in section.blocks %}
       {%- assign product_image = "" -%}
@@ -550,85 +555,39 @@
             stack.className = 't-stack';
             stack.appendChild(cardA.cloneNode(true));
             
-            // Wrapper for swing animation
+            // Create Filler Wrapper
             const fillerWrapper = document.createElement('div');
             fillerWrapper.className = 't-filler-wrapper';
             
-            // Thread
-            const thread = document.createElement('div');
-            thread.className = 't-thread';
-            fillerWrapper.appendChild(thread);
-
-            // The Card itself
-            const imgUrl = cardA.getAttribute('data-product-image');
-            const prodUrl = cardA.getAttribute('data-product-url');
-            const variantId = cardA.getAttribute('data-variant-id');
+            // --- RANDOM COLLAGE LOGIC ---
+            const products = window.sectionProducts_{{ section.id }} || [];
             
-            let filler;
-            if (prodUrl) {
-                filler = document.createElement('a');
-                filler.href = prodUrl;
-            } else {
-                filler = document.createElement('div');
-            }
-            
-            filler.className = 't-filler';
-            
-            if (imgUrl) {
-                filler.style.backgroundImage = `url('${imgUrl}')`;
-            } else {
-                filler.style.backgroundImage = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`;
-            }
-
-            // Add to Cart Button
-            if (variantId) {
-                const atcBtn = document.createElement('button');
-                atcBtn.className = 't-filler-atc';
-                atcBtn.innerText = 'Quick Add +';
-                atcBtn.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+            if (products.length > 0) {
+                // Decide layout: Single (70%) or Split (30%)
+                const isSplit = Math.random() > 0.7;
+                
+                if (isSplit && products.length >= 2) {
+                    fillerWrapper.classList.add('split');
+                    // Pick 2 unique random products
+                    const shuffled = [...products].sort(() => 0.5 - Math.random());
+                    const selected = shuffled.slice(0, 2);
                     
-                    // Add to cart logic
-                    const formData = {
-                        'items': [{
-                            'id': variantId,
-                            'quantity': 1
-                        }]
-                    };
-                    
-                    fetch(window.Shopify.routes.root + 'cart/add.js', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    })
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Refresh cart or open drawer (assuming theme has an event for this)
-                        // Dispatch generic event that most themes listen to
-                        document.documentElement.dispatchEvent(new CustomEvent('cart:refresh', {
-                            bubbles: true
-                        }));
-                        // Also try to open drawer if theme uses it
-                        const cartDrawer = document.querySelector('cart-drawer');
-                        if (cartDrawer) cartDrawer.open();
-                        
-                        atcBtn.innerText = 'Added!';
-                        setTimeout(() => atcBtn.innerText = 'Quick Add +', 2000);
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                        atcBtn.innerText = 'Error';
+                    selected.forEach(prod => {
+                        fillerWrapper.appendChild(createFillerItem(prod));
                     });
-                };
-                filler.appendChild(atcBtn);
+                } else {
+                    // Single large item
+                    const randomProd = products[Math.floor(Math.random() * products.length)];
+                    fillerWrapper.appendChild(createFillerItem(randomProd));
+                }
+            } else {
+                // Fallback if no products found
+                const fallback = document.createElement('div');
+                fallback.className = 't-filler-item';
+                fallback.style.backgroundImage = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`;
+                fillerWrapper.appendChild(fallback);
             }
 
-            fillerWrapper.appendChild(filler);
             stack.appendChild(fillerWrapper);
             newContent.appendChild(stack);
             
@@ -642,6 +601,84 @@
       track.appendChild(newContent);
       isStacked = true;
     };
+
+    // Helper to create a filler item
+    function createFillerItem(product) {
+        let item;
+        if (product.url) {
+            item = document.createElement('a');
+            item.href = product.url;
+        } else {
+            item = document.createElement('div');
+        }
+        
+        item.className = 't-filler-item';
+        
+        if (product.image) {
+            item.style.backgroundImage = `url('${product.image}')`;
+        } else {
+            item.style.backgroundColor = '#FDB813';
+        }
+
+        // Add to Cart Button
+        if (product.variantId) {
+            const atcBtn = document.createElement('button');
+            atcBtn.className = 't-filler-atc';
+            atcBtn.innerText = 'Quick Add +';
+            atcBtn.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                atcBtn.innerText = 'Adding...';
+                
+                const formData = {
+                    'items': [{
+                        'id': product.variantId,
+                        'quantity': 1
+                    }]
+                };
+                
+                fetch(window.Shopify.routes.root + 'cart/add.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 1. Dispatch generic cart update event (for bubbles)
+                    document.dispatchEvent(new CustomEvent('cart:update', {
+                        bubbles: true,
+                        detail: {
+                            resource: data,
+                            sourceId: 'testimonial-filler',
+                            data: {
+                                source: 'product-form-component',
+                                variantId: product.variantId
+                            }
+                        }
+                    }));
+
+                    // 2. Explicitly open the drawer
+                    const cartDrawer = document.querySelector('cart-drawer-component');
+                    if (cartDrawer && cartDrawer.open) {
+                        cartDrawer.open();
+                    }
+                    
+                    atcBtn.innerText = 'Added!';
+                    setTimeout(() => atcBtn.innerText = 'Quick Add +', 2000);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    atcBtn.innerText = 'Error';
+                });
+            };
+            item.appendChild(atcBtn);
+        }
+        
+        return item;
+    }
 
     // --- ADAPTIVE HEIGHT LOGIC (Mobile) ---
     const updateLayout = () => {
