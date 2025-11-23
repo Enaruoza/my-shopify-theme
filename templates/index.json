@@ -1441,6 +1441,14 @@
             "link": "shopify://products/100-arganovo-ulje"
           }
         },
+        "gallery_card_37hVej": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/duo_hair.png",
+            "product": "",
+            "link": ""
+          }
+        },
         "testimonial_yTrpWm": {
           "type": "testimonial",
           "settings": {
@@ -1450,15 +1458,6 @@
             "customer_name": "Donny",
             "product": "100-arganovo-ulje",
             "product_reference": ""
-          }
-        },
-        "gallery_card_37hVej": {
-          "type": "gallery_card",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/qweqweqwe.png",
-            "product": "",
-            "link": ""
           }
         },
         "testimonial_MQhaBU": {
@@ -1531,8 +1530,8 @@
       "block_order": [
         "testimonial_rVHdHA",
         "gallery_card_Gp9b9y",
-        "testimonial_yTrpWm",
         "gallery_card_37hVej",
+        "testimonial_yTrpWm",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
         "testimonial_QXhTRh",
