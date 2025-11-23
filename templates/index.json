@@ -1460,6 +1460,14 @@
             "product_reference": ""
           }
         },
+        "gallery_card_xd9ywa": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_otaxdootaxdootax_upscayl_2x_ultrasharp-4x_1.png",
+            "product": "",
+            "link": ""
+          }
+        },
         "testimonial_MQhaBU": {
           "type": "testimonial",
           "settings": {
@@ -1532,6 +1540,7 @@
         "gallery_card_Gp9b9y",
         "gallery_card_37hVej",
         "testimonial_yTrpWm",
+        "gallery_card_xd9ywa",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
         "testimonial_QXhTRh",
