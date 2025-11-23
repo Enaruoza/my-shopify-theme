@@ -147,15 +147,15 @@
   .t-filler-wrapper.split {
     display: grid;
     grid-template-rows: 1fr 1fr;
-    gap: 12px;
+    gap: 8px; /* Tighter gap */
   }
 
   /* Mosaic view (3 items) */
   .t-filler-wrapper.mosaic-3 {
     display: grid;
-    grid-template-rows: 1.2fr 0.8fr; /* Top slightly larger */
+    grid-template-rows: 1.2fr 0.8fr; 
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 8px; /* Tighter gap */
   }
   
   /* First item spans full width */
@@ -185,28 +185,40 @@
   }
 
   /* Quick Add Button on Filler */
+  /* Quick Add Button on Filler - Minimal & Hover Only */
   .t-filler-atc {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
     background: #fff;
     color: #2C3E50;
     border: none;
-    padding: 8px 16px;
-    border-radius: 30px;
+    padding: 8px 14px;
+    border-radius: 20px;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: all 0.2s;
-    width: 100%;
-    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: auto;
     z-index: 2;
-    opacity: 0.9;
+    opacity: 0; /* Hidden by default */
+    transform: translateY(10px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .t-filler-item:hover .t-filler-atc {
+    opacity: 1;
+    transform: translateY(0);
   }
   
   .t-filler-atc:hover {
-    opacity: 1;
     background: #2C3E50;
     color: #fff;
     transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
   }
 
   /* --- CARD DESIGN ("Cut-Out Paper") --- */
