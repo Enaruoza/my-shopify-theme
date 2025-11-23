@@ -413,7 +413,7 @@
   {%- endif -%}
 
   <script>
-    window.sectionProducts_{{ section.id }} = [
+    window['sectionProducts_{{ section.id }}'] = [
       {%- for block in section.blocks -%}
         {%- if block.settings.product != blank -%}
           {
@@ -560,7 +560,7 @@
             fillerWrapper.className = 't-filler-wrapper';
             
             // --- RANDOM COLLAGE LOGIC ---
-            const products = window.sectionProducts_{{ section.id }} || [];
+            const products = window['sectionProducts_{{ section.id }}'] || [];
             
             if (products.length > 0) {
                 // Decide layout: Single (70%) or Split (30%)
