@@ -550,7 +550,7 @@
       "name": "Countdown Timer",
       "settings": {
         "enable_popup": true,
-        "popup_position": "center",
+        "popup_position": "bottom-right",
         "minimized_text": "30% OFF",
         "heading": "DO 30% POPUSTA.",
         "subheading": "<p>DO KRAJA NOVEMBRA.</p>",
