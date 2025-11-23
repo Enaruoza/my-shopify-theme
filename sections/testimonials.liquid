@@ -526,97 +526,99 @@
 
   <div class="scroller-wrapper" id="Track-{{ section.id }}">
     {% for block in section.blocks %}
-      {%- if block.type == 'testimonial' -%}
-        {%- assign product_image = "" -%}
-        {%- assign product_url = "" -%}
-        {%- assign variant_id = "" -%}
-        
-        {%- if block.settings.product != blank -%}
-          {%- if block.settings.product.featured_image != blank -%}
-              {%- assign product_image = block.settings.product.featured_image | image_url: width: 600 -%}
-          {%- endif -%}
-          {%- assign product_url = block.settings.product.url -%}
-          {%- assign variant_id = block.settings.product.selected_or_first_available_variant.id -%}
-        {%- endif -%}
-
-        <div class="t-card" {{ block.shopify_attributes }} 
-             data-type="review"
-             data-length="{{ block.settings.review_text | strip_html | size }}" 
-             data-product-image="{{ product_image }}"
-             data-product-url="{{ product_url }}"
-             data-variant-id="{{ variant_id }}">
-          
-          {% if block.settings.rating > 0 %}
-            <div class="t-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
-              {% for i in (1..block.settings.rating) %}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-              {% endfor %}
-            </div>
-          {% endif %}
-
-          {% if block.settings.review_title != blank and block.settings.review_title != 'AUTO' %}
-            <h3 class="t-title">{{ block.settings.review_title | escape }}</h3>
-          {% endif %}
-          
-          {% if block.settings.review_text != blank %}
-            <div class="t-text">{{ block.settings.review_text }}</div>
-          {% endif %}
-
-          <div class="t-footer">
-            {%- assign name = block.settings.customer_name | default: 'Customer' -%}
-            {%- assign first_letter = name | slice: 0 | upcase -%}
+      <!-- Debug: Block Type = {{ block.type }} -->
+      {% case block.type %}
+        {% when 'gallery_card' %}
+            {%- assign g_image = block.settings.image -%}
+            {%- if g_image == blank and block.settings.product != blank -%}
+                {%- assign g_image = block.settings.product.featured_image -%}
+            {%- endif -%}
             
-            <div class="t-avatar">{{ first_letter }}</div>
+            {%- assign g_link = block.settings.link -%}
+            {%- if g_link == blank and block.settings.product != blank -%}
+                {%- assign g_link = block.settings.product.url -%}
+            {%- endif -%}
 
-            <div class="t-meta">
-              <span class="t-name">
-                {{ name }}
-                <span class="verified-badge" title="Verified Customer">
-                  <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                </span>
-              </span>
+            <div class="t-manual-gallery" {{ block.shopify_attributes }} data-type="manual_gallery">
+                <div class="t-filler-wrapper">
+                    {%- if g_link != blank -%}
+                        <a href="{{ g_link }}" class="t-filler-item" style="background-image: url('{{ g_image | image_url: width: 600 }}');">
+                    {%- else -%}
+                        <div class="t-filler-item" style="background-image: url('{{ g_image | image_url: width: 600 }}');">
+                    {%- endif -%}
+                    
+                    {%- if block.settings.product != blank -%}
+                        <button class="t-filler-atc" onclick="quickAdd(event, {{ block.settings.product.selected_or_first_available_variant.id }})">
+                            Quick Add +
+                        </button>
+                    {%- endif -%}
 
-              {%- if block.settings.product -%}
-                <a href="{{ block.settings.product.url }}" class="t-product">Verified buyer of {{ block.settings.product.title }}</a>
-              {%- elsif block.settings.product_reference != blank and block.settings.product_reference != 'AUTO' -%}
-                 <span class="t-product">Verified buyer of {{ block.settings.product_reference }}</span>
-              {%- else -%}
-                 <span class="t-product" style="opacity: 0.5; font-size: 12px;">Verified Review</span>
+                    {%- if g_link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+                </div>
+            </div>
+
+        {% when 'testimonial' %}
+            {%- assign product_image = "" -%}
+            {%- assign product_url = "" -%}
+            {%- assign variant_id = "" -%}
+            
+            {%- if block.settings.product != blank -%}
+              {%- if block.settings.product.featured_image != blank -%}
+                  {%- assign product_image = block.settings.product.featured_image | image_url: width: 600 -%}
               {%- endif -%}
-            </div>
-          </div>
+              {%- assign product_url = block.settings.product.url -%}
+              {%- assign variant_id = block.settings.product.selected_or_first_available_variant.id -%}
+            {%- endif -%}
 
-        </div>
-      
-      {%- elsif block.type == 'gallery_card' -%}
-        {%- assign g_image = block.settings.image -%}
-        {%- if g_image == blank and block.settings.product != blank -%}
-            {%- assign g_image = block.settings.product.featured_image -%}
-        {%- endif -%}
-        
-        {%- assign g_link = block.settings.link -%}
-        {%- if g_link == blank and block.settings.product != blank -%}
-            {%- assign g_link = block.settings.product.url -%}
-        {%- endif -%}
+            <div class="t-card" {{ block.shopify_attributes }} 
+                 data-type="review"
+                 data-length="{{ block.settings.review_text | strip_html | size }}" 
+                 data-product-image="{{ product_image }}"
+                 data-product-url="{{ product_url }}"
+                 data-variant-id="{{ variant_id }}">
+              
+              {% if block.settings.rating > 0 %}
+                <div class="t-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {% for i in (1..block.settings.rating) %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                  {% endfor %}
+                </div>
+              {% endif %}
 
-        <div class="t-manual-gallery" {{ block.shopify_attributes }} data-type="manual_gallery">
-            <div class="t-filler-wrapper">
-                {%- if g_link != blank -%}
-                    <a href="{{ g_link }}" class="t-filler-item" style="background-image: url('{{ g_image | image_url: width: 600 }}');">
-                {%- else -%}
-                    <div class="t-filler-item" style="background-image: url('{{ g_image | image_url: width: 600 }}');">
-                {%- endif -%}
+              {% if block.settings.review_title != blank and block.settings.review_title != 'AUTO' %}
+                <h3 class="t-title">{{ block.settings.review_title | escape }}</h3>
+              {% endif %}
+              
+              {% if block.settings.review_text != blank %}
+                <div class="t-text">{{ block.settings.review_text }}</div>
+              {% endif %}
+
+              <div class="t-footer">
+                {%- assign name = block.settings.customer_name | default: 'Customer' -%}
+                {%- assign first_letter = name | slice: 0 | upcase -%}
                 
-                {%- if block.settings.product != blank -%}
-                    <button class="t-filler-atc" onclick="quickAdd(event, {{ block.settings.product.selected_or_first_available_variant.id }})">
-                        Quick Add +
-                    </button>
-                {%- endif -%}
+                <div class="t-avatar">{{ first_letter }}</div>
 
-                {%- if g_link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+                <div class="t-meta">
+                  <span class="t-name">
+                    {{ name }}
+                    <span class="verified-badge" title="Verified Customer">
+                      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                    </span>
+                  </span>
+
+                  {%- if block.settings.product -%}
+                    <a href="{{ block.settings.product.url }}" class="t-product">Verified buyer of {{ block.settings.product.title }}</a>
+                  {%- elsif block.settings.product_reference != blank and block.settings.product_reference != 'AUTO' -%}
+                     <span class="t-product">Verified buyer of {{ block.settings.product_reference }}</span>
+                  {%- else -%}
+                     <span class="t-product" style="opacity: 0.5; font-size: 12px;">Verified Review</span>
+                  {%- endif -%}
+                </div>
+              </div>
+
             </div>
-        </div>
-      {%- endif -%}
+      {% endcase %}
     {% endfor %}
   </div>
 
