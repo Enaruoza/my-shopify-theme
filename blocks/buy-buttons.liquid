@@ -21,15 +21,27 @@
   if inventory_managed
     if inventory_quantity <= 0 and inventory_policy == 'deny' or quantity_rule_soldout
       assign can_add_to_cart = false
-      assign add_to_cart_text = settings.text_sold_out | default: 'products.product.sold_out' | t
+      if settings.text_sold_out != blank
+        assign add_to_cart_text = settings.text_sold_out
+      else
+        assign add_to_cart_text = 'products.product.sold_out' | t
+      endif
     else
       assign can_add_to_cart = true
-      assign add_to_cart_text = settings.text_add_to_cart | default: 'products.product.add_to_cart' | t
+      if settings.text_add_to_cart != blank
+        assign add_to_cart_text = settings.text_add_to_cart
+      else
+        assign add_to_cart_text = 'products.product.add_to_cart' | t
+      endif
     endif
   else
     if closest.product.selected_or_first_available_variant != null
       assign can_add_to_cart = true
-      assign add_to_cart_text = settings.text_add_to_cart | default: 'products.product.add_to_cart' | t
+      if settings.text_add_to_cart != blank
+        assign add_to_cart_text = settings.text_add_to_cart
+      else
+        assign add_to_cart_text = 'products.product.add_to_cart' | t
+      endif
     else
       assign can_add_to_cart = false
       assign add_to_cart_text = 'products.product.unavailable' | t

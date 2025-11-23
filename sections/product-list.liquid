@@ -115,8 +115,8 @@
      (Only active if layout is carousel AND script is running)
   */
   .product-conveyor-{{ section.id }} .az-conveyor-mode .az-carousel-track {
-    scroll-snap-type: none; /* Disable snap for continuous flow */
-    overflow-x: hidden; /* JS handles movement */
+    /* scroll-snap-type: none;  Keep snap for better UX */
+    /* overflow-x: hidden;  Removed to allow user swipe! */
   }
 
   /* NAVIGATION ARROWS */

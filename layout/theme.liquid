@@ -27,9 +27,9 @@
     <script>
       window.Theme = window.Theme || {};
       window.Theme.translations = {
-        addToCart: {{ settings.text_add_to_cart | default: 'products.product.add_to_cart' | t | json }},
-        added: {{ settings.text_added_to_cart | default: 'Dodano' | json }},
-        soldOut: {{ settings.text_sold_out | default: 'products.product.sold_out' | t | json }},
+        addToCart: {% if settings.text_add_to_cart != blank %}{{ settings.text_add_to_cart | json }}{% else %}{{ 'products.product.add_to_cart' | t | json }}{% endif %},
+        added: {% if settings.text_added_to_cart != blank %}{{ settings.text_added_to_cart | json }}{% else %}{{ 'products.product.added_to_cart' | t | default: 'Dodano' | json }}{% endif %},
+        soldOut: {% if settings.text_sold_out != blank %}{{ settings.text_sold_out | json }}{% else %}{{ 'products.product.sold_out' | t | json }}{% endif %},
         unavailable: {{ 'products.product.unavailable' | t | json }}
       };
     </script>
