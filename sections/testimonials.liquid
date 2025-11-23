@@ -117,6 +117,22 @@
     display: none;
   }
 
+  /* --- STACKED LAYOUT (Desktop Only) --- */
+  .t-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 0 0 380px;
+    scroll-snap-align: center;
+    height: 100%; /* Fill scroller height */
+  }
+  
+  .t-stack .t-card {
+    flex: 1; /* Stretch to fill stack */
+    min-height: 0;
+    margin: 0; /* Reset margins */
+  }
+
   /* --- CARD DESIGN ("Cut-Out Paper") --- */
   .testimonial-section-{{ section.id }} .t-card {
     flex: 0 0 380px;
@@ -321,7 +337,7 @@
 
   <div class="scroller-wrapper" id="Track-{{ section.id }}">
     {% for block in section.blocks %}
-      <div class="t-card" {{ block.shopify_attributes }}>
+      <div class="t-card" {{ block.shopify_attributes }} data-length="{{ block.settings.review_text | strip_html | size }}">
         
         {% if block.settings.rating > 0 %}
           <div class="t-stars" aria-label="{{ block.settings.rating }} out of 5 stars">
@@ -383,56 +399,119 @@
     const track = document.getElementById('Track-{{ section.id }}');
     const prev = document.getElementById('Prev-{{ section.id }}');
     const next = document.getElementById('Next-{{ section.id }}');
-    const cards = track ? track.querySelectorAll('.t-card') : [];
     
     if(!track || !prev || !next) return;
 
-    // --- ADAPTIVE HEIGHT LOGIC (Mobile) ---
-    const updateHeight = () => {
-      if (window.innerWidth > 767) {
-        track.style.height = ''; // Reset on desktop
-        return;
-      }
+    // Store original HTML for mobile/desktop switching
+    const originalHTML = track.innerHTML;
+    let isStacked = false;
 
-      // Find the card closest to the center
-      const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
-      let closestCard = null;
-      let minDiff = Infinity;
+    // --- SMART STACKING LOGIC (Desktop) ---
+    const stackCards = () => {
+      // Threshold for "Short" review (approx chars)
+      const SHORT_THRESHOLD = 180; 
+      
+      // Get current cards (fresh from DOM)
+      const cards = Array.from(track.querySelectorAll('.t-card'));
+      if (cards.length === 0) return;
 
-      cards.forEach(card => {
-        const cardCenter = card.getBoundingClientRect().left + card.offsetWidth / 2;
-        const diff = Math.abs(trackCenter - cardCenter);
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestCard = card;
+      const newContent = document.createDocumentFragment();
+      
+      for (let i = 0; i < cards.length; i++) {
+        const cardA = cards[i];
+        const lenA = parseInt(cardA.getAttribute('data-length') || '999');
+        
+        // Check if we can stack with next card
+        if (lenA < SHORT_THRESHOLD && i + 1 < cards.length) {
+          const cardB = cards[i+1];
+          const lenB = parseInt(cardB.getAttribute('data-length') || '999');
+          
+          if (lenB < SHORT_THRESHOLD) {
+            // Create Stack
+            const stack = document.createElement('div');
+            stack.className = 't-stack';
+            stack.appendChild(cardA.cloneNode(true));
+            stack.appendChild(cardB.cloneNode(true));
+            newContent.appendChild(stack);
+            
+            i++; // Skip next card since we used it
+            continue;
+          }
         }
-      });
+        
+        // Else, append single card
+        newContent.appendChild(cardA.cloneNode(true));
+      }
+      
+      track.innerHTML = '';
+      track.appendChild(newContent);
+      isStacked = true;
+    };
 
-      if (closestCard) {
-        // Add padding bottom to account for shadow/padding in wrapper
-        const newHeight = closestCard.offsetHeight + 60; 
-        track.style.height = `${newHeight}px`;
+    // --- ADAPTIVE HEIGHT LOGIC (Mobile) ---
+    const updateLayout = () => {
+      const isMobile = window.innerWidth <= 767;
+
+      if (isMobile) {
+        // Mobile: Restore original HTML if needed
+        if (isStacked) {
+          track.innerHTML = originalHTML;
+          isStacked = false;
+        }
+        
+        // Run Adaptive Height
+        const cards = track.querySelectorAll('.t-card');
+        const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
+        let closestCard = null;
+        let minDiff = Infinity;
+
+        cards.forEach(card => {
+          const cardCenter = card.getBoundingClientRect().left + card.offsetWidth / 2;
+          const diff = Math.abs(trackCenter - cardCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestCard = card;
+          }
+        });
+
+        if (closestCard) {
+          const newHeight = closestCard.offsetHeight + 60; 
+          track.style.height = `${newHeight}px`;
+        }
+      } else {
+        // Desktop: Stack cards if not already stacked
+        track.style.height = ''; // Reset height
+        if (!isStacked) {
+          stackCards();
+        }
       }
     };
 
     // Initial check
-    updateHeight();
+    // Give a small delay to ensure styles are applied for height calc
+    setTimeout(updateLayout, 100);
 
-    // Update on scroll (throttled for performance)
+    // Update on scroll (Mobile only)
     let isScrolling;
     track.addEventListener('scroll', () => {
-      window.cancelAnimationFrame(isScrolling);
-      isScrolling = window.requestAnimationFrame(updateHeight);
+      if (window.innerWidth <= 767) {
+        window.cancelAnimationFrame(isScrolling);
+        isScrolling = window.requestAnimationFrame(updateLayout);
+      }
     });
 
     // Update on resize
-    window.addEventListener('resize', updateHeight);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateLayout, 200);
+    });
 
     // --- NAVIGATION LOGIC ---
-    // Scroll Distance = width of card + gap
     const getScrollAmount = () => {
-      const card = track.querySelector('.t-card');
-      return card ? card.offsetWidth + 32 : 300; 
+      // Check for stack or card
+      const item = track.querySelector('.t-card, .t-stack');
+      return item ? item.offsetWidth + 32 : 300; 
     }
 
     next.addEventListener('click', () => {
