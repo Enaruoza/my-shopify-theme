@@ -1433,22 +1433,6 @@
             "product_reference": ""
           }
         },
-        "gallery_card_Gp9b9y": {
-          "type": "gallery_card",
-          "settings": {
-            "image": "shopify://shop_images/Gemini_Generated_Image_eyp0kdeyp0kdeyp0_0fe7410d-a4c0-4bb8-8aa0-ce68ec004410.png",
-            "product": "100-arganovo-ulje",
-            "link": "shopify://products/100-arganovo-ulje"
-          }
-        },
-        "gallery_card_37hVej": {
-          "type": "gallery_card",
-          "settings": {
-            "image": "shopify://shop_images/duo_hair.png",
-            "product": "",
-            "link": ""
-          }
-        },
         "testimonial_yTrpWm": {
           "type": "testimonial",
           "settings": {
@@ -1468,6 +1452,14 @@
             "link": ""
           }
         },
+        "gallery_card_37hVej": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/duo_hair.png",
+            "product": "",
+            "link": ""
+          }
+        },
         "testimonial_MQhaBU": {
           "type": "testimonial",
           "settings": {
@@ -1477,6 +1469,14 @@
             "customer_name": "Lejla S.",
             "product": "afoulki",
             "product_reference": ""
+          }
+        },
+        "gallery_card_Gp9b9y": {
+          "type": "gallery_card",
+          "settings": {
+            "image": "shopify://shop_images/Gemini_Generated_Image_eyp0kdeyp0kdeyp0_0fe7410d-a4c0-4bb8-8aa0-ce68ec004410.png",
+            "product": "100-arganovo-ulje",
+            "link": "shopify://products/100-arganovo-ulje"
           }
         },
         "testimonial_UGEeMK": {
@@ -1537,11 +1537,11 @@
       },
       "block_order": [
         "testimonial_rVHdHA",
-        "gallery_card_Gp9b9y",
-        "gallery_card_37hVej",
         "testimonial_yTrpWm",
         "gallery_card_xd9ywa",
+        "gallery_card_37hVej",
         "testimonial_MQhaBU",
+        "gallery_card_Gp9b9y",
         "testimonial_UGEeMK",
         "testimonial_XGtNik",
         "testimonial_QXhTRh",
