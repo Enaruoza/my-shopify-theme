@@ -1446,6 +1446,7 @@
         },
         "gallery_card_xd9ywa": {
           "type": "gallery_card",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Gemini_Generated_Image_otaxdootaxdootax_upscayl_2x_ultrasharp-4x_1.png",
             "product": "",
@@ -1454,6 +1455,7 @@
         },
         "gallery_card_37hVej": {
           "type": "gallery_card",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/duo_hair.png",
             "product": "",
@@ -1473,6 +1475,7 @@
         },
         "gallery_card_Gp9b9y": {
           "type": "gallery_card",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Gemini_Generated_Image_eyp0kdeyp0kdeyp0_0fe7410d-a4c0-4bb8-8aa0-ce68ec004410.png",
             "product": "100-arganovo-ulje",
@@ -1550,7 +1553,7 @@
       ],
       "name": "Award-Winning Reviews",
       "settings": {
-        "enable_gallery_mix": false,
+        "enable_gallery_mix": true,
         "gallery_products": [
           "100-arganovo-ulje",
           "afoulki",
