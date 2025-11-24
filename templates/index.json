@@ -1458,8 +1458,8 @@
       "settings": {
         "bg_color": "#64bae2",
         "text_color": "#ffffff",
-        "button_bg": "#000000",
-        "button_text": "#FFFFFF",
+        "button_bg": "#ffc818",
+        "button_text": "#000000",
         "font_size_desktop": 80,
         "font_size_mobile": 36,
         "max_width": 1200,
