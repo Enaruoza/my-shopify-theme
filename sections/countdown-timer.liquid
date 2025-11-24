@@ -579,6 +579,11 @@
       const minimizeBtn = container.querySelector('.countdown-minimize-btn');
       const minimizedTrigger = container.querySelector('.countdown-minimized-trigger');
 
+      // Move to body to prevent stacking context issues (unless in Theme Editor)
+      if (!window.Shopify.designMode) {
+        document.body.appendChild(container);
+      }
+
       // Check session storage
       if (sessionStorage.getItem('countdownClosed') === 'true') {
         container.style.display = 'none';

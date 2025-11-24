@@ -10,6 +10,10 @@
   elsif section.settings.height == 'auto'
     assign height_class = 'master-hero--auto'
   endif
+
+  if section.settings.enable_curtain
+    assign height_class = height_class | append: ' curtain-mode'
+  endif
 %}
 
 <div class="master-hero {{ height_class }} color-{{ section.settings.color_scheme }}">
@@ -69,6 +73,13 @@
     align-items: center;
     justify-content: center;
   }
+  
+  /* Curtain Mode: Sticky at top, lower z-index */
+  .master-hero.curtain-mode {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+  }
 
   .master-hero--full { min-height: 100vh; }
   .master-hero--large { min-height: 80vh; }
@@ -118,6 +129,31 @@
     max-width: 800px;
     width: 100%;
   }
+  
+  /* Mega Heading Layout Adjustments */
+  .master-hero__heading.hmega {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+    font-size: 12vw; /* Responsive Mega Size */
+    line-height: 0.8;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    pointer-events: none; /* Let clicks pass through if needed */
+    z-index: 5;
+  }
+  
+  /* Ensure content wrapper doesn't trap the absolute mega heading */
+  .master-hero__content:has(.hmega) {
+    position: static;
+    max-width: none;
+  }
+  .master-hero__content-wrapper:has(.hmega) {
+    position: static;
+  }
 
   .master-hero__heading {
     margin-bottom: 1rem;
@@ -162,6 +198,7 @@
   @media (max-width: 768px) {
     .master-hero__heading.hxl { font-size: 2.5rem; }
     .master-hero__heading.h1 { font-size: 2rem; }
+    .master-hero__heading.hmega { font-size: 15vw; bottom: 80px; } /* Adjust for mobile */
   }
 {% endstylesheet %}
 
@@ -202,6 +239,17 @@
       "id": "color_scheme",
       "label": "Color Scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Curtain Effect"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_curtain",
+      "label": "Enable Curtain Effect",
+      "default": false,
+      "info": "Fixes the hero in place so the next section slides over it. Works best when the next section has a solid background."
     },
     {
       "type": "header",
@@ -258,7 +306,8 @@
             { "value": "h1", "label": "H1" },
             { "value": "h2", "label": "H2" },
             { "value": "h3", "label": "H3" },
-            { "value": "hxl", "label": "Extra Large" }
+            { "value": "hxl", "label": "Extra Large" },
+            { "value": "hmega", "label": "Mega (Bottom Aligned)" }
           ],
           "default": "h1"
         }
