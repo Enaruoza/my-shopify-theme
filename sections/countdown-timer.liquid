@@ -62,11 +62,33 @@
       "content": "Timer Settings"
     },
     {
+      "type": "select",
+      "id": "timer_type",
+      "label": "Timer Logic",
+      "options": [
+        { "value": "fixed", "label": "Fixed Date (e.g. Sale End)" },
+        { "value": "monthly", "label": "Smart Monthly (Auto-End of Month)" },
+        { "value": "daily", "label": "Daily Recurring (e.g. Midnight)" }
+      ],
+      "default": "fixed",
+      "info": "'Smart Monthly' automatically counts down to the end of the current month."
+    },
+    {
       "type": "text",
       "id": "target_date",
-      "label": "Target Date",
-      "info": "Format: YYYY-MM-DDTHH:mm:ss (e.g., 2025-12-31T23:59:59)",
+      "label": "Fixed Target Date",
+      "info": "Format: YYYY-MM-DDTHH:mm:ss (Required for 'Fixed Date' mode)",
       "default": "2025-12-31T23:59:59"
+    },
+    {
+      "type": "range",
+      "id": "daily_end_hour",
+      "min": 0,
+      "max": 23,
+      "step": 1,
+      "label": "Daily End Hour (0-23)",
+      "default": 24,
+      "info": "Hour of the day the timer ends (for 'Daily Recurring'). 0 = Midnight start, 23 = 11 PM. Set to 24 for Midnight end."
     },
     {
       "type": "header",
@@ -418,25 +440,35 @@
     .countdown-colon { font-size: 1.5rem; margin-top: 0.2rem; }
     
     {% if section.settings.enable_popup %}
+      /* MOBILE FIX: Force bottom-center positioning */
       .countdown-timer-section {
         width: 92%;
-        left: 4%;
-        right: 4%;
+        max-width: 400px;
+        left: 50%;
+        right: auto;
         bottom: 20px;
+        top: auto;
+        transform: translateX(-50%); /* Center horizontally */
         padding: 24px !important;
       }
+      
+      /* Minimized state on mobile */
       .countdown-timer-section.is-minimized {
         width: auto;
         left: auto;
         right: 20px;
         bottom: 20px;
+        transform: none; /* Reset transform */
         padding: 10px 16px !important;
       }
     {% endif %}
   }
 </style>
 
-<div id="Countdown-{{ section.id }}" class="countdown-timer-section section-{{ section.id }}-padding" data-target="{{ section.settings.target_date }}">
+<div id="Countdown-{{ section.id }}" class="countdown-timer-section section-{{ section.id }}-padding" 
+     data-timer-type="{{ section.settings.timer_type }}"
+     data-target="{{ section.settings.target_date }}"
+     data-daily-end="{{ section.settings.daily_end_hour }}">
   
   {% if section.settings.enable_popup %}
     <div class="countdown-controls">
@@ -520,8 +552,36 @@
     const container = document.getElementById('Countdown-{{ section.id }}');
     if (!container) return;
 
-    const targetDateStr = container.dataset.target;
-    const targetDate = new Date(targetDateStr).getTime();
+    const timerType = container.dataset.timerType;
+    let targetDate;
+
+    // --- TIMER LOGIC ---
+    if (timerType === 'monthly') {
+      // End of current month
+      const now = new Date();
+      targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).getTime();
+    } else if (timerType === 'daily') {
+      // Next occurrence of daily_end_hour
+      const endHour = parseInt(container.dataset.dailyEnd, 10) || 24;
+      const now = new Date();
+      let target = new Date(now);
+      
+      if (endHour === 24) {
+        target.setHours(23, 59, 59, 999);
+      } else {
+        target.setHours(endHour, 0, 0, 0);
+      }
+
+      // If already passed today, set to tomorrow
+      if (target.getTime() < now.getTime()) {
+        target.setDate(target.getDate() + 1);
+      }
+      targetDate = target.getTime();
+    } else {
+      // Fixed date
+      const targetDateStr = container.dataset.target;
+      targetDate = new Date(targetDateStr).getTime();
+    }
     
     const els = {
       days: container.querySelector('[data-days]'),
