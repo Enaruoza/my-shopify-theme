@@ -765,7 +765,7 @@
         "button_label": "NARUČI ODMAH",
         "button_link": "shopify://collections/all",
         "target_date": "2025-11-30T23:59:59",
-        "color_bg": "#ffffff",
+        "color_bg": "#faf3aa",
         "color_text": "#fc801c",
         "color_number": "#eca72c",
         "color_label_bg": "#f48f91",
