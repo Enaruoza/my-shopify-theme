@@ -96,7 +96,7 @@
                   "type": "text",
                   "name": "t:names.heading",
                   "settings": {
-                    "text": "<p>100% prirodna marokanska njega za lice, tijelo i kosu.</p>",
+                    "text": "<p>100% prirodna marokanska njega </p><p>za lice, tijelo i kosu.</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
