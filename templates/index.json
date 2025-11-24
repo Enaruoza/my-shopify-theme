@@ -781,7 +781,7 @@
         "text_segment_wkzepp": {
           "type": "text_segment",
           "settings": {
-            "text": "Simbol naše porodice."
+            "text": "PLANINA AZOURANE JE NAŠ POČETAK."
           }
         },
         "reveal_button_FMF99K": {
@@ -794,13 +794,13 @@
         "text_segment_Rpp3MR": {
           "type": "text_segment",
           "settings": {
-            "text": "Našeg plemena."
+            "text": "ČISTA ULJA SU NAŠ JEZIK."
           }
         },
         "text_segment_r3Px67": {
           "type": "text_segment",
           "settings": {
-            "text": "Naše vjere da priroda daje ono što hemija ne može."
+            "text": "TVOJA KOŽA JE NAŠA PRIČA."
           }
         }
       },
@@ -821,7 +821,7 @@
         "max_width": 1200,
         "padding_top": 80,
         "padding_bottom": 80,
-        "subtext": "<p>NATURAL PRODUCTS LIKE YOU'VE NEVER FELT BEFORE.</p>",
+        "subtext": "<h2><strong>AZOURANE</strong></h2>",
         "read_more_link": "shopify://collections/all",
         "read_more_label": "NARUČI ODMAH"
       }
