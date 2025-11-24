@@ -645,9 +645,12 @@
       }
 
       // Check session storage
-      if (sessionStorage.getItem('countdownClosed') === 'true') {
+      // Bypass storage check if in Design Mode (Theme Editor)
+      const isDesignMode = window.Shopify && window.Shopify.designMode;
+      
+      if (!isDesignMode && sessionStorage.getItem('countdownClosed') === 'true') {
         container.style.display = 'none';
-      } else if (sessionStorage.getItem('countdownMinimized') === 'true') {
+      } else if (!isDesignMode && sessionStorage.getItem('countdownMinimized') === 'true') {
         container.classList.add('is-minimized');
       }
 

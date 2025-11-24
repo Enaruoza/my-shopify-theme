@@ -56,7 +56,7 @@
   }
 
   .it-reveal-button.is-visible {
-    max-width: 300px; /* Arbitrary large limit */
+    max-width: 400px; /* Increased limit for larger buttons */
     opacity: 1;
     transform: scale(1);
     margin: 0 0.2em; /* Add spacing when visible */
@@ -65,9 +65,11 @@
   .it-btn-inner {
     background-color: {{ section.settings.button_bg }};
     color: {{ section.settings.button_text }};
-    padding: 0.4em 1em; /* Relative padding */
+    /* Customizable padding */
+    padding: {{ section.settings.button_padding_v }}em {{ section.settings.button_padding_h }}em;
     border-radius: 100px;
-    font-size: 0.4em; /* Relative font size to parent text */
+    /* Customizable font size ratio */
+    font-size: {{ section.settings.button_font_ratio }}em; 
     font-weight: 600;
     text-decoration: none;
     text-transform: uppercase;
@@ -78,6 +80,9 @@
     gap: 0.5em;
     height: auto;
     line-height: 1;
+    /* Minimum width to prevent it from being too small */
+    min-width: {{ section.settings.button_min_width }}px;
+    justify-content: center;
   }
 
   .it-btn-inner:hover {
@@ -225,6 +230,48 @@
       "unit": "px",
       "label": "Mobile Font Size",
       "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Button Customization"
+    },
+    {
+      "type": "range",
+      "id": "button_font_ratio",
+      "min": 0.2,
+      "max": 1.0,
+      "step": 0.1,
+      "label": "Button Font Size Ratio",
+      "info": "Size relative to the main text (e.g., 0.5 is half the size).",
+      "default": 0.4
+    },
+    {
+      "type": "range",
+      "id": "button_padding_v",
+      "min": 0.2,
+      "max": 2.0,
+      "step": 0.1,
+      "label": "Vertical Padding (em)",
+      "default": 0.4
+    },
+    {
+      "type": "range",
+      "id": "button_padding_h",
+      "min": 0.5,
+      "max": 3.0,
+      "step": 0.1,
+      "label": "Horizontal Padding (em)",
+      "default": 1.0
+    },
+    {
+      "type": "range",
+      "id": "button_min_width",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Minimum Button Width",
+      "default": 0
     },
     {
       "type": "header",
