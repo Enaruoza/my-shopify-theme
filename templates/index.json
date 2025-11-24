@@ -1553,7 +1553,7 @@
       ],
       "name": "Award-Winning Reviews",
       "settings": {
-        "enable_gallery_mix": true,
+        "enable_gallery_mix": false,
         "gallery_products": [
           "100-arganovo-ulje",
           "afoulki",
