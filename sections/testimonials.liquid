@@ -20,6 +20,7 @@
     background-color: {{ section.settings.background_color }};
     overflow: hidden;
     position: relative;
+    transition: height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth height adjustment */
   }
 
   /* --- FLAT COLLAGE LAYOUT --- */
@@ -322,7 +323,7 @@
   }
 </style>
 
-<div class="testimonial-section-{{ section.id }}">
+<div class="testimonial-section-{{ section.id }}" id="TestimonialSection-{{ section.id }}">
   {%- if section.settings.heading != blank -%}
     <div class="section-header">
       <h2>{{ section.settings.heading | escape }}</h2>
@@ -358,7 +359,13 @@
                   {% endif %}
 
                   <div class="t-footer">
-                    {%- assign name = block.settings.customer_name | default: 'Customer' -%}
+                    {%- assign raw_name = block.settings.customer_name | strip -%}
+                    {%- if raw_name == blank -%}
+                      {%- assign name = 'Customer' -%}
+                    {%- else -%}
+                      {%- assign name = raw_name -%}
+                    {%- endif -%}
+                    
                     {%- assign first_letter = name | slice: 0 | upcase -%}
                     <div class="t-avatar">{{ first_letter }}</div>
                     <div class="t-meta">
