@@ -775,6 +775,57 @@
         "padding_bottom": 28
       }
     },
+    "interactive_text_reveal_69GFYH": {
+      "type": "interactive-text-reveal",
+      "blocks": {
+        "text_segment_wkzepp": {
+          "type": "text_segment",
+          "settings": {
+            "text": "Simbol naše porodice."
+          }
+        },
+        "reveal_button_FMF99K": {
+          "type": "reveal_button",
+          "settings": {
+            "label": "SVE PROIZVODE",
+            "link": "shopify://collections/all"
+          }
+        },
+        "text_segment_Rpp3MR": {
+          "type": "text_segment",
+          "settings": {
+            "text": "Našeg plemena."
+          }
+        },
+        "text_segment_r3Px67": {
+          "type": "text_segment",
+          "settings": {
+            "text": "Naše vjere da priroda daje ono što hemija ne može."
+          }
+        }
+      },
+      "block_order": [
+        "text_segment_wkzepp",
+        "reveal_button_FMF99K",
+        "text_segment_Rpp3MR",
+        "text_segment_r3Px67"
+      ],
+      "name": "Interactive Text Reveal",
+      "settings": {
+        "bg_color": "#64bae2",
+        "text_color": "#ffffff",
+        "button_bg": "#ffc818",
+        "button_text": "#000000",
+        "font_size_desktop": 80,
+        "font_size_mobile": 36,
+        "max_width": 1200,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "subtext": "<p>NATURAL PRODUCTS LIKE YOU'VE NEVER FELT BEFORE.</p>",
+        "read_more_link": "shopify://collections/all",
+        "read_more_label": "NARUČI ODMAH"
+      }
+    },
     "featured_product_mXJfBV": {
       "type": "featured-product",
       "blocks": {
@@ -1419,57 +1470,6 @@
         "padding-block-end": 48
       }
     },
-    "interactive_text_reveal_69GFYH": {
-      "type": "interactive-text-reveal",
-      "blocks": {
-        "text_segment_wkzepp": {
-          "type": "text_segment",
-          "settings": {
-            "text": "100%"
-          }
-        },
-        "reveal_button_FMF99K": {
-          "type": "reveal_button",
-          "settings": {
-            "label": "SVE PROIZVODE",
-            "link": "shopify://collections/all"
-          }
-        },
-        "text_segment_Rpp3MR": {
-          "type": "text_segment",
-          "settings": {
-            "text": "PRIRODNA"
-          }
-        },
-        "text_segment_r3Px67": {
-          "type": "text_segment",
-          "settings": {
-            "text": "MAROKANSKA KOZMETIKA"
-          }
-        }
-      },
-      "block_order": [
-        "text_segment_wkzepp",
-        "reveal_button_FMF99K",
-        "text_segment_Rpp3MR",
-        "text_segment_r3Px67"
-      ],
-      "name": "Interactive Text Reveal",
-      "settings": {
-        "bg_color": "#64bae2",
-        "text_color": "#ffffff",
-        "button_bg": "#ffc818",
-        "button_text": "#000000",
-        "font_size_desktop": 80,
-        "font_size_mobile": 36,
-        "max_width": 1200,
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "subtext": "<p>NATURAL PRODUCTS LIKE YOU'VE NEVER FELT BEFORE.</p>",
-        "read_more_link": "shopify://collections/all",
-        "read_more_label": "NARUČI ODMAH"
-      }
-    },
     "testimonials_CQzbrj": {
       "type": "testimonials",
       "blocks": {
@@ -2103,12 +2103,12 @@
     "product_list_dCcPd9",
     "divider_eVPqxR",
     "countdown_timer_J3dprW",
+    "interactive_text_reveal_69GFYH",
     "featured_product_mXJfBV",
     "collection_list_cYTHn4",
     "media_with_content_zrepDz",
     "hero_4P44dV",
     "product_recommendations_whYxKN",
-    "interactive_text_reveal_69GFYH",
     "testimonials_CQzbrj",
     "section_PiVBQD",
     "media_with_content_aYVRzm",
