@@ -1490,6 +1490,17 @@
             "product_reference": ""
           }
         },
+        "testimonial_XGtNik": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "review_title": "Afoulki mi je smirila kožu",
+            "review_text": "<p>Afoulki mi je umirila kožu već nakon prvih nekoliko korištenja. Nema više zatezanja ni crvenila! Koža mi je mekša, ujednačenija i izgleda svježe, čak i bez šminke.</p>",
+            "customer_name": "Sarah J.",
+            "product": "afoulki",
+            "product_reference": ""
+          }
+        },
         "testimonial_QXhTRh": {
           "type": "testimonial",
           "settings": {
@@ -1522,17 +1533,6 @@
             "product": "100-arganovo-ulje",
             "product_reference": ""
           }
-        },
-        "testimonial_XGtNik": {
-          "type": "testimonial",
-          "settings": {
-            "rating": 5,
-            "review_title": "Afoulki mi je smirila kožu",
-            "review_text": "<p>Afoulki mi je umirila kožu već nakon prvih nekoliko korištenja. Nema više zatezanja ni crvenila! Koža mi je mekša, ujednačenija i izgleda svježe, čak i bez šminke.</p>",
-            "customer_name": "Sarah J.",
-            "product": "afoulki",
-            "product_reference": ""
-          }
         }
       },
       "block_order": [
@@ -1543,10 +1543,10 @@
         "gallery_card_xd9ywa",
         "testimonial_MQhaBU",
         "testimonial_UGEeMK",
+        "testimonial_XGtNik",
         "testimonial_QXhTRh",
         "testimonial_NC4JNq",
-        "testimonial_9AHzFh",
-        "testimonial_XGtNik"
+        "testimonial_9AHzFh"
       ],
       "name": "Award-Winning Reviews",
       "settings": {
