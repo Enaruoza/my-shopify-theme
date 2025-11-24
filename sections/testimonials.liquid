@@ -89,28 +89,29 @@
   .masonry-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-auto-rows: 20px; /* Small row unit for fine-grained height */
+    grid-auto-rows: 10px; /* Finer grain for smooth sizing */
     grid-gap: 24px;
   }
 
   /* MASONRY ITEM */
   .masonry-item {
-    /* Grid row span is set by JS */
     background-color: transparent;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth re-flow */
   }
 
   /* CARD STYLES */
   .t-card {
     background-color: #FFFBF0; /* Cream */
     border-radius: 16px;
-    padding: 32px;
+    padding: 24px;
     box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
-    transition: transform 0.2s ease;
-    height: 100%; /* Fill the masonry item height */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    height: auto; 
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
   }
 
   .t-card:hover {
@@ -118,26 +119,63 @@
     box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
   }
 
-  /* Quote Icon */
-  .t-card::before {
-    content: '“';
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 80px;
-    line-height: 1;
-    font-family: serif;
-    color: #FDB813;
-    opacity: 0.3;
-    pointer-events: none;
+  /* Collapsed State (Default) */
+  .t-card .t-content-wrapper {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
   }
+
+  /* Expanded State */
+  .t-card.is-expanded {
+    background-color: #FFFFFF;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    z-index: 10;
+    transform: scale(1.02);
+  }
+
+  .t-card.is-expanded .t-content-wrapper {
+    max-height: 500px; /* Arbitrary large height */
+    opacity: 1;
+    margin-top: 16px;
+  }
+
+  /* Expand Icon */
+  .t-expand-icon {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 24px;
+    height: 24px;
+    background: #FDB813;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .t-card.is-expanded .t-expand-icon {
+    transform: rotate(45deg);
+    background: #EF4444; /* Red for close */
+    color: white;
+  }
+
+  .t-expand-icon svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    color: #2C3E50;
+  }
+  .t-card.is-expanded .t-expand-icon svg { color: white; }
 
   /* Content Styles */
   .t-stars {
     color: #F59E0B;
     font-size: 14px;
     letter-spacing: 2px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     display: flex;
     gap: 2px;
   }
@@ -146,9 +184,10 @@
     color: #2C3E50;
     font-weight: 800;
     font-size: {{ section.settings.title_font_size }}px;
-    margin: 0 0 12px 0;
+    margin: 0;
     line-height: 1.3;
     font-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    padding-right: 30px; /* Space for icon */
   }
 
   .t-text {
@@ -296,7 +335,11 @@
         {% case block.type %}
           {% when 'testimonial' %}
             <div class="masonry-item" {{ block.shopify_attributes }}>
-              <div class="t-card">
+              <div class="t-card" onclick="toggleCard(this)">
+                <div class="t-expand-icon">
+                  <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+
                 {% if block.settings.rating > 0 %}
                   <div class="t-stars">
                     {% for i in (1..block.settings.rating) %}
@@ -309,26 +352,28 @@
                   <h3 class="t-title">{{ block.settings.review_title | escape }}</h3>
                 {% endif %}
                 
-                {% if block.settings.review_text != blank %}
-                  <div class="t-text">{{ block.settings.review_text }}</div>
-                {% endif %}
+                <div class="t-content-wrapper">
+                  {% if block.settings.review_text != blank %}
+                    <div class="t-text">{{ block.settings.review_text }}</div>
+                  {% endif %}
 
-                <div class="t-footer">
-                  {%- assign name = block.settings.customer_name | default: 'Customer' -%}
-                  {%- assign first_letter = name | slice: 0 | upcase -%}
-                  <div class="t-avatar">{{ first_letter }}</div>
-                  <div class="t-meta">
-                    <span class="t-name">
-                      {{ name }}
-                      <span class="verified-badge">
-                        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                  <div class="t-footer">
+                    {%- assign name = block.settings.customer_name | default: 'Customer' -%}
+                    {%- assign first_letter = name | slice: 0 | upcase -%}
+                    <div class="t-avatar">{{ first_letter }}</div>
+                    <div class="t-meta">
+                      <span class="t-name">
+                        {{ name }}
+                        <span class="verified-badge">
+                          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                        </span>
                       </span>
-                    </span>
-                    {%- if block.settings.product -%}
-                      <a href="{{ block.settings.product.url }}" class="t-product">Verified buyer of {{ block.settings.product.title }}</a>
-                    {%- elsif block.settings.product_reference != blank -%}
-                       <span class="t-product">Verified buyer of {{ block.settings.product_reference }}</span>
-                    {%- endif -%}
+                      {%- if block.settings.product -%}
+                        <a href="{{ block.settings.product.url }}" class="t-product">Verified buyer of {{ block.settings.product.title }}</a>
+                      {%- elsif block.settings.product_reference != blank -%}
+                         <span class="t-product">Verified buyer of {{ block.settings.product_reference }}</span>
+                      {%- endif -%}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -411,9 +456,10 @@
     const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-gap'));
     
     // Get content height (first child)
-    const content = item.firstElementChild;
-    // Ensure images are loaded before calculating
-    const contentHeight = content.getBoundingClientRect().height;
+    const card = item.querySelector('.t-card') || item.querySelector('.t-gallery-card');
+    
+    // Ensure we measure the card's full scrollHeight to account for expanded content
+    const contentHeight = card.scrollHeight; 
     
     const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
     item.style.gridRowEnd = "span " + rowSpan;
@@ -426,9 +472,19 @@
     }
   }
 
-  function resizeInstance(instance) {
-    const item = instance.elements[0];
-    resizeGridItem(item);
+  function toggleCard(card) {
+    // Toggle class
+    const wasExpanded = card.classList.contains('is-expanded');
+    
+    if (!wasExpanded) {
+      card.classList.add('is-expanded');
+    } else {
+      card.classList.remove('is-expanded');
+    }
+
+    // Recalculate layout
+    resizeAllGridItems();
+    setTimeout(resizeAllGridItems, 450); // Wait for CSS transition
   }
 
   window.addEventListener("load", resizeAllGridItems);
@@ -437,9 +493,7 @@
   // Run on DOM content loaded as well for text-only items
   document.addEventListener('DOMContentLoaded', () => {
       resizeAllGridItems();
-      // Re-run after a short delay to catch font loading
       setTimeout(resizeAllGridItems, 500);
-      setTimeout(resizeAllGridItems, 2000);
   });
   
   // If images are present, wait for them
