@@ -62,7 +62,7 @@
                 "vertical_alignment": "center",
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "center",
+                "vertical_alignment_flex_direction_column": "flex-end",
                 "gap": 36,
                 "width": "fit-content",
                 "custom_width": 100,
@@ -1553,18 +1553,6 @@
       ],
       "name": "Award-Winning Reviews",
       "settings": {
-        "enable_gallery_mix": false,
-        "gallery_products": [
-          "100-arganovo-ulje",
-          "afoulki",
-          "amaan",
-          "tawenza",
-          "sanouj",
-          "tayri",
-          "tifawin",
-          "tislit"
-        ],
-        "mix_frequency": 2,
         "heading": "ŠTA NAŠI KUPCI KAŽU?",
         "max_width": 1400,
         "background_color": "#f4e8ba",
