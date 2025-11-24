@@ -1446,7 +1446,6 @@
         },
         "gallery_card_xd9ywa": {
           "type": "gallery_card",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Gemini_Generated_Image_otaxdootaxdootax_upscayl_2x_ultrasharp-4x_1.png",
             "product": "",
