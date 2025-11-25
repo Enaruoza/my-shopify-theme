@@ -1,3 +1,70 @@
+{%- liquid
+  assign heading_font = section.settings.heading_font
+  assign body_font = section.settings.body_font
+  assign card_bg = section.settings.card_background_color
+  assign text_color = section.settings.heading_color
+-%}
+
+<style>
+  {{ heading_font | font_face }}
+  {{ body_font | font_face }}
+
+  :root {
+    --ts-primary: {{ section.settings.heading_color }};
+    --ts-star: {{ section.settings.star_color }};
+  }
+
+  .testimonial-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.background_color }};
+    overflow: hidden;
+    position: relative;
+    transition: height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  
+  /* The Sun */
+  .testimonial-section-{{ section.id }}::before {
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    background-color: #FDB813;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Cloud Divider */
+  .testimonial-section-{{ section.id }}::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFFFFF' fill-opacity='1' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .testimonial-section-{{ section.id }} .section-header {
+    position: relative;
+    z-index: 1;
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+    text-align: center;
+  }
+  
+  .testimonial-section-{{ section.id }} h2 {
+    color: {{ text_color }};
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
     font-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
     font-weight: {{ heading_font.weight }};
     font-size: {{ section.settings.heading_font_size }}px;
@@ -246,6 +313,10 @@
     }
     .testimonial-section-{{ section.id }} h2 {
       font-size: calc({{ section.settings.heading_font_size }}px * 0.8);
+    }
+    .testimonial-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
     }
   }
 </style>
@@ -568,6 +639,30 @@
       "unit": "px",
       "label": "Bottom Padding",
       "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Top Padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Bottom Padding",
+      "default": 40
     }
   ],
   "blocks": [
