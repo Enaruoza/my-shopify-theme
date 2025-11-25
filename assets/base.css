@@ -2249,6 +2249,14 @@ product-price.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) > *:not(.tax-note) {
   margin-inline: var(--margin-inline-start) var(--margin-inline-end);
 }
 
+@media screen and (max-width: 749px) {
+  .spacing-style,
+  .inherit-spacing {
+    padding-block-start: calc(var(--padding-block-start-mobile, var(--padding-block-start)) + var(--section-top-offset, 0px));
+    padding-block-end: var(--padding-block-end-mobile, var(--padding-block-end));
+  }
+}
+
 /* Size style */
 .size-style {
   width: var(--size-style-width-mobile, var(--size-style-width));

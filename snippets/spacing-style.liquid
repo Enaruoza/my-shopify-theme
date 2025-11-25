@@ -9,7 +9,7 @@
 {%- enddoc -%}
 {%- liquid
   assign scale_min = 20
-  assign keys = 'padding-block-start,padding-block-end,padding-inline-start,padding-inline-end' | split: ','
+  assign keys = 'padding-block-start,padding-block-end,padding-inline-start,padding-inline-end,padding-block-start-mobile,padding-block-end-mobile' | split: ','
 
   for key in keys
     assign value = settings[key]

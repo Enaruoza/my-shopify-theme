@@ -28,6 +28,7 @@
   style="
     {{ section_style }}
     --section-vertical-padding: {{ section.settings.section_height }}rem;
+    --mobile-section-vertical-padding: {{ section.settings.mobile_section_height }}rem;
     --mobile-font-scale: {{ section.settings.mobile_font_size_percentage | divided_by: 100.0 }};
   "
 >
@@ -101,6 +102,11 @@
     text-align: center;
     background-size: cover;
     background-position: center;
+  }
+  @media (max-width: 768px) {
+    .jumbo-fx-section {
+      padding: var(--mobile-section-vertical-padding) 1.5rem;
+    }
   }
   .page-width-fx {
     max-width: 1200px;
@@ -228,6 +234,12 @@
       "id": "section_height",
       "label": "Vertical Spacing",
       "min": 2, "max": 20, "step": 1, "unit": "rem", "default": 8
+    },
+    {
+      "type": "range",
+      "id": "mobile_section_height",
+      "label": "Mobile Vertical Spacing",
+      "min": 1, "max": 10, "step": 1, "unit": "rem", "default": 4
     },
     {
       "type": "color",
