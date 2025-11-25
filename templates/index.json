@@ -313,7 +313,9 @@
         "blurred_reflection": true,
         "reflection_opacity": 0,
         "padding-block-start": 96,
-        "padding-block-end": 79
+        "padding-block-end": 79,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
       }
     },
     "product_list_KDDjy4": {
@@ -541,7 +543,9 @@
         "gap": 28,
         "color_scheme": "scheme-1",
         "padding-block-start": 20,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "padding-block-start-mobile": 24,
+        "padding-block-end-mobile": 24
       }
     },
     "product_list_dCcPd9": {
@@ -736,7 +740,9 @@
         "gap": 28,
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-end": 48,
+        "padding-block-start-mobile": 24,
+        "padding-block-end-mobile": 24
       }
     },
     "divider_eVPqxR": {
@@ -750,7 +756,9 @@
         "width_percent": 100,
         "alignment_horizontal": "center",
         "padding-block-start": 4,
-        "padding-block-end": 3
+        "padding-block-end": 3,
+        "padding-block-start-mobile": 16,
+        "padding-block-end-mobile": 16
       }
     },
     "countdown_timer_J3dprW": {
@@ -1090,7 +1098,9 @@
         "gap": 12,
         "color_scheme": "scheme-8",
         "padding-block-start": 24,
-        "padding-block-end": 24
+        "padding-block-end": 24,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
       }
     },
     "media_with_content_zrepDz": {
@@ -1232,7 +1242,9 @@
         "extend_media": true,
         "color_scheme": "scheme-6",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
       }
     },
     "hero_4P44dV": {
@@ -1324,7 +1336,9 @@
         "blurred_reflection": false,
         "reflection_opacity": 75,
         "padding-block-start": 40,
-        "padding-block-end": 40
+        "padding-block-end": 40,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
       }
     },
     "product_recommendations_whYxKN": {
@@ -1758,7 +1772,9 @@
         "extend_media": true,
         "color_scheme": "scheme-2",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
       }
     },
     "media_with_content_BRnGM9": {
@@ -1887,7 +1903,9 @@
         "extend_media": true,
         "color_scheme": "scheme-5",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
       }
     },
     "section_LMhqH3": {
