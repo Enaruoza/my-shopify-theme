@@ -763,6 +763,7 @@
     },
     "countdown_timer_J3dprW": {
       "type": "countdown-timer",
+      "disabled": true,
       "name": "Countdown Timer",
       "settings": {
         "enable_popup": false,
