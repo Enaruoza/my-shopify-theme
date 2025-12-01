@@ -17,7 +17,7 @@
         "announcement_mxxhta": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>NOVEMBAR: do –30% </strong>ušteda<strong> </strong>• Besplatna dostava 79+ KM • Plaćanje pouzećem",
+            "text": "Besplatna dostava 79+ KM • Plaćanje pouzećem",
             "link": "shopify://collections/all",
             "font": "var(--font-primary--family)",
             "font_size": "var(--font-size--body-md)",
