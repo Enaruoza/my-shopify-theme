@@ -1,1 +1,327 @@
-{"sections":{"main":{"type":"main-page","blocks":{"heading":{"type":"text","name":"Title","settings":{"text":"<h1>{{ closest.page.title }}<\/h1>","width":"100%","max_width":"normal","alignment":"left","type_preset":"h2","font":"var(--font-body--family)","font_size":"1rem","line_height":"normal","letter_spacing":"normal","case":"none","wrap":"pretty","color":"var(--color-foreground)","background":false,"background_color":"#00000026","corner_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}},"page-content":{"type":"page-content","settings":{},"blocks":{}}},"block_order":["heading","page-content"],"disabled":true,"settings":{"content_direction":"column","gap":32,"color_scheme":"","padding-block-start":40,"padding-block-end":80}},"section_b6R4b4":{"type":"section","blocks":{"text_c7FiTn":{"type":"text","settings":{"text":"<h3>Tradicija Maroka. Preciznost laboratorija.<\/h3>","width":"fit-content","max_width":"narrow","alignment":"left","type_preset":"rte","font":"var(--font-body--family)","font_size":"1rem","line_height":"normal","letter_spacing":"normal","case":"none","wrap":"pretty","color":"var(--color-foreground)","background":false,"background_color":"#00000026","corner_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}},"text_9m9rhC":{"type":"text","name":"t:names.text","settings":{"text":"<h4>AZOURANE spaja rituale koje su žene u Maroku čuvale generacijama s današnjom laboratorijskom disciplinom. Svaki sastojak je ručno bran. Svaka formula je napravljena u kontrolisanim uslovima. Jednostavno, čisto, dosljedno.<\/h4>","width":"fit-content","max_width":"normal","alignment":"left","type_preset":"rte","font":"var(--font-body--family)","font_size":"1rem","line_height":"normal","letter_spacing":"normal","case":"none","wrap":"pretty","color":"var(--color-foreground)","background":false,"background_color":"#00000026","corner_radius":0,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}},"logo_CHmX4H":{"type":"logo","settings":{"inverse":false,"font":"heading","unit":"percent","percent_width":100,"pixel_height":48,"custom_mobile_size":false,"unit_mobile":"percent","percent_width_mobile":100,"pixel_height_mobile":120,"padding-block-start":0,"padding-block-end":0,"padding-inline-start":0,"padding-inline-end":0},"blocks":{}}},"block_order":["text_c7FiTn","text_9m9rhC","logo_CHmX4H"],"name":"t:names.large_logo","settings":{"content_direction":"column","vertical_on_mobile":true,"horizontal_alignment":"flex-start","vertical_alignment":"center","align_baseline":false,"horizontal_alignment_flex_direction_column":"flex-start","vertical_alignment_flex_direction_column":"space-between","gap":16,"section_width":"page-width","section_height":"medium","section_height_custom":50,"color_scheme":"scheme-7","background_media":"none","video_position":"cover","background_image_position":"cover","border":"none","border_width":1,"border_opacity":100,"border_radius":0,"toggle_overlay":false,"overlay_color":"#00000026","overlay_style":"solid","gradient_direction":"to top","padding-block-start":40,"padding-block-end":40}},"story_JFkwxd":{"type":"story","blocks":{"chapter_zzhDkK":{"type":"chapter","settings":{"layout":"text_left","heading":"Tradicija Maroka. Preciznost laboratorija.","content":"<p>AZOURANE spaja rituale koje su žene u Maroku čuvale generacijama s današnjom laboratorijskom disciplinom. Svaki sastojak je ručno bran. Svaka formula je napravljena u kontrolisanim uslovima. Jednostavno, čisto, dosljedno<\/p>","button_label":"Explore Now","button_link":"","featured_image":"shopify:\/\/shop_images\/0_2_b3900365-ac6c-408c-a9fa-9d51e411d0f4.jpg","background_color":"#0a0a0a","text_color":"#e5e5e5"}},"chapter_397iXQ":{"type":"chapter","settings":{"layout":"text_right","heading":"Radimo direktno s ženskim zadrugama","content":"<p>Poštujemo porijeklo, znanje i vještinu onih koje beru i pripremaju sirovine. Ručno branje znači pažljiv odabir i svježinu - temelj kvalitete koju osjetite na koži i kosi.<\/p>","button_label":"Explore Now","button_link":"","featured_image":"shopify:\/\/shop_images\/Gemini_Generated_Image_s5az3ys5az3ys5az.png","background_color":"#0a0a0a","text_color":"#e5e5e5"}},"chapter_AYyiN7":{"type":"chapter","settings":{"layout":"text_left","heading":"Od ručno branog do laboratorijski usavršenog","content":"<ol><li><strong>Berba i selekcija:<\/strong> svaka šarža potiče iz provjerenih izvora, birana na terenu.<br\/><\/li><li><strong>Ekstrakcija i stabilizacija:<\/strong> sastojci se prerađuju pod nadzorom, da sačuvaju aktivnost.<br\/><\/li><li><strong>Formulacija u laboratoriju:<\/strong> moderne, minimalističke formule bez suvišnih dodataka.<br\/><\/li><li><strong>Kontrola svake serije:<\/strong> dosljedna tekstura, miris i učinak prije nego dođe u vašu rutinu.<\/li><\/ol>","button_label":"Explore Now","button_link":"","featured_image":"shopify:\/\/shop_images\/Gemini_Generated_Image_s5az3ys5az3ys5az.png","background_color":"#0a0a0a","text_color":"#e5e5e5"}},"chapter_ezhTfH":{"type":"chapter","settings":{"layout":"text_right","heading":"Naša filozofija","content":"<p>Koristimo provjerene marokanske metode za njegu kože, kose i noktiju, pretvorene u <strong>savremena rješenja<\/strong>. Prioritet su <strong>prirodni sastojci<\/strong> i <strong>funkcionalna jednostavnost<\/strong> - bez silikona i bez mineralnih ulja. Obećavamo ono što možemo isporučiti. Ništa napuhano.<\/p>","button_label":"Explore Now","button_link":"","featured_image":"shopify:\/\/shop_images\/Gemini_Generated_Image_s5az3ys5az3ys5az.png","background_color":"#0a0a0a","text_color":"#e5e5e5"}},"chapter_haNMAB":{"type":"chapter","settings":{"layout":"text_left","heading":"Gdje nas naći","content":"<p>AZOURANE - Sarajevo City Center, III sprat. Svratite, upoznajte formule, osjetite teksture, pitajte sve što vas zanima.<\/p>","button_label":"Explore Now","button_link":"","featured_image":"shopify:\/\/shop_images\/Gemini_Generated_Image_s5az3ys5az3ys5az.png","background_color":"#0a0a0a","text_color":"#e5e5e5"}}},"block_order":["chapter_zzhDkK","chapter_397iXQ","chapter_AYyiN7","chapter_ezhTfH","chapter_haNMAB"],"name":"Kinetic Storyteller","settings":{}}},"order":["main","section_b6R4b4","story_JFkwxd"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    },
+    "section_b6R4b4": {
+      "type": "section",
+      "blocks": {
+        "text_c7FiTn": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>Tradicija Maroka. Preciznost laboratorija.</h3>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_9m9rhC": {
+          "type": "text",
+          "name": "t:names.text",
+          "settings": {
+            "text": "<h4>AZOURANE spaja rituale koje su žene u Maroku čuvale generacijama s današnjom laboratorijskom disciplinom. Svaki sastojak je ručno bran. Svaka formula je napravljena u kontrolisanim uslovima. Jednostavno, čisto, dosljedno.</h4>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "logo_CHmX4H": {
+          "type": "logo",
+          "settings": {
+            "inverse": false,
+            "font": "heading",
+            "unit": "percent",
+            "percent_width": 100,
+            "pixel_height": 48,
+            "custom_mobile_size": false,
+            "unit_mobile": "percent",
+            "percent_width_mobile": 100,
+            "pixel_height_mobile": 120,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_c7FiTn",
+        "text_9m9rhC",
+        "logo_CHmX4H"
+      ],
+      "name": "t:names.large_logo",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "space-between",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "medium",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-7",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "story_JFkwxd": {
+      "type": "story",
+      "blocks": {
+        "chapter_zzhDkK": {
+          "type": "chapter",
+          "settings": {
+            "layout": "text_left",
+            "content_width": 50,
+            "chapter_theme": "dark",
+            "eyebrow": "Chapter 01",
+            "heading": "Tradicija Maroka. Preciznost laboratorija.",
+            "content": "<p>AZOURANE spaja rituale koje su žene u Maroku čuvale generacijama s današnjom laboratorijskom disciplinom. Svaki sastojak je ručno bran. Svaka formula je napravljena u kontrolisanim uslovima. Jednostavno, čisto, dosljedno</p>",
+            "button_label": "Explore Now",
+            "button_link": "",
+            "button_style": "primary",
+            "button_label_2": "",
+            "button_link_2": "",
+            "featured_image": "shopify://shop_images/0_2_b3900365-ac6c-408c-a9fa-9d51e411d0f4.jpg",
+            "featured_video": "",
+            "media_caption": "",
+            "background_color": "#0a0a0a",
+            "background_overlay": 40,
+            "text_color": "#e5e5e5",
+            "heading_size_mobile": 36,
+            "heading_size_desktop": 64,
+            "content_size_mobile": 16,
+            "content_size_desktop": 18
+          }
+        },
+        "chapter_397iXQ": {
+          "type": "chapter",
+          "settings": {
+            "layout": "text_right",
+            "content_width": 50,
+            "chapter_theme": "dark",
+            "eyebrow": "Chapter 01",
+            "heading": "Radimo direktno s ženskim zadrugama",
+            "content": "<p>Poštujemo porijeklo, znanje i vještinu onih koje beru i pripremaju sirovine. Ručno branje znači pažljiv odabir i svježinu - temelj kvalitete koju osjetite na koži i kosi.</p>",
+            "button_label": "Explore Now",
+            "button_link": "",
+            "button_style": "primary",
+            "button_label_2": "",
+            "button_link_2": "",
+            "featured_image": "shopify://shop_images/Gemini_Generated_Image_s5az3ys5az3ys5az.png",
+            "featured_video": "",
+            "media_caption": "",
+            "background_color": "#0a0a0a",
+            "background_overlay": 40,
+            "text_color": "#e5e5e5",
+            "heading_size_mobile": 36,
+            "heading_size_desktop": 64,
+            "content_size_mobile": 16,
+            "content_size_desktop": 18
+          }
+        },
+        "chapter_AYyiN7": {
+          "type": "chapter",
+          "settings": {
+            "layout": "text_left",
+            "content_width": 50,
+            "chapter_theme": "dark",
+            "eyebrow": "Chapter 01",
+            "heading": "Od ručno branog do laboratorijski usavršenog",
+            "content": "<ol><li><strong>Berba i selekcija:</strong> svaka šarža potiče iz provjerenih izvora, birana na terenu.<br/></li><li><strong>Ekstrakcija i stabilizacija:</strong> sastojci se prerađuju pod nadzorom, da sačuvaju aktivnost.<br/></li><li><strong>Formulacija u laboratoriju:</strong> moderne, minimalističke formule bez suvišnih dodataka.<br/></li><li><strong>Kontrola svake serije:</strong> dosljedna tekstura, miris i učinak prije nego dođe u vašu rutinu.</li></ol>",
+            "button_label": "Explore Now",
+            "button_link": "",
+            "button_style": "primary",
+            "button_label_2": "",
+            "button_link_2": "",
+            "featured_image": "shopify://shop_images/Gemini_Generated_Image_s5az3ys5az3ys5az.png",
+            "featured_video": "",
+            "media_caption": "",
+            "background_color": "#0a0a0a",
+            "background_overlay": 40,
+            "text_color": "#e5e5e5",
+            "heading_size_mobile": 36,
+            "heading_size_desktop": 64,
+            "content_size_mobile": 16,
+            "content_size_desktop": 18
+          }
+        },
+        "chapter_ezhTfH": {
+          "type": "chapter",
+          "settings": {
+            "layout": "text_right",
+            "content_width": 50,
+            "chapter_theme": "dark",
+            "eyebrow": "Chapter 01",
+            "heading": "Naša filozofija",
+            "content": "<p>Koristimo provjerene marokanske metode za njegu kože, kose i noktiju, pretvorene u <strong>savremena rješenja</strong>. Prioritet su <strong>prirodni sastojci</strong> i <strong>funkcionalna jednostavnost</strong> - bez silikona i bez mineralnih ulja. Obećavamo ono što možemo isporučiti. Ništa napuhano.</p>",
+            "button_label": "Explore Now",
+            "button_link": "",
+            "button_style": "primary",
+            "button_label_2": "",
+            "button_link_2": "",
+            "featured_image": "shopify://shop_images/Gemini_Generated_Image_s5az3ys5az3ys5az.png",
+            "featured_video": "",
+            "media_caption": "",
+            "background_color": "#0a0a0a",
+            "background_overlay": 40,
+            "text_color": "#e5e5e5",
+            "heading_size_mobile": 36,
+            "heading_size_desktop": 64,
+            "content_size_mobile": 16,
+            "content_size_desktop": 18
+          }
+        },
+        "chapter_haNMAB": {
+          "type": "chapter",
+          "settings": {
+            "layout": "text_left",
+            "content_width": 50,
+            "chapter_theme": "dark",
+            "eyebrow": "Chapter 01",
+            "heading": "Gdje nas naći",
+            "content": "<p>AZOURANE - Sarajevo City Center, III sprat. Svratite, upoznajte formule, osjetite teksture, pitajte sve što vas zanima.</p>",
+            "button_label": "Explore Now",
+            "button_link": "",
+            "button_style": "primary",
+            "button_label_2": "",
+            "button_link_2": "",
+            "featured_image": "shopify://shop_images/Gemini_Generated_Image_s5az3ys5az3ys5az.png",
+            "featured_video": "",
+            "media_caption": "",
+            "background_color": "#0a0a0a",
+            "background_overlay": 40,
+            "text_color": "#e5e5e5",
+            "heading_size_mobile": 36,
+            "heading_size_desktop": 64,
+            "content_size_mobile": 16,
+            "content_size_desktop": 18
+          }
+        }
+      },
+      "block_order": [
+        "chapter_zzhDkK",
+        "chapter_397iXQ",
+        "chapter_AYyiN7",
+        "chapter_ezhTfH",
+        "chapter_haNMAB"
+      ],
+      "disabled": true,
+      "name": "Kinetic Storyteller",
+      "settings": {
+        "section_label": "Product Story",
+        "color_scheme": "",
+        "section_spacing": 100,
+        "enable_parallax": true,
+        "animation_speed": 600,
+        "show_progress": true,
+        "show_navigation": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_b6R4b4",
+    "story_JFkwxd"
+  ]
+}
