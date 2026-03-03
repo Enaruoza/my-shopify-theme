@@ -1,7 +1,37 @@
 {
     "current": {
-        "color_bg": "#FAF9F6",
-        "color_text": "#1A1A1A",
+        "color_schemes": {
+            "scheme-1": {
+                "background": "#FAF9F6",
+                "background_gradient": "",
+                "text": "#1A1A1A",
+                "button": "#1A1A1A",
+                "button_label": "#FAF9F6",
+                "secondary_button": "#FAF9F6",
+                "secondary_button_label": "#1A1A1A",
+                "outline_button": "#1A1A1A"
+            },
+            "scheme-2": {
+                "background": "#F0EBE1",
+                "background_gradient": "",
+                "text": "#1A1A1A",
+                "button": "#1A1A1A",
+                "button_label": "#F0EBE1",
+                "secondary_button": "#F0EBE1",
+                "secondary_button_label": "#1A1A1A",
+                "outline_button": "#1A1A1A"
+            },
+            "scheme-3": {
+                "background": "#1A1A1A",
+                "background_gradient": "",
+                "text": "#FAF9F6",
+                "button": "#FAF9F6",
+                "button_label": "#1A1A1A",
+                "secondary_button": "#1A1A1A",
+                "secondary_button_label": "#FAF9F6",
+                "outline_button": "#FAF9F6"
+            }
+        },
         "free_shipping_threshold": 79,
         "low_stock_threshold": 10
     }

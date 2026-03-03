@@ -1,37 +1,63 @@
-<header class="header page-width">
-  <div class="header__inner" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
-    <div class="header__logo">
-      <a href="{{ routes.root_url }}">
-        {%- if section.settings.logo != blank -%}
-          {{ section.settings.logo | image_url: width: 400 | image_tag: height: section.settings.logo.height, width: section.settings.logo.width, alt: section.settings.logo.alt | default: shop.name }}
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-    </div>
-
-    <nav class="header__nav">
-      <ul style="display: flex; gap: 20px; list-style: none; margin: 0; padding: 0;">
+<header class="header page-width" style="position: sticky; top: 0; z-index: 900; background: rgba(250, 249, 246, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-border); padding: 24px 60px; display: flex; justify-content: space-between; align-items: center; transition: all var(--transition-fast);">
+  
+  {%- if section.settings.menu != blank -%}
+    <nav class="header__nav" style="flex: 1;">
+      <ul style="display: flex; gap: 40px; list-style: none; margin: 0; padding: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;">
         {%- for link in section.settings.menu.links -%}
-          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          <li>
+            <a href="{{ link.url }}" style="position: relative; padding-bottom: 5px;" class="nav-link">{{ link.title }}</a>
+          </li>
         {%- endfor -%}
       </ul>
     </nav>
+  {%- else -%}
+    <div style="flex: 1;"></div>
+  {%- endif -%}
 
-    <div class="header__actions">
-      <a href="{{ routes.search_url }}" class="header__search-link" aria-label="Search">Search</a>
-      
-      {%- if shop.customer_accounts_enabled -%}
-        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__account-link">
-          Account
-        </a>
+  <div class="header__logo" style="flex: 1; text-align: center;">
+    <a href="{{ routes.root_url }}" style="display: inline-block;">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: height: section.settings.logo.height, width: section.settings.logo.width, alt: section.settings.logo.alt, style: 'max-height: 40px; width: auto;' }}
+      {%- else -%}
+        <span class="h3" style="margin: 0; letter-spacing: 0.15em;">{{ shop.name }}</span>
       {%- endif -%}
-
-      <a href="{{ routes.cart_url }}" class="header__cart-link" id="cart-icon-bubble">
-        Cart ({%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- endif -%})
-      </a>
-    </div>
+    </a>
   </div>
+
+  <div class="header__actions" style="flex: 1; display: flex; justify-content: flex-end; gap: 30px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;">
+    <a href="{{ routes.search_url }}" class="header__search-link" aria-label="Search">Search</a>
+    
+    {%- if shop.customer_accounts_enabled -%}
+      <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__account-link">
+        Account
+      </a>
+    {%- endif -%}
+
+    <a href="{{ routes.cart_url }}" class="header__cart-link" id="cart-icon-bubble" style="position: relative;">
+      Cart <span style="font-weight: 400; color: var(--color-base-text-light);">({%- if cart.item_count < 100 -%}{{ cart.item_count }}{%- else -%}99+{%- endif -%})</span>
+    </a>
+  </div>
+
+  <style>
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--color-base-text);
+      transition: width var(--transition-fast);
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    @media screen and (max-width: 768px) {
+      .header { padding: 16px 24px !important; }
+      .header__nav { display: none !important; }
+      .header__actions { gap: 15px !important; }
+    }
+  </style>
 </header>
 
 {% schema %}

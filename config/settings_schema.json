@@ -3,24 +3,22 @@
     "name": "theme_info",
     "theme_name": "AZOURANE",
     "theme_author": "AZOURANE MOROCCAN COSMETICS",
-    "theme_version": "1.0.0",
+    "theme_version": "2.0.0",
     "theme_support_url": ""
   },
   {
-    "name": "Colors",
+    "name": "Color schemes",
     "settings": [
       {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Background",
-        "default": "#FAF9F6"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Text",
-        "default": "#1A1A1A"
-      },
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "title": "Color schemes"
+      }
+    ]
+  },
+  {
+    "name": "Theme Colors",
+    "settings": [
       {
         "type": "color",
         "id": "color_accent_primary",

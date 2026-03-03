@@ -1,65 +1,87 @@
-<div id="shopify-section-main-cart-drawer">
-  <div class="cart-drawer__header">
-    <h2 class="h4" style="margin: 0;">Cart</h2>
-    <button class="cart-drawer__close" aria-label="Close cart">&times;</button>
+<div class="drawer-overlay" id="CartDrawerOverlay"></div>
+
+<div class="drawer" id="CartDrawer" aria-modal="true" aria-label="Cart" role="dialog" tabindex="-1">
+  <div class="drawer__header">
+    <h2 class="h5" style="margin: 0; text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--font-body-family);">Cart</h2>
+    <button class="drawer__close" aria-label="Close cart" id="CartDrawerClose">&times;</button>
   </div>
 
-  <div class="cart-drawer__inner">
+  <div class="drawer__inner" id="CartDrawerInner">
     {%- if cart.empty? -%}
-      <div class="cart-drawer__empty" style="text-align: center; padding: 40px 0;">
-        <p>Your cart is empty.</p>
-        <a href="{{ routes.all_products_collection_url }}" class="button" style="margin-top: 20px;">Continue shopping</a>
+      <div style="text-align: center; padding: 60px 0; color: var(--color-base-text-light);">
+        <p style="font-family: var(--font-heading-family); font-size: 1.5rem; margin-bottom: 2rem;">Your cart is empty.</p>
+        <button class="button" id="CartDrawerContinue">Continue shopping</button>
       </div>
     {%- else -%}
-      <div class="cart-drawer__items">
-        <div class="cart-drawer__shipping-bar" style="margin-bottom: 20px; font-size: 14px; text-align: center;">
-          {%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
-          {%- if cart.total_price >= threshold -%}
-            <span style="font-weight: bold;">You have free shipping!</span>
-          {%- else -%}
-            {%- assign diff = threshold | minus: cart.total_price -%}
-            <span>You are {{ diff | money }} away from free shipping.</span>
-          {%- endif -%}
-          <div style="background: #eee; height: 4px; width: 100%; margin-top: 8px;">
-            {%- assign progress = cart.total_price | times: 1.0 | divided_by: threshold | times: 100 -%}
-            {%- if progress > 100 -%}{% assign progress = 100 %}{%- endif -%}
-            <div style="background: var(--color-base-text); height: 100%; width: {{ progress }}%;"></div>
-          </div>
+      
+      <div class="shipping-bar">
+        {%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
+        {%- if cart.total_price >= threshold -%}
+          <span style="font-weight: 500;">You have free shipping!</span>
+        {%- else -%}
+          {%- assign diff = threshold | minus: cart.total_price -%}
+          <span>You are <strong style="font-weight:600">{{ diff | money }}</strong> away from free shipping.</span>
+        {%- endif -%}
+        
+        <div class="shipping-bar__track">
+          {%- assign progress = cart.total_price | times: 1.0 | divided_by: threshold | times: 100 -%}
+          {%- if progress > 100 -%}{% assign progress = 100 %}{%- endif -%}
+          <div class="shipping-bar__fill" style="width: {{ progress }}%;"></div>
         </div>
+      </div>
 
+      <div class="cart-items" style="display: flex; flex-direction: column; gap: 30px;">
         {%- for item in cart.items -%}
-          <div class="cart-drawer__item" style="display: flex; gap: 15px; margin-bottom: 20px;">
-            <div class="cart-item__media" style="width: 80px; flex-shrink: 0;">
+          <div style="display: flex; gap: 20px;">
+            <div style="width: 100px; flex-shrink: 0; background: #eee; aspect-ratio: 4/5;">
               {% if item.image %}
-                {{ item.image | image_url: width: 160 | image_tag: width: item.image.width, height: item.image.height, alt: item.title, style: 'width: 100%; height: auto;' }}
+                {{ item.image | image_url: width: 200 | image_tag: alt: item.title, style: 'width: 100%; height: 100%; object-fit: cover;' }}
               {% endif %}
             </div>
-            <div class="cart-item__details" style="flex: 1;">
-              <a href="{{ item.url }}" style="font-weight: bold; font-size: 14px; display: block; margin-bottom: 5px;">{{ item.product.title }}</a>
+            
+            <div style="flex: 1; display: flex; flex-direction: column;">
+              <a href="{{ item.url }}" style="font-family: var(--font-heading-family); font-size: 1.25rem; line-height: 1.2; margin-bottom: 8px;">
+                {{ item.product.title }}
+              </a>
               {%- unless item.product.has_only_default_variant -%}
-                <p style="font-size: 12px; margin: 0 0 5px; color: #666;">{{ item.variant.title }}</p>
+                <p style="font-size: 0.85rem; color: var(--color-base-text-light); margin: 0 0 10px;">{{ item.variant.title }}</p>
               {%- endunless -%}
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                <input class="cart-drawer-qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-line="{{ item.key }}" style="width: 60px; padding: 5px; text-align: center; border: 1px solid #ccc;">
-                <span class="cart-item__price">{{ item.final_line_price | money }}</span>
+              
+              <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+                <cart-quantity class="qty-selector" style="display: flex; border: 1px solid var(--color-border); align-items: center;">
+                  <button type="button" class="qty-btn minus" data-line="{{ item.key }}" style="background:none; border:none; padding: 5px 15px; cursor:pointer;" aria-label="Decrease">&minus;</button>
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-line="{{ item.key }}" style="width: 40px; text-align: center; border: none; padding: 5px; -moz-appearance: textfield;" readonly>
+                  <button type="button" class="qty-btn plus" data-line="{{ item.key }}" style="background:none; border:none; padding: 5px 15px; cursor:pointer;" aria-label="Increase">+</button>
+                </cart-quantity>
+                <div style="font-weight: 500;">{{ item.final_line_price | money }}</div>
               </div>
             </div>
           </div>
         {%- endfor -%}
       </div>
+      
     {%- endif -%}
   </div>
 
-  <div class="cart-drawer__footer">
+  <div class="drawer__footer">
     {%- if cart != empty -%}
-      <div class="cart-drawer__totals" style="display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; font-size: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-family: var(--font-heading-family); font-size: 1.5rem;">
         <span>Subtotal</span>
         <span>{{ cart.total_price | money_with_currency }}</span>
       </div>
-      <small style="display: block; text-align: center; margin-bottom: 15px; color: #666;">Taxes and shipping calculated at checkout</small>
-      <form action="{{ routes.cart_url }}" method="post" id="cart">
-        <button type="submit" name="checkout" class="button" style="width: 100%; padding: 16px;">Check out</button>
+      <p style="font-size: 0.85rem; color: var(--color-base-text-light); text-align: center; margin-bottom: 20px;">
+        Taxes and shipping calculated at checkout
+      </p>
+      <form action="{{ routes.cart_url }}" method="post" id="cart" style="width: 100%;">
+        <button type="submit" name="checkout" class="button" style="width: 100%;">Proceed to Checkout</button>
       </form>
     {%- endif -%}
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": []
+}
+{% endschema %}

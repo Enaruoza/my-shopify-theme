@@ -1,37 +1,42 @@
-<section class="drops-hub-journey page-width" style="padding: 80px 0;">
+<section class="drops-hub-journey section-spacing page-width">
   
   {%- if section.settings.heading != 'AUTO' and section.settings.heading != blank -%}
-    <div style="text-align: center; margin-bottom: 60px;">
+    <div style="text-align: center; margin-bottom: 80px; max-width: 800px; margin-left: auto; margin-right: auto;">
       <h2 class="h2">{{ section.settings.heading }}</h2>
       {%- if section.settings.subheading != 'AUTO' and section.settings.subheading != blank -%}
-        <p class="h5" style="color: #666; margin-top: 10px;">{{ section.settings.subheading }}</p>
+        <p class="h5" style="color: var(--color-base-text-light); margin-top: 15px;">{{ section.settings.subheading }}</p>
       {%- endif -%}
     </div>
   {%- endif -%}
 
   <!-- A) In stock now (core-stock) -->
-  <div class="drops-hub__section" style="margin-bottom: 80px;">
-    <h3 class="h3" style="border-bottom: 2px solid var(--color-base-text); padding-bottom: 10px; margin-bottom: 30px;">
+  <div class="drops-hub__section" style="margin-bottom: 120px;">
+    <h3 class="h3" style="border-bottom: 1px solid var(--color-border); padding-bottom: 15px; margin-bottom: 50px;">
       1. In Stock Now (Core Essentials)
     </h3>
     {%- assign core_stock = collections[section.settings.core_stock] -%}
-    {%- if core_stock != blank and core_stock.products_count > 0 -%}
-      <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px;">
+    
+    <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+      {%- if core_stock != blank and core_stock.products_count > 0 -%}
         {%- for product in core_stock.products limit: 4 -%}
-          <div class="product-card" style="text-align: center;">
-            <a href="{{ product.url }}" style="display: block; margin-bottom: 20px;">
-              <div class="product-card__image-wrapper" style="aspect-ratio: 1; background: #eee;">
+          <div class="product-card">
+            <a href="{{ product.url }}" style="display: block;">
+              <div class="product-card__image-wrapper">
                 {%- if product.featured_media -%}
-                  {{ product.featured_media | image_url: width: 600 | image_tag: width: product.featured_media.width, height: product.featured_media.height, alt: product.title, style: 'object-fit: cover; width: 100%; height: 100%;' }}
+                  {{ product.featured_media | image_url: width: 800 | image_tag: alt: product.title }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
                 {%- endif -%}
               </div>
             </a>
-            <h4 class="h5" style="margin-bottom: 5px;">{{ product.title }}</h4>
-            <div class="product-card__price" style="margin-bottom: 15px;">{{ product.price | money }}</div>
+            <h4 class="product-card__title">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h4>
+            <div class="product-card__price">{{ product.price | money }}</div>
             
-            <form method="post" action="{{ routes.cart_add_url }}" style="display: inline-block; width: 100%;">
+            <form method="post" action="{{ routes.cart_add_url }}" style="width: 100%;">
               <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-              <button type="submit" class="button" style="width: 100%;" {% if product.available == false %}disabled{% endif %}>
+              <button type="submit" class="button" style="width: 100%; border-radius: var(--radius-button);" {% if product.available == false %}disabled{% endif %}>
                 {%- if product.available -%}
                   Add to cart
                 {%- else -%}
@@ -41,23 +46,31 @@
             </form>
           </div>
         {%- endfor -%}
-      </div>
-    {%- else -%}
-      <p>Assign the core stock collection in editor.</p>
-    {%- endif -%}
+      {%- else -%}
+        {%- for i in (1..4) -%}
+          <div class="product-card">
+             <div class="product-card__image-wrapper">
+               {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+             </div>
+             <h4 class="product-card__title">Example Product</h4>
+             <div class="product-card__price">$45.00</div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
   </div>
 
   <!-- B) Last chance (october-remnants) -->
-  <div class="drops-hub__section" style="margin-bottom: 80px;">
-    <h3 class="h3" style="border-bottom: 2px solid var(--color-base-text); padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: baseline;">
+  <div class="drops-hub__section" style="margin-bottom: 120px;">
+    <h3 class="h3" style="border-bottom: 1px solid var(--color-border); padding-bottom: 15px; margin-bottom: 50px; display: flex; justify-content: space-between; align-items: baseline;">
       <span>2. Last Chance (Past Drops)</span>
     </h3>
     
     {%- assign remnants = collections[section.settings.remnants] -%}
-    {%- if remnants != blank and remnants.products_count > 0 -%}
-      <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px;">
+    <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+      {%- if remnants != blank and remnants.products_count > 0 -%}
         {%- for product in remnants.products limit: 4 -%}
-          <div class="product-card" style="text-align: center; position: relative;">
+          <div class="product-card">
             
             {%- assign low_stock = false -%}
             {%- if product.variants.first.inventory_management == 'shopify' -%}
@@ -67,25 +80,29 @@
             {%- endif -%}
 
             {%- if low_stock -%}
-              <div style="position: absolute; top: 10px; right: 10px; background: var(--color-base-text); color: var(--color-base-bg); padding: 5px 10px; font-size: 12px; font-weight: bold; z-index: 1;">
+              <div class="product-badge">
                 Only {{ product.variants.first.inventory_quantity }} left
               </div>
             {%- endif -%}
 
-            <a href="{{ product.url }}" style="display: block; margin-bottom: 20px;">
-              <div class="product-card__image-wrapper" style="aspect-ratio: 1; background: #eee;">
+            <a href="{{ product.url }}" style="display: block;">
+              <div class="product-card__image-wrapper">
                 {%- if product.featured_media -%}
-                  {{ product.featured_media | image_url: width: 600 | image_tag: width: product.featured_media.width, height: product.featured_media.height, alt: product.title, style: 'object-fit: cover; width: 100%; height: 100%; filter: {% if product.available == false %}grayscale(100%){% else %}none{% endif %};' }}
+                  {{ product.featured_media | image_url: width: 800 | image_tag: alt: product.title, style: 'filter: {% if product.available == false %}grayscale(100%){% else %}none{% endif %};' }}
+                {%- else -%}
+                  {{ 'product-5' | placeholder_svg_tag: 'placeholder-svg' }}
                 {%- endif -%}
               </div>
             </a>
             
-            <h4 class="h5" style="margin-bottom: 5px;">{{ product.title }}</h4>
-            <div class="product-card__price" style="margin-bottom: 15px;">{{ product.price | money }}</div>
+            <h4 class="product-card__title">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h4>
+            <div class="product-card__price">{{ product.price | money }}</div>
             
-            <form method="post" action="{{ routes.cart_add_url }}" style="display: inline-block; width: 100%;">
+            <form method="post" action="{{ routes.cart_add_url }}" style="width: 100%;">
               <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-              <button type="submit" class="button button--secondary" style="width: 100%;" {% if product.available == false %}disabled{% endif %}>
+              <button type="submit" class="button button--secondary" style="width: 100%; border-radius: var(--radius-button);" {% if product.available == false %}disabled{% endif %}>
                 {%- if product.available -%}
                   {%- if low_stock -%}Claim last remaining{%- else -%}Add to cart{%- endif -%}
                 {%- else -%}
@@ -95,27 +112,35 @@
             </form>
           </div>
         {%- endfor -%}
-      </div>
-    {%- else -%}
-      <p>Assign the last chance collection in editor.</p>
-    {%- endif -%}
+      {%- else -%}
+        {%- for i in (1..4) -%}
+          <div class="product-card">
+             <div class="product-card__image-wrapper">
+               {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+             </div>
+             <h4 class="product-card__title">Example Archive</h4>
+             <div class="product-card__price">$0.00</div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
   </div>
 
   <!-- C) Next drop incoming (coming-soon) -->
-  <div class="drops-hub__section" style="background: rgba(0,0,0,0.03); padding: 60px; border: 1px solid rgba(0,0,0,0.1);">
-    <div style="max-width: 600px; margin: 0 auto; text-align: center;">
-      <h3 class="h3" style="margin-bottom: 15px;">3. Next Drop Incoming</h3>
-      <p style="margin-bottom: 30px; font-size: 18px; color: #555;">{{ section.settings.next_drop_eta }}</p>
-      <p style="margin-bottom: 30px;">Join the waitlist to receive 24h early access before the general public.</p>
+  <div class="drops-hub__section" style="background: var(--color-base-bg-alt); padding: 80px 40px; text-align: center;">
+    <div style="max-width: 600px; margin: 0 auto; ">
+      <h3 class="h3" style="margin-bottom: 20px;">3. Next Drop Incoming</h3>
+      <p style="margin-bottom: 30px; font-size: 1.25rem; font-family: var(--font-heading-family); color: var(--color-base-text-light);">{{ section.settings.next_drop_eta }}</p>
+      <p style="margin-bottom: 40px; line-height: 1.6;">Join the waitlist to receive 24h early access before the general public. Our drops sell out fast.</p>
       
       {% form 'customer' %}
         <input type="hidden" name="contact[tags]" value="newsletter, next_drop_waitlist">
-        <div style="display: flex; gap: 10px;">
-          <input type="email" name="contact[email]" required placeholder="Enter your email" style="flex: 1; padding: 12px; border: 1px solid var(--color-base-text);">
-          <button type="submit" class="button">Join Waitlist</button>
+        <div style="display: flex; gap: 0; max-width: 500px; margin: 0 auto;">
+          <input type="email" name="contact[email]" required placeholder="Enter your email" style="flex: 1; border-right: none;">
+          <button type="submit" class="button" style="min-width: 150px;">Join</button>
         </div>
         {% if form.posted_successfully? %}
-          <p class="form-success" style="margin-top: 15px; color: green;">You are on the list.</p>
+          <p class="form-success" style="margin-top: 20px; color: #4A7055; font-weight: 500;">You are on the list.</p>
         {% endif %}
       {% endform %}
     </div>

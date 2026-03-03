@@ -1,10 +1,10 @@
 <!doctype html>
 <html class="no-js" lang="{{ request.locale.iso_code }}">
   <head>
-    <meta charset="utf-from-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
+    <meta name="theme-color" content="{{ settings.color_schemes['scheme-1'].background }}">
     <link rel="canonical" href="{{ canonical_url }}">
     
     {%- if settings.favicon != blank -%}
@@ -25,7 +25,6 @@
     {{ content_for_header }}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
-
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
 
     <script>
@@ -46,13 +45,16 @@
 
     {% sections 'header-group' %}
 
-    <main id="MainContent" class="main-content focus-none" role="main" tabindex="-1">
+    <main id="MainContent" class="main-content focus-none" role="main" tabindex="-1" style="min-height: 80vh;">
       {{ content_for_layout }}
     </main>
 
     {% sections 'footer-group' %}
 
-    <!-- Cart Drawer Container -->
-    <div id="cart-drawer-container"></div>
+    <!-- Global Cart Drawer Architecture -->
+    <div id="cart-drawer-container">
+      {% section 'main-cart-drawer' %}
+    </div>
+
   </body>
 </html>
