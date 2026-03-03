@@ -1,0 +1,165 @@
+<section class="drops-hub-journey page-width" style="padding: 80px 0;">
+  
+  {%- if section.settings.heading != 'AUTO' and section.settings.heading != blank -%}
+    <div style="text-align: center; margin-bottom: 60px;">
+      <h2 class="h2">{{ section.settings.heading }}</h2>
+      {%- if section.settings.subheading != 'AUTO' and section.settings.subheading != blank -%}
+        <p class="h5" style="color: #666; margin-top: 10px;">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <!-- A) In stock now (core-stock) -->
+  <div class="drops-hub__section" style="margin-bottom: 80px;">
+    <h3 class="h3" style="border-bottom: 2px solid var(--color-base-text); padding-bottom: 10px; margin-bottom: 30px;">
+      1. In Stock Now (Core Essentials)
+    </h3>
+    {%- assign core_stock = collections[section.settings.core_stock] -%}
+    {%- if core_stock != blank and core_stock.products_count > 0 -%}
+      <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px;">
+        {%- for product in core_stock.products limit: 4 -%}
+          <div class="product-card" style="text-align: center;">
+            <a href="{{ product.url }}" style="display: block; margin-bottom: 20px;">
+              <div class="product-card__image-wrapper" style="aspect-ratio: 1; background: #eee;">
+                {%- if product.featured_media -%}
+                  {{ product.featured_media | image_url: width: 600 | image_tag: width: product.featured_media.width, height: product.featured_media.height, alt: product.title, style: 'object-fit: cover; width: 100%; height: 100%;' }}
+                {%- endif -%}
+              </div>
+            </a>
+            <h4 class="h5" style="margin-bottom: 5px;">{{ product.title }}</h4>
+            <div class="product-card__price" style="margin-bottom: 15px;">{{ product.price | money }}</div>
+            
+            <form method="post" action="{{ routes.cart_add_url }}" style="display: inline-block; width: 100%;">
+              <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+              <button type="submit" class="button" style="width: 100%;" {% if product.available == false %}disabled{% endif %}>
+                {%- if product.available -%}
+                  Add to cart
+                {%- else -%}
+                  Sold out
+                {%- endif -%}
+              </button>
+            </form>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p>Assign the core stock collection in editor.</p>
+    {%- endif -%}
+  </div>
+
+  <!-- B) Last chance (october-remnants) -->
+  <div class="drops-hub__section" style="margin-bottom: 80px;">
+    <h3 class="h3" style="border-bottom: 2px solid var(--color-base-text); padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: baseline;">
+      <span>2. Last Chance (Past Drops)</span>
+    </h3>
+    
+    {%- assign remnants = collections[section.settings.remnants] -%}
+    {%- if remnants != blank and remnants.products_count > 0 -%}
+      <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px;">
+        {%- for product in remnants.products limit: 4 -%}
+          <div class="product-card" style="text-align: center; position: relative;">
+            
+            {%- assign low_stock = false -%}
+            {%- if product.variants.first.inventory_management == 'shopify' -%}
+              {%- if product.variants.first.inventory_quantity > 0 and product.variants.first.inventory_quantity <= settings.low_stock_threshold -%}
+                {%- assign low_stock = true -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            {%- if low_stock -%}
+              <div style="position: absolute; top: 10px; right: 10px; background: var(--color-base-text); color: var(--color-base-bg); padding: 5px 10px; font-size: 12px; font-weight: bold; z-index: 1;">
+                Only {{ product.variants.first.inventory_quantity }} left
+              </div>
+            {%- endif -%}
+
+            <a href="{{ product.url }}" style="display: block; margin-bottom: 20px;">
+              <div class="product-card__image-wrapper" style="aspect-ratio: 1; background: #eee;">
+                {%- if product.featured_media -%}
+                  {{ product.featured_media | image_url: width: 600 | image_tag: width: product.featured_media.width, height: product.featured_media.height, alt: product.title, style: 'object-fit: cover; width: 100%; height: 100%; filter: {% if product.available == false %}grayscale(100%){% else %}none{% endif %};' }}
+                {%- endif -%}
+              </div>
+            </a>
+            
+            <h4 class="h5" style="margin-bottom: 5px;">{{ product.title }}</h4>
+            <div class="product-card__price" style="margin-bottom: 15px;">{{ product.price | money }}</div>
+            
+            <form method="post" action="{{ routes.cart_add_url }}" style="display: inline-block; width: 100%;">
+              <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+              <button type="submit" class="button button--secondary" style="width: 100%;" {% if product.available == false %}disabled{% endif %}>
+                {%- if product.available -%}
+                  {%- if low_stock -%}Claim last remaining{%- else -%}Add to cart{%- endif -%}
+                {%- else -%}
+                  Archived / Sold out
+                {%- endif -%}
+              </button>
+            </form>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p>Assign the last chance collection in editor.</p>
+    {%- endif -%}
+  </div>
+
+  <!-- C) Next drop incoming (coming-soon) -->
+  <div class="drops-hub__section" style="background: rgba(0,0,0,0.03); padding: 60px; border: 1px solid rgba(0,0,0,0.1);">
+    <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+      <h3 class="h3" style="margin-bottom: 15px;">3. Next Drop Incoming</h3>
+      <p style="margin-bottom: 30px; font-size: 18px; color: #555;">{{ section.settings.next_drop_eta }}</p>
+      <p style="margin-bottom: 30px;">Join the waitlist to receive 24h early access before the general public.</p>
+      
+      {% form 'customer' %}
+        <input type="hidden" name="contact[tags]" value="newsletter, next_drop_waitlist">
+        <div style="display: flex; gap: 10px;">
+          <input type="email" name="contact[email]" required placeholder="Enter your email" style="flex: 1; padding: 12px; border: 1px solid var(--color-base-text);">
+          <button type="submit" class="button">Join Waitlist</button>
+        </div>
+        {% if form.posted_successfully? %}
+          <p class="form-success" style="margin-top: 15px; color: green;">You are on the list.</p>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Drops Hub Journey",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The AZOURANE Drops"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Small batches. Truthful scarcity."
+    },
+    {
+      "type": "collection",
+      "id": "core_stock",
+      "label": "Core Stock Collection"
+    },
+    {
+      "type": "collection",
+      "id": "remnants",
+      "label": "Last Chance Collection"
+    },
+    {
+      "type": "text",
+      "id": "next_drop_eta",
+      "label": "Next Drop ETA Text",
+      "default": "Delivery expected late February"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drops Hub Journey"
+    }
+  ]
+}
+{% endschema %}

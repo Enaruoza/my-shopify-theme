@@ -1,0 +1,55 @@
+<section class="page-width" style="padding: 60px 0;">
+  <h1 class="h2" style="margin-bottom: 40px;">Your Cart</h1>
+
+  {%- if cart.empty? -%}
+    <div style="text-align: center; padding: 40px 0;">
+      <p>Your cart is empty.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button" style="margin-top: 20px;">Continue shopping</a>
+    </div>
+  {%- else -%}
+    <form action="{{ routes.cart_url }}" method="post" id="cart" class="cart-form">
+      <div class="cart-items" style="width: 100%; border-collapse: collapse;">
+        {%- for item in cart.items -%}
+          <div class="cart-item" style="display: flex; align-items: center; border-bottom: 1px solid #eee; padding: 20px 0; gap: 20px;">
+            <div class="cart-item__media" style="width: 100px; flex-shrink: 0;">
+              {% if item.image %}
+                {{ item.image | image_url: width: 200 | image_tag: width: item.image.width, height: item.image.height, alt: item.title, style: 'width: 100%; height: auto;' }}
+              {% endif %}
+            </div>
+            <div class="cart-item__details" style="flex: 1;">
+              <a href="{{ item.url }}" class="h5" style="display: block; margin-bottom: 5px;">{{ item.product.title }}</a>
+              {%- unless item.product.has_only_default_variant -%}
+                <p style="margin: 0 0 10px; color: #666; font-size: 14px;">{{ item.variant.title }}</p>
+              {%- endunless -%}
+            </div>
+            <div class="cart-item__quantity">
+              <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-line="{{ item.key }}" style="width: 80px; padding: 10px; text-align: center; border: 1px solid var(--color-base-text);">
+            </div>
+            <div class="cart-item__price" style="font-weight: bold; width: 100px; text-align: right;">
+              {{ item.final_line_price | money }}
+            </div>
+            <div class="cart-item__remove">
+              <a href="{{ item.url_to_remove }}" style="font-size: 24px; text-decoration: none; color: #999;" aria-label="Remove">&times;</a>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="cart-footer" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 40px; gap: 20px;">
+        <div style="text-align: right;">
+          <h3 class="h4" style="margin: 0 0 10px;">Subtotal: {{ cart.total_price | money_with_currency }}</h3>
+          <p style="margin: 0 0 20px; color: #666;">Taxes and shipping calculated at checkout</p>
+        </div>
+        <button type="submit" name="update" class="button button--secondary">Update</button>
+        <button type="submit" name="checkout" class="button">Check out</button>
+      </div>
+    </form>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Cart items",
+  "settings": []
+}
+{% endschema %}

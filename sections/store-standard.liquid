@@ -1,0 +1,68 @@
+<section class="page-width" style="padding: 80px 0;">
+  <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 60px; align-items: center;">
+    
+    <div class="standard__content" style="padding-right: 40px;">
+      {%- if section.settings.heading != blank and section.settings.heading != 'AUTO' -%}
+        <h2 class="h2" style="margin-bottom: 30px;">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      <div class="rte" style="font-size: 18px; line-height: 1.6; color: #444;">
+        {{ section.settings.text }}
+      </div>
+      {%- if section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="button" style="margin-top: 30px;">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="standard__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1000 | image_tag: style: 'width: 100%; height: auto; border: 1px solid #eee;' }}
+      {%- else -%}
+        <div style="width: 100%; aspect-ratio: 4/3; background: #eee;"></div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Standard Content",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Sustainably Sourced"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We partner directly with cooperatives in the High Atlas Mountains. Every bottle can be traced back to its origin. No middlemen, no compromise on quality.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Our Story"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Standard Content"
+    }
+  ]
+}
+{% endschema %}

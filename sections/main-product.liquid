@@ -1,0 +1,47 @@
+<section class="page-width" style="padding: 60px 0;">
+  <div class="product grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px;">
+    
+    <div class="product__media-wrapper">
+      {%- if product.selected_or_first_available_variant.featured_media -%}
+        {{ product.selected_or_first_available_variant.featured_media | image_url: width: 800 | image_tag: height: product.selected_or_first_available_variant.featured_media.height, width: product.selected_or_first_available_variant.featured_media.width, alt: product.title }}
+      {%- else -%}
+        {{ product.featured_image | image_url: width: 800 | image_tag: height: product.featured_image.height, width: product.featured_image.width, alt: product.title }}
+      {%- endif -%}
+    </div>
+
+    <div class="product__info-wrapper">
+      <h1 class="h2">{{ product.title }}</h1>
+      <div class="product__price h4">{{ product.price | money }}</div>
+      
+      <div class="product__description" style="margin: 20px 0;">
+        {{ product.description }}
+      </div>
+
+      {%- form 'product', product, id: 'product-form-installment', class: 'form' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        
+        <div class="product__quantity" style="margin-bottom: 20px;">
+          <label for="Quantity-{{ section.id }}" style="display:block; margin-bottom: 8px;">Quantity</label>
+          <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" style="padding: 10px; width: 80px; text-align: center; border: 1px solid var(--color-base-text);">
+        </div>
+
+        <button type="submit" name="add" class="button" style="width: 100%; padding: 16px;" 
+                {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+          {%- if product.selected_or_first_available_variant.available -%}
+            Add to cart
+          {%- else -%}
+            Sold out
+          {%- endif -%}
+        </button>
+      {%- endform -%}
+    </div>
+    
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": []
+}
+{% endschema %}

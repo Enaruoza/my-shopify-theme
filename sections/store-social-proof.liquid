@@ -1,0 +1,69 @@
+<section class="page-width" style="padding: 80px 0; background: var(--color-base-bg); border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+  {%- if section.settings.heading != blank and section.settings.heading != 'AUTO' -%}
+    <h2 class="h2" style="text-align: center; margin-bottom: 60px;">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+    {%- for block in section.blocks -%}
+      <div class="testimonial-card" style="text-align: center; padding: 40px 20px; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+        <div style="color: var(--color-accent-primary); font-size: 24px; margin-bottom: 20px;">★★★★★</div>
+        <q style="font-size: 18px; line-height: 1.6; font-style: italic; display: block; margin-bottom: 20px;">
+          {{ block.settings.quote }}
+        </q>
+        <cite style="font-weight: bold; font-style: normal;">&mdash; {{ block.settings.author }}</cite>
+        {%- if block.settings.product != blank -%}
+          <div style="margin-top: 10px; font-size: 14px; color: #666;">On {{ block.settings.product.title }}</div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Real Results from Real Customers"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "This oil completely transformed my skin texture."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Sarah M."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product Reviewed"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ]
+}
+{% endschema %}

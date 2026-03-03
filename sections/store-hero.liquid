@@ -1,0 +1,135 @@
+<section class="store-hero" style="position: relative; overflow: hidden; height: {{ section.settings.desktop_height }}px; display: flex; align-items: center;">
+  <div class="store-hero__media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+    {%- if section.settings.video != blank -%}
+      {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, style: 'width: 100%; height: 100%; object-fit: cover;' }}
+    {%- elsif section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2400 | image_tag: width: section.settings.image.width, height: section.settings.image.height, alt: section.settings.image.alt, style: 'width: 100%; height: 100%; object-fit: cover;' }}
+    {%- else -%}
+      <div style="width: 100%; height: 100%; background: #e0e0e0;"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="store-hero__overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,{{ section.settings.overlay_opacity | divided_by: 100.0 }}); z-index: 1;"></div>
+
+  <div class="page-width store-hero__content" style="position: relative; z-index: 2; width: 100%; text-align: {{ section.settings.text_alignment }}; color: {{ section.settings.text_color }};">
+    <div style="max-width: 800px; {% if section.settings.text_alignment == 'center' %}margin: 0 auto;{% elsif section.settings.text_alignment == 'right' %}margin-left: auto;{% endif %}">
+      
+      {%- if section.settings.subheading != 'AUTO' and section.settings.subheading != blank -%}
+        <p class="h5" style="text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px;">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != 'AUTO' and section.settings.heading != blank -%}
+        <h1 class="h1" style="margin-bottom: 30px; font-size: 4rem;">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      <div class="store-hero__ctas" style="display: flex; gap: 20px; flex-wrap: wrap; {% if section.settings.text_alignment == 'center' %}justify-content: center;{% elsif section.settings.text_alignment == 'right' %}justify-content: flex-end;{% endif %}">
+        {%- if section.settings.primary_cta_link != blank -%}
+          <a href="{{ section.settings.primary_cta_link }}" class="button" style="background: {{ section.settings.text_color }}; color: {% if section.settings.text_color == '#ffffff' %}#000{% else %}#fff{% endif %}; border-color: {{ section.settings.text_color }};">
+            {{ section.settings.primary_cta_text | default: 'Shop in stock now' }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.secondary_cta_link != blank -%}
+          <a href="{{ section.settings.secondary_cta_link }}" class="button button--secondary" style="color: {{ section.settings.text_color }}; border-color: {{ section.settings.text_color }};">
+            {{ section.settings.secondary_cta_text | default: 'Drops Hub' }}
+          </a>
+        {%- endif -%}
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Store Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Hero Video"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Desktop Height",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Premium Moroccan Skincare"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "AZOURANE"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_text",
+      "label": "Primary CTA Text",
+      "default": "Shop in stock now"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA Text",
+      "default": "Drops Hub"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store Hero"
+    }
+  ]
+}
+{% endschema %}

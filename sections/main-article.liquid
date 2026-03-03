@@ -1,0 +1,21 @@
+<article class="page-width" style="padding: 60px 0; max-width: 800px; margin: 0 auto;">
+  <h1 class="h2" style="text-align: center; margin-bottom: 20px;">{{ article.title }}</h1>
+  <p style="text-align: center; color: #666; margin-bottom: 40px;">{{ article.published_at | date: "%B %d, %Y" }}</p>
+  
+  {%- if article.image -%}
+    <div style="margin-bottom: 40px;">
+      {{ article.image | image_url: width: 1200 | image_tag: width: article.image.width, height: article.image.height, alt: article.title, style: 'width: 100%; height: auto;' }}
+    </div>
+  {%- endif -%}
+
+  <div class="rte">
+    {{ article.content }}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article content",
+  "settings": []
+}
+{% endschema %}

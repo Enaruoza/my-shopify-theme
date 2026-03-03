@@ -1,0 +1,65 @@
+<div id="shopify-section-main-cart-drawer">
+  <div class="cart-drawer__header">
+    <h2 class="h4" style="margin: 0;">Cart</h2>
+    <button class="cart-drawer__close" aria-label="Close cart">&times;</button>
+  </div>
+
+  <div class="cart-drawer__inner">
+    {%- if cart.empty? -%}
+      <div class="cart-drawer__empty" style="text-align: center; padding: 40px 0;">
+        <p>Your cart is empty.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="button" style="margin-top: 20px;">Continue shopping</a>
+      </div>
+    {%- else -%}
+      <div class="cart-drawer__items">
+        <div class="cart-drawer__shipping-bar" style="margin-bottom: 20px; font-size: 14px; text-align: center;">
+          {%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
+          {%- if cart.total_price >= threshold -%}
+            <span style="font-weight: bold;">You have free shipping!</span>
+          {%- else -%}
+            {%- assign diff = threshold | minus: cart.total_price -%}
+            <span>You are {{ diff | money }} away from free shipping.</span>
+          {%- endif -%}
+          <div style="background: #eee; height: 4px; width: 100%; margin-top: 8px;">
+            {%- assign progress = cart.total_price | times: 1.0 | divided_by: threshold | times: 100 -%}
+            {%- if progress > 100 -%}{% assign progress = 100 %}{%- endif -%}
+            <div style="background: var(--color-base-text); height: 100%; width: {{ progress }}%;"></div>
+          </div>
+        </div>
+
+        {%- for item in cart.items -%}
+          <div class="cart-drawer__item" style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <div class="cart-item__media" style="width: 80px; flex-shrink: 0;">
+              {% if item.image %}
+                {{ item.image | image_url: width: 160 | image_tag: width: item.image.width, height: item.image.height, alt: item.title, style: 'width: 100%; height: auto;' }}
+              {% endif %}
+            </div>
+            <div class="cart-item__details" style="flex: 1;">
+              <a href="{{ item.url }}" style="font-weight: bold; font-size: 14px; display: block; margin-bottom: 5px;">{{ item.product.title }}</a>
+              {%- unless item.product.has_only_default_variant -%}
+                <p style="font-size: 12px; margin: 0 0 5px; color: #666;">{{ item.variant.title }}</p>
+              {%- endunless -%}
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <input class="cart-drawer-qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-line="{{ item.key }}" style="width: 60px; padding: 5px; text-align: center; border: 1px solid #ccc;">
+                <span class="cart-item__price">{{ item.final_line_price | money }}</span>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="cart-drawer__footer">
+    {%- if cart != empty -%}
+      <div class="cart-drawer__totals" style="display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; font-size: 18px;">
+        <span>Subtotal</span>
+        <span>{{ cart.total_price | money_with_currency }}</span>
+      </div>
+      <small style="display: block; text-align: center; margin-bottom: 15px; color: #666;">Taxes and shipping calculated at checkout</small>
+      <form action="{{ routes.cart_url }}" method="post" id="cart">
+        <button type="submit" name="checkout" class="button" style="width: 100%; padding: 16px;">Check out</button>
+      </form>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,11 @@
+{
+    "sections": {
+        "drops_hub": {
+            "type": "store-drops-hub-journey",
+            "settings": {}
+        }
+    },
+    "order": [
+        "drops_hub"
+    ]
+}

@@ -1,0 +1,68 @@
+<section class="page-width" style="padding: 80px 0; max-width: 800px; margin: 0 auto;">
+  {%- if section.settings.heading != blank and section.settings.heading != 'AUTO' -%}
+    <h2 class="h2" style="text-align: center; margin-bottom: 50px;">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="faq-accordion" style="border-top: 1px solid #ccc;">
+    {%- for block in section.blocks -%}
+      <details class="faq-item" style="border-bottom: 1px solid #ccc;">
+        <summary style="padding: 20px 0; font-size: 18px; font-weight: bold; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+          {{ block.settings.question }}
+          <span style="font-size: 24px;">+</span>
+        </summary>
+        <div class="faq-answer rte" style="padding-bottom: 20px; color: #555;">
+          {{ block.settings.answer }}
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  <style>
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item[open] summary span { transform: rotate(45deg); display: inline-block; transition: transform 0.3s; }
+  </style>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "qa",
+      "name": "Q&A",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Are your products cruelty-free?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Yes, all AZOURANE products are 100% cruelty-free. We never test on animals.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        { "type": "qa" },
+        { "type": "qa" },
+        { "type": "qa" }
+      ]
+    }
+  ]
+}
+{% endschema %}
